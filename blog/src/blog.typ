@@ -29,13 +29,13 @@
     title + html.br() + html.span(class: "blog-subtitle", subtitle),
   )
     + html.ul(
-      class: "metadata",
+      class: "blog-metadata",
       html.li(class: "author", author)
         + html.li(class: "date-published", date_published)
         + html.li(class: "read-time", read_time)
         + html.ul(
           class: "tags",
-          tags.map(t => html.li(class: "tag", "#" + t)).join(),
+          tags.map(t => html.li(class: "tag", t)).join(),
         ),
     ),
 )
@@ -46,7 +46,7 @@
     + html.elem(
       "ul",
       attrs: (class: "footer-links"),
-      html.li(html.elem("a", attrs: (href: "#", "aria-label": "Github")))
+      html.li(html.elem("a", attrs: (href: "#", "aria-label": "GitHub")))
         + html.li(html.elem("a", attrs: (href: "#", "aria-label": "Twitter")))
         + html.li(html.elem("a", attrs: (href: "#", "aria-label": "RSS"))),
     ),
@@ -55,8 +55,6 @@
 // ==========================================
 // Content Block Helpers
 // ==========================================
-
-#let blog_quote(content) = html.blockquote(content)
 
 #let section_heading(num, title) = html.h2(
   html.span(class: "section-num", num + ".") + " " + title,
@@ -122,7 +120,7 @@
     "Fig 1. Tracing the UART pads on the primary logic board.",
   )
 
-  #blog_quote[
+  #html.blockquote[
     "Security through obscurity is a weak defense, but it sure makes for a fun Friday night."
   ]
 
