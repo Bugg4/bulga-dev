@@ -70,13 +70,13 @@
 // Main Layout Root
 // ==========================================
 #let blog_post(
-  main_title,
-  subtitle,
-  author,
-  date_published,
-  read_time,
-  tags,
-  stylesheet,
+  main_title: "Main Title",
+  subtitle: "Subtitle",
+  author: "Author",
+  date_published: "Date Published",
+  read_time: "Read Time",
+  tags: ("Tag 1", "Tag 2", "Tag 3"),
+  stylesheet: "",
   content,
 ) = html.html(
   lang: "en",
@@ -94,13 +94,13 @@
 // Document Execution
 // ==========================================
 #blog_post(
-  "Hello, Internet!",
-  "My First Blog Post",
-  "Marco Bulgarelli",
-  "Oct 24, 2026",
-  "5 min read",
-  ("reverse-engineering", "assembly", "hardware"),
-  "main.css",
+  main_title: "Hello, Internet!",
+  subtitle: "My First Blog Post",
+  author: "Marco Bulgarelli",
+  date_published: "Oct 24, 2026",
+  read_time: "5 min read",
+  tags: ("reverse-engineering", "assembly", "hardware"),
+  stylesheet: "main.css",
 )[
 
   Last week, I got my hands on a proprietary IoT device that was acting completely erratic.
