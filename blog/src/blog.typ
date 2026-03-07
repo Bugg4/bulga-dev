@@ -55,11 +55,6 @@
 // ==========================================
 // Content Block Helpers
 // ==========================================
-
-#let section_heading(num, title) = html.h2(
-  html.span(class: "section-num", num + ".") + " " + title,
-)
-
 #let blog_figure(src, alt, caption) = html.figure(
   html.img(src: src, alt: alt) + html.figcaption(caption),
 )
@@ -67,7 +62,7 @@
 // ==========================================
 // Main Layout Root
 // ==========================================
-#let blog_post(
+#let blog_template(
   main_title: "Main Title",
   subtitle: "Subtitle",
   author: "Author",
@@ -76,22 +71,43 @@
   tags: ("Tag 1", "Tag 2", "Tag 3"),
   stylesheet: "",
   content,
-) = html.html(
-  lang: "en",
-  blog_head(main_title, stylesheet)
-    + html.body(
-      blog_nav()
-        + html.article(
-          blog_header(main_title, subtitle, author, date_published, read_time, tags) + html.main(content),
-        )
-        + blog_footer(author, "2026"),
-    ),
-)
+) = {
+  // ============================= Headings
+  set heading(numbering: "01.")
+  show heading: it => {
+    if it.level == 1 {
+      html.h1(it.body)
+    } else if it.level == 2 {
+      html.h2(html.span(it.numbering, class: "section-num") + " " + it.body)
+    } else if it.level == 3 {
+      html.h3(html.span(it.numbering, class: "section-num") + " " + it.body)
+    } else if it.level == 4 {
+      html.h4(html.span(it.numbering, class: "section-num") + " " + it.body)
+    } else if it.level == 5 {
+      html.h5(html.span(it.numbering, class: "section-num") + " " + it.body)
+    } else if it.level == 6 {
+      html.h6(html.span(it.numbering, class: "section-num") + " " + it.body)
+    }
+  }
+
+  // ============================= Build Document
+  html.html(
+    lang: "en",
+    blog_head(main_title, stylesheet)
+      + html.body(
+        blog_nav()
+          + html.article(
+            blog_header(main_title, subtitle, author, date_published, read_time, tags) + html.main(content),
+          )
+          + blog_footer(author, "2026"),
+      ),
+  )
+}
 
 // ==========================================
 // Document Execution
 // ==========================================
-#blog_post(
+#blog_template(
   main_title: "Hello, Internet!",
   subtitle: "My First Blog Post",
   author: "Marco Bulgarelli",
@@ -106,7 +122,7 @@
   what was going on under the hood. What I found was a beautifully chaotic custom bootloader.
 
 
-  #section_heading("01", "Initial Reconnaissance")
+  == Initial Reconnaissance
 
 
   The first step was identifying the test pads on the PCB. After probing around with a multimeter,
@@ -114,28 +130,25 @@
   115200 baud rate. However, the output wasn't your typical U-Boot string. It was obfuscated.
 
 
-  #blog_figure(
-    "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=80",
-    "Close up of a green printed circuit board with traces and chips",
-    "Fig 1. Tracing the UART pads on the primary logic board.",
+  #figure(
+    image("pic.jpg", alt: "Alternative descrition"),
+    caption: "Close up of a green printed circuit board with traces and chips",
   )
 
   #html.blockquote[
     "Security through obscurity is a weak defense, but it sure makes for a fun Friday night."
   ]
 
-  #section_heading("02", "Dumping the Flash")
+  == Dumping the Flash
 
   To figure out the encryption routine, I needed the binary. I desoldered the SPI flash chip and
   dumped it using Connecting my SOP8 clip required a bit of finesse, but eventually the payload was extracted.
 
 
-  #blog_figure(
-    "https://images.unsplash.com/photo-1555664424-778a1e5e1b48?auto=format&fit=crop&w=1000&q=80",
-    "Electronics workspace with cables, a laptop, and a logic analyzer",
-    "Fig 2. The extraction setup hooked into the logic analyzer.",
+  #figure(
+    image("pic.jpg", alt: "Alternative descrition"),
+    caption: "Other caption",
   )
-
 
   Here is a snippet of the decryption loop I found loaded in memory:
 

@@ -243,7 +243,7 @@ article h2 {
 .section-num {
   color: var(--accent-fuchsia);
   font-family: var(--font-mono);
-  font-size: 2rem;
+  font-size: 1.2em;
 }
 
 /* Images and Figures */
@@ -380,4 +380,8 @@ footer {
   list-style: none;
   display: flex;
   gap: 1.5rem;
+}
+
+strong {
+  font-weight: 800;
 }
