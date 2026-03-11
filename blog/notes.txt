@@ -1,0 +1,4 @@
+check out this python binding: https://github.com/messense/typst-py
+
+could be useful to bor clean up the make.py script, and programmatically generate a posts files list, so we can be aware of the 
+posts filenames, fullpath and other stuff that would require bveing able to ealk directories, which typst currently does not allow
