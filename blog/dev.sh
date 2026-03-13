@@ -60,6 +60,7 @@ watch_typst() {
   local dest_dir=$(dirname "$dest")
   mkdir -p "$dest_dir"
   
+  #Using custom build of typst allowing ACE through #exec()
   typstex watch --allow-exec "$src" "$dest" --root . --features html --format html --ignore-system-fonts --no-serve --no-reload
 }
 export -f watch_typst

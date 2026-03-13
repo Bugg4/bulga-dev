@@ -1,4 +1,4 @@
-#import "post-001/hello-internet.typ": info as post_001
+#import "001/hello-internet.typ": info as post_001
 
 #let posts = (
   post_001,
@@ -35,5 +35,7 @@
       )
     }
   ]
+
+  yo
   
 ]

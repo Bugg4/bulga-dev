@@ -108,7 +108,7 @@
   content,
 ) = {
   // ============================= Headings
-  set heading(numbering: "01.")
+  set heading(numbering: "1")
   show heading: it => {
     if it.level == 1 {
       html.h1(it.body)
