@@ -9,6 +9,8 @@
   read_time: "5 min read",
   tags: (tags.meta, tags.typst),
   stylesheet: styles.blog,
+  post_filename: "hello-internet",
+  post_number: 1,
 )
 
 #blog_template(

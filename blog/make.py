@@ -6,7 +6,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from multiprocessing import cpu_count
 
 ROOT_IN = "content/"
-ROOT_OUT = ".dist/"
+ROOT_OUT = "dist/"
 
 POSTS_OUT_DIR = "posts"
 
@@ -112,8 +112,9 @@ def build_post(post):
         try:
             sp.run(
                 [
-                    "typst",
+                    "typstex",
                     "compile",
+                    "--allow-exec",
                     src,
                     dst,
                     "--root",
@@ -161,8 +162,13 @@ def main():
 
     if "clean" in sys.argv:
         if os.path.exists(ROOT_OUT):
-            shutil.rmtree(ROOT_OUT)
-            print(f"Cleaned {ROOT_OUT}")
+            for item in os.listdir(ROOT_OUT):
+                item_path = os.path.join(ROOT_OUT, item)
+                if os.path.isfile(item_path) or os.path.islink(item_path):
+                    os.unlink(item_path)
+                elif os.path.isdir(item_path):
+                    shutil.rmtree(item_path)
+            print(f"Cleaned contents of {ROOT_OUT}")
         if "all" not in sys.argv and len(sys.argv) == 2:
             return
 

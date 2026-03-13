@@ -2,7 +2,8 @@
 // Layout Components
 // ==========================================
 
-#let DIST_PATH_OFFSET = "../.." // Adjust this path based on your directory structure
+#let PUBLIC_ROOT = ".dist"
+#let PUBLIC_POSTS_ROOT = "posts"
 
 #let styles = (
   blog: "../../styles/blog.css",
@@ -38,6 +39,21 @@
     ),
 )
 
+#let to-string(it) = {
+  if type(it) == str {
+    it
+  } else if type(it) != content {
+    str(it)
+  } else if it.has("text") {
+    it.text
+  } else if it.has("children") {
+    it.children.map(to-string).join()
+  } else if it.has("body") {
+    to-string(it.body)
+  } else if it == [ ] {
+    " "
+  }
+}
 
 #let blog_header(title, subtitle, author, date_published, read_time, tags) = html.header(
   html.h1(
@@ -47,7 +63,7 @@
     + html.ul(
       class: "blog-metadata",
       html.li(class: "author", author)
-        + html.li(class: "date-published", date_published)
+        + html.li(class: "date-published", date_published.display())
         + html.li(class: "read-time", read_time)
         + html.ul(
           class: "tags",
@@ -91,7 +107,6 @@
   post_filename: "some-title",
   content,
 ) = {
-
   // ============================= Headings
   set heading(numbering: "01.")
   show heading: it => {
@@ -117,7 +132,7 @@
       + html.body(
         blog_nav()
           + html.article(
-            blog_header(main_title, subtitle, author, date_published.display(), read_time, tags) + html.main(content),
+            blog_header(main_title, subtitle, author, date_published, read_time, tags) + html.main(content),
           )
           + blog_footer(author, "2026"),
       ),

@@ -1,5 +1,5 @@
 BLOG_SRC := content/
-BLOG_DIST := .dist/
+BLOG_DIST := dist/
 POST_OUT_DIR := posts
 
 # Notice the added hyphen here so the stem strictly captures "001"
@@ -24,7 +24,10 @@ STYLE_TARGETS := $(patsubst styles/%, $(BLOG_DIST)styles/%, $(STYLE_FILES))
 SHARED_FILES := $(shell find shared -type f 2>/dev/null)
 SHARED_TARGETS := $(patsubst shared/%, $(BLOG_DIST)shared/%, $(SHARED_FILES))
 
-.PHONY: all build clean copy-assets copy-styles
+.PHONY: all build clean copy-assets copy-styles serve
+
+serve:
+	live-server .dist & disown
 
 # Main target
 all: build copy-assets copy-styles copy-shared

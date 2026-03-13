@@ -4,7 +4,7 @@
   post_001,
 )
 
-#import "../blog.typ": blog_template, styles
+#import "../blog.typ": PUBLIC_POSTS_ROOT, blog_template, styles
 
 #let pad_left(pad_char, number) = {
   let num_str = str(number)
@@ -16,20 +16,24 @@
   main_title: "Index",
   subtitle: "List of my posts",
   author: "Marco Bulgarelli",
-  date_published: "Oct 24, 2026",
+  date_published: datetime(day: 12, month: 03, year: 2026),
   read_time: "5 min read",
   tags: (),
   stylesheet: styles.blog,
+  post_filename: "index",
+  post_number: 0,
 )[
   == Here is the index of my posts:
+
 
   #html.ul()[
     #for p in posts {
       html.li(
         html.a(
-          href: "/posts/001/" + p.post_filename + ".html",
-        )[ #p.main_title --- #p.subtitle],
+          href: "/" + PUBLIC_POSTS_ROOT + "/" + pad_left("0", p.post_number) + "/" + p.post_filename + ".html",
+        )[#p.date_published.display(): #p.main_title --- #p.subtitle],
       )
     }
   ]
+  
 ]
