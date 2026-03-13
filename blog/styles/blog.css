@@ -77,7 +77,7 @@ main {
   /* 768px */
   margin: 0 auto;
   /* top | right | bottom | left */
-  padding: 3rem 1.5rem 2rem 1.5rem;
+  padding: 1.5rem 1.5rem 2rem 1.5rem;
 }
 
 /* Typography & Links */
@@ -226,6 +226,30 @@ article p {
   font-weight: 300;
 }
 
+article ul,
+article ol {
+  list-style-position: inside;
+  margin-bottom: 1.5rem;
+  padding-left: 0;
+}
+
+article li {
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 300;
+}
+
+article li p {
+  display: inline;
+}
+
+article li>ul,
+article li>ol {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding-left: 1.5rem;
+}
+
 article a:hover {
   text-decoration: underline;
   text-underline-offset: 4px;
@@ -285,13 +309,13 @@ blockquote {
 
 /* Inline Code Styling */
 :not(pre)>code {
-  color: var(--accent-cyan-hover);
-  background-color: var(--code-header-bg);
-  padding: 0.125rem 0.375rem;
-  border: 1px solid var(--border-color);
+  color: var(--bg-color);
+  background-color: var(--text-main);
+  padding: 0.2rem 0.275rem 0.1rem 0.275rem;
+  margin: 0rem 0.1rem 0rem 0.1rem;
   border-radius: 0.25rem;
   font-family: var(--font-mono);
-  font-size: 0.875em;
+  font-weight: 800;
 }
 
 /* Semantic Preformatted Code Block */
@@ -301,52 +325,17 @@ blockquote {
   border-radius: 0.5rem;
 }
 
-/* Neon Glow Effect */
-.code-wrapper::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  background: linear-gradient(to right,
-      var(--accent-cyan),
-      var(--accent-fuchsia));
-  border-radius: 0.6rem;
-  filter: blur(8px);
-  opacity: 0.15;
-  z-index: 0;
-  transition: opacity 0.5s ease;
-}
-
-.code-wrapper:hover::before {
-  opacity: 0.4;
-}
-
 pre {
   position: relative;
-  background-color: var(--code-bg);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--accent-fuchsia);
   border-radius: 0.5rem;
-  padding: 3rem 1rem 1rem 1rem;
+  padding: 1.5rem 2rem 1.5rem 2rem;
+  margin: 2rem 0;
   overflow-x: auto;
   font-family: var(--font-mono);
   font-size: 0.875rem;
   color: var(--text-main);
   z-index: 1;
-}
-
-/* Terminal Header for Code Blocks */
-pre::after {
-  content: ">_ terminal";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 0.5rem 1rem;
-  background-color: var(--code-header-bg);
-  border-bottom: 1px solid var(--border-color);
-  color: var(--text-dim);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  border-radius: 0.5rem 0.5rem 0 0;
 }
 
 /* Footer */

@@ -31,7 +31,7 @@ trap cleanup SIGINT SIGTERM
 echo -e "${SYSTEM_COLOR}[${SYSTEM_PREFIX}]${RESET_COLOR} Starting dev environment..."
 
 # Watch and Build
-(find . -type f -name "*.typ" | entr -r uv run make.py 2>&1 | prefix_output "$BUILD_PREFIX" "$BUILD_COLOR") &
+(find content shared styles blog.typ -type f | entr -r uv run make.py 2>&1 | prefix_output "$BUILD_PREFIX" "$BUILD_COLOR") &
 
 # Live Server
 (live-server dist/ 2>&1 | prefix_output "$SERVER_PREFIX" "$SERVER_COLOR")
