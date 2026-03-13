@@ -65,15 +65,9 @@ watch_typst() {
 }
 export -f watch_typst
 
-# Initial copy to populate dist on startup
-echo "Populating $DIST_DIR with initial files..."
-mkdir -p "$DIST_DIR/$STYLES_DIR" "$DIST_DIR/$SHARED_DIR"
-cp -r "$STYLES_DIR"/* "$DIST_DIR/$STYLES_DIR/" 2>/dev/null || true
-cp -r "$SHARED_DIR"/* "$DIST_DIR/$SHARED_DIR/" 2>/dev/null || true
-
 # /_ is replaced by the path of the first file that changed
-find $STYLES_DIR/ -type f | entr -p bash -c 'copy_file "$0"' /_ &
-find $SHARED_DIR/ -type f | entr -p bash -c 'copy_file "$0"' /_ &
+find $STYLES_DIR/ -type f | entr bash -c 'copy_file "$0"' /_ &
+find $SHARED_DIR/ -type f | entr bash -c 'copy_file "$0"' /_ &
 find $POSTS_DIR/ -type f -name "*.typ" | parallel --line-buffer --tag watch_typst {} &
 live-server $DIST_DIR/ &
 LIVE_SERVER_PID=$!

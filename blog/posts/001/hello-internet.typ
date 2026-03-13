@@ -56,9 +56,9 @@
   Yeah, I wrote my blog post in Python, bruv. \
   Just Kidding, but I did try. \
 
-  Let me open a funny parenthesis for a moment, and tell you about that.
-  I thought: "Hey, I know Python, it's very ergonomic, very flexible, so maybe I can find a way to intertwine written content with
-  Python code in a way that doesn't look ugly as sin, and grants me the full power of an actual programming language (yeah, sorry HTML folks).
+  Let me open a funny parenthesis for a moment, and tell you about that. \
+  I thought: _"Hey, I know Python, it's very ergonomic, very flexible, so maybe I can find a way to intertwine written content with
+  Python code in a way that doesn't look ugly, and grants me the full power of an actual programming language"_ (yeah, sorry HTML folks).
 
   I had recently learnt about context managers, which, if you wrote any Python at all, you surely used.
   It's the costruct the allows you to do something like:
@@ -68,16 +68,17 @@
       data = f.read()
   ```
 
-  The `with` statement is a context manager, and it allows you to execute some code before and after the block of code it wraps,
-  which is perfect for writing HTML programmatically! As you can do something like:
+  The `with` keyword opens a _context_, which allows you to execute some code before and after the block of code it wraps. \
+  Sounds perfect for writing HTML programmatically! All we need is somethis like this:
 
   ```python
+  items = ["a", "b", "c"]
   with html.ul() as ul:
       for item in items:
           ul.li(item)
   ```
 
-  - python con: writing "content" is clunky because we have to use strings, so no syntax highlighting, and intepolating code with content becomes kidan verbose with the `with` spam
+  - Python con: writing _content_ is clunky because we have to use strings, so no syntax highlighting out of the box, and intepolating code with content becomes kinda verbose with the `with` spam.
   - talk about choosing typst and creating the blog template
   - talk about html feature being in beta, but stable enough for my use case, and how it allows me to write HTML in a more natural way, without the need for string concatenation or anything like that.
 
