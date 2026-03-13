@@ -13,6 +13,21 @@ if [ "$1" == "clean" ]; then
   exit 0
 fi
 
+# Cleanup to run on SIGINT and SIGTERM
+cleanup() {
+  echo " Stopping live-server..."
+  if [ -n "$LIVE_SERVER_PID" ]; then
+    kill $LIVE_SERVER_PID 2>/dev/null
+  fi
+  
+  # Restore terminal state in case background processes (like entr) corrupted it
+  stty sane
+  tput rmam 2>/dev/null || true
+  
+  exit 0
+}
+trap cleanup SIGINT SIGTERM
+
 
 copy_file() {
   local file=$1
@@ -49,9 +64,17 @@ watch_typst() {
 }
 export -f watch_typst
 
+# Initial copy to populate dist on startup
+echo "Populating $DIST_DIR with initial files..."
+mkdir -p "$DIST_DIR/$STYLES_DIR" "$DIST_DIR/$SHARED_DIR"
+cp -r "$STYLES_DIR"/* "$DIST_DIR/$STYLES_DIR/" 2>/dev/null || true
+cp -r "$SHARED_DIR"/* "$DIST_DIR/$SHARED_DIR/" 2>/dev/null || true
+
 # /_ is replaced by the path of the first file that changed
 find $STYLES_DIR/ -type f | entr -p bash -c 'copy_file "$0"' /_ &
 find $SHARED_DIR/ -type f | entr -p bash -c 'copy_file "$0"' /_ &
 find $POSTS_DIR/ -type f -name "*.typ" | parallel --line-buffer --tag watch_typst {} &
 live-server $DIST_DIR/ &
+LIVE_SERVER_PID=$!
+
 wait
