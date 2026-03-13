@@ -1,37 +1,57 @@
 #!/bin/bash
 
-# Define colors using literal escape characters for better compatibility
-BUILD_COLOR=$'\e[34m' # Blue
-SERVER_COLOR=$'\e[32m' # Green
-SYSTEM_COLOR=$'\e[33m' # Yellow
+export DIST_DIR="dist"
+export STYLES_DIR="styles"
+export SHARED_DIR="shared"
+export POSTS_DIR="posts"
 
-RESET_COLOR=$'\e[0m'
+# Handle Args
+if [ "$1" == "clean" ]; then
+  echo "Cleaning dist ..."
+  rm -rf "$DIST_DIR"
+  echo "Cleaned."
+  exit 0
+fi
 
-BUILD_PREFIX="Build "
-SERVER_PREFIX="Server"
-SYSTEM_PREFIX="System "
 
-# Function to prefix output reliably with colors
-prefix_output() {
-  local prefix=$1
-  local color=$2
-  while read -r line; do
-    printf "%s[%s]%s %s\n" "$color" "$prefix" "$RESET_COLOR" "$line"
-  done
+copy_file() {
+  local file=$1
+  if [ -z "$file" ]; then
+    return
+  fi
+  # We want to copy the file to its corresponding location in dist/
+  # For example, if file is styles/blog.css, it should go to dist/styles/blog.css
+  local dest="$DIST_DIR/$file"
+  local dest_dir=$(dirname "$dest")
+  
+  mkdir -p "$dest_dir"
+  cp -v "$file" "$dest"
 }
+export -f copy_file
 
-# Cleanup background processes on exit
-cleanup() {
-  echo -e "\n${SYSTEM_COLOR}[${SYSTEM_PREFIX}]${RESET_COLOR} Stopping background processes..."
-  pkill -P $$ 2>/dev/null
-  exit
+watch_typst() {
+  local src=$1
+  local dest=""
+  
+  # Rule: posts/index.typ --> dist/index.html
+  # But index is an exception
+  if [[ "$src" == *"$POSTS_DIR/index.typ" ]]; then
+    dest="${DIST_DIR}/index.html"
+  else
+    # src already includes 'posts/', so appending it to dist/ works
+    dest="${DIST_DIR}/${src%.typ}.html"
+  fi
+  
+  local dest_dir=$(dirname "$dest")
+  mkdir -p "$dest_dir"
+  
+  typstex watch --allow-exec "$src" "$dest" --root . --features html --format html --ignore-system-fonts --no-serve --no-reload
 }
-trap cleanup SIGINT SIGTERM
+export -f watch_typst
 
-echo -e "${SYSTEM_COLOR}[${SYSTEM_PREFIX}]${RESET_COLOR} Starting dev environment..."
-
-# Watch and Build
-(find content shared styles blog.typ -type f | entr -r uv run make.py 2>&1 | prefix_output "$BUILD_PREFIX" "$BUILD_COLOR") &
-
-# Live Server
-(live-server dist/ 2>&1 | prefix_output "$SERVER_PREFIX" "$SERVER_COLOR")
+# /_ is replaced by the path of the first file that changed
+find $STYLES_DIR/ -type f | entr -p bash -c 'copy_file "$0"' /_ &
+find $SHARED_DIR/ -type f | entr -p bash -c 'copy_file "$0"' /_ &
+find $POSTS_DIR/ -type f -name "*.typ" | parallel --line-buffer --tag watch_typst {} &
+live-server $DIST_DIR/ &
+wait
