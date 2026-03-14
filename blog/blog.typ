@@ -1,5 +1,5 @@
 // ==========================================
-// Layout Components
+// Globals
 // ==========================================
 
 #let PUBLIC_ROOT = ".dist"
@@ -17,6 +17,10 @@
   meta: "meta",
   typst: "typst",
 )
+
+// ==========================================
+// Layout Components
+// ==========================================
 
 #let blog_head(title, stylesheet) = html.head(
   html.meta(charset: "utf-8")
@@ -78,6 +82,7 @@
 // ==========================================
 // Main Layout Root
 // ==========================================
+
 #let blog_template(
   main_title: "Main Title",
   subtitle: "Subtitle",
@@ -91,32 +96,35 @@
   post_filename: "some-title",
   content,
 ) = {
-  // ============================= Headings
-  set heading(numbering: "1")
+  // =============== Headings ==============
+  set heading(numbering: "01.")
   show heading: it => {
-    if it.level == 1 {
+    if it.level <= 1 {
       html.h1(it.body)
-    } else if it.level == 2 {
-      html.h2(html.span(it.numbering, class: "section-num") + " " + it.body)
-    } else if it.level == 3 {
-      html.h3(html.span(it.numbering, class: "section-num") + " " + it.body)
-    } else if it.level == 4 {
-      html.h4(html.span(it.numbering, class: "section-num") + " " + it.body)
-    } else if it.level == 5 {
-      html.h5(html.span(it.numbering, class: "section-num") + " " + it.body)
-    } else if it.level == 6 {
-      html.h6(html.span(it.numbering, class: "section-num") + " " + it.body)
+    } else {
+      html.elem(
+        "h" + str(it.level),
+        html.span(it.numbering, class: "section-num") + " " + it.body,
+      )
     }
   }
 
-  // ============================= Build Document
+  // =============== Build Document ==============
   html.html(
     lang: "en",
     blog_head(main_title, stylesheet)
       + html.body(
         blog_nav()
           + html.article(
-            blog_header(main_title, subtitle, author, date_published, read_time, tags) + html.main(content),
+            blog_header(
+              main_title,
+              subtitle,
+              author,
+              date_published,
+              read_time,
+              tags,
+            )
+              + html.main(content),
           )
           + blog_footer(author, "2026"),
       ),
