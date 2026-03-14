@@ -15,29 +15,39 @@ fi
 
 # Cleanup to run on SIGINT and SIGTERM
 cleanup() {
-  echo " Stopping live-server..."
-  if [ -n "$LIVE_SERVER_PID" ]; then
-    kill $LIVE_SERVER_PID 2>/dev/null
-  fi
+  echo -e "\nStopping live-server and background watchers..."
+
+  # 1. Prevent infinite recursion (removes the trap so our kill command doesn't re-trigger it)
+  trap - SIGINT SIGTERM
+
+  # 2. Kill the entire process group (-$$ targets all children of this script)
+  kill -TERM -$$ 2>/dev/null
+
+  # 3. Give processes a split second to actually die before fixing the terminal
+  sleep 0.1
+
+  # 4. Restore terminal sanity
+  stty sane                      # Restores character echo and normal line formatting
+  tput sgr0 2>/dev/null || true  # Resets text colors/formatting to default
+  tput cnorm 2>/dev/null || true # Restores the cursor if any process hid it
   
-  # Restore terminal state in case background processes (like entr) corrupted it
-  stty sane
-  tput rmam 2>/dev/null || true
-  
+  echo "Cleaned up successfully. Goodbye!"
   exit 0
 }
+
 trap cleanup SIGINT SIGTERM
 
 
 copy_file() {
   local file=$1
+  local dest_dir=""
   if [ -z "$file" ]; then
     return
   fi
   # We want to copy the file to its corresponding location in dist/
   # For example, if file is styles/blog.css, it should go to dist/styles/blog.css
   local dest="$DIST_DIR/$file"
-  local dest_dir=$(dirname "$dest")
+  dest_dir=$(dirname "$dest")
   
   mkdir -p "$dest_dir"
   cp -v "$file" "$dest"
@@ -47,6 +57,7 @@ export -f copy_file
 watch_typst() {
   local src=$1
   local dest=""
+  local dest_dir=""
   
   # Rule: posts/index.typ --> dist/index.html
   # But index is an exception
@@ -57,19 +68,33 @@ watch_typst() {
     dest="${DIST_DIR}/${src%.typ}.html"
   fi
   
-  local dest_dir=$(dirname "$dest")
+  dest_dir=$(dirname "$dest")
   mkdir -p "$dest_dir"
   
   #Using custom build of typst allowing ACE through #exec()
-  typstex watch --allow-exec "$src" "$dest" --root . --features html --format html --ignore-system-fonts --no-serve --no-reload
+  typstex --color always \
+          watch \
+          --allow-exec \
+          "$src" \
+          "$dest" \
+          --root . \
+          --features html \
+          --format html \
+          --ignore-system-fonts \
+          --no-serve \
+          --no-reload \
+          --diagnostic-format short \
+          2>&1 | \
+          grep -v -e '^[[:space:]]*$'
+         
 }
 export -f watch_typst
 
 # /_ is replaced by the path of the first file that changed
 find $STYLES_DIR/ -type f | entr bash -c 'copy_file "$0"' /_ &
 find $SHARED_DIR/ -type f | entr bash -c 'copy_file "$0"' /_ &
-find $POSTS_DIR/ -type f -name "*.typ" | parallel --line-buffer --tag watch_typst {} &
-live-server $DIST_DIR/ &
-LIVE_SERVER_PID=$!
+# Watch all .typ files in parallel
+find "$POSTS_DIR" -type f -name "*.typ" | xargs --max-args=1 --max-procs=0 bash -c 'watch_typst "$0"' &
+live-server $DIST_DIR/
 
 wait
