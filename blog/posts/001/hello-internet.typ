@@ -8,7 +8,7 @@
   date_published: datetime(day: 11, month: 3, year: 2026),
   read_time: "5 min read",
   tags: (tags.meta, tags.typst),
-  //stylesheet: styles.blog,
+  stylesheet: styles.blog,
   post_filename: "hello-internet",
   post_number: 1,
 )
@@ -58,7 +58,6 @@
   === Markdown
   The obvious first choice... for a _sane_ person. \
   Also the de-facto standard use buy pretty much every static site generator out there. \
-
   - Pros:
     - sane choice
     - very terse
@@ -117,37 +116,113 @@
   It's basically Markdown on steroids, and Turing complete. \
   It's meant to be a modern replacement for LaTeX, here's the official #link("https://github.com/typst/typst")[GitHub repo], check it out if you've never heard of it.
 
-  Here's an example of its syntax, straight from their README:
+  Here's my blog template function, as an example of its syntax:
 
+  #html.details(
+    html.summary("Expand Code")
+      + ```typst
+      #let blog_template(
+        main_title: "Main Title",
+        subtitle: "Subtitle",
+        author: "Author",
+        date_published: datetime(day: 1, month: 1, year: 1970),
+        read_time: "Read Time",
+        tags: ("Tag 1", "Tag 2", "Tag 3"),
+        stylesheet: "",
+        // typst source file metadata
+        post_number: 0,
+        post_filename: "some-title",
+        content,
+      ) = {
+        // =============== Headings ==============
+        set heading(numbering: "01.")
+        show heading: it => {
+          if it.level <= 1 {
+            html.h1(it.body)
+          } else {
+            html.elem(
+              "h" + str(it.level),
+              html.span(it.numbering, class: "section-num") + " " + it.body,
+            )
+          }
+        }
 
-
-
-  ```typst
-  #set page(width: 106cm, height: auto) #set heading(numbering: "1.")
-
-  = Fibonacci sequence
-
-  The Fibonacci sequence is defined through the recurrence relation
-  $F_n = F_(n-1) + F_(n-2)$. It can also be expressed in _closed form:_
-
-  $F_n = round(1 / sqrt(5) phi.alt^n), quad phi.alt = (1 + sqrt(5)) / 2$
-
-  #let count = 8
-  #let nums = range(1, count + 1)
-  #let fib(n) = (
-    if n <= 2 { 1 } else { fib(n - 1) + fib(n - 2) }
+        // =============== Build Document ==============
+        html.html(
+          lang: "en",
+          blog_head(main_title, stylesheet)
+            + html.body(
+              blog_nav()
+                + html.article(
+                  blog_header(
+                    main_title,
+                    subtitle,
+                    author,
+                    date_published,
+                    read_time,
+                    tags,
+                  )
+                    + html.main(content),
+                )
+                + blog_footer(author, "2026"),
+            ),
+        )
+      }
+      ```,
   )
+  \
+  And here's how it looks in use:
 
-  The first #count numbers of the sequence are:
+  #html.details(
+    html.summary("Expand Code")
+      + ```typst
+      #import "../../blog.typ": blog_template, styles, tags
 
-  #align(center, table(
-    columns: count,
-    ..nums.map(n => $F_#n$),
-    ..nums.map(n => str(fib(n))),
-   ))
-  ```
+      #let info = (
+        // post metadata
+        main_title: "Hello, Internet!",
+        subtitle: "To Write a Blog Post, You Must First Introduce an ACE Vulnerability in Your Markup Language",
+        author: "Marco Bulgarelli",
+        date_published: datetime(day: 11, month: 3, year: 2026),
+        read_time: "5 min read",
+        tags: (tags.meta, tags.typst),
+        stylesheet: styles.blog,
+        post_filename: "hello-internet",
+        post_number: 1,
+      )
 
-  #html.hr() \
+      #blog_template(
+        ..info,
+      )[
+        == Some Title
+
+        And here I can just write normal typst.\
+        I can use *bold*, _italics_ ...
+
+        Lists
+        - item 1
+        - item 2
+
+        You got the idea
+      ]
+      ```,
+  )
+  \
+  And that gets rendered as follows:
+
+  == Some Title
+
+  And here I can just write normal typst.\
+  I can use *bold*, _italics_ ...
+
+  Lists
+  - item 1
+  - item 2
+
+  You got the idea
+
+
+
   == Some notes
 
   Try writing CSS in typst directly, using shared variables for colors and styles, the build css directly into the components with show/set rules
