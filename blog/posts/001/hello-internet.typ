@@ -21,7 +21,7 @@
   Welcome to my first ever blog post! How exciting!
   This took *MUCH* longer than I expected, but I'm happy I managed to get it started.
 
-  I won't waste time introducing myselft, as that's the job of the #link("about:blank")[About Me] page, which I've yet to write,
+  I won't waste time introducing myself, as that's the job of the #link("about:blank")[About Me] page, which I've yet to write,
   but I'm sure you'll manage fine in the meantime. \
   Instead, I'd like to talk a bit about how I approached this blog writing thing, which is quite funny
   to actually write word for word, now that I'm actually doing it.
@@ -37,7 +37,7 @@
   and all the other #link("https://github.com/lyoshenka/awesome-motherfucking-website")[mfw-inspired sites], which I encourage you to check out if you're not familiar. \
   _But_ I also want to enjoy the whole process of wrting the website first, and the content later, which may not be as obvious as it sounds. \
   I see, I'm a lazy person, and arguably, an even lazier developer. \
-  If I don't set the whole thing up to be a an absolute joy to use, I'll get borded or annoyed, and won't write a second post. I'm sure that'd leave you, dear reader, in absolute shables, so I promise to do my best to make this fun and interesting for both me _and_ you!
+  If I don't set the whole thing up to be a an absolute joy to use, I'll get bored or annoyed, and won't write a second post. I'm sure that'd leave you, dear reader, in absolute shambles, so I promise to do my best to make this fun and interesting for both me _and_ you!
 
   So, the first choice I have to make is: which markup language should I choose? \
   My options:
@@ -53,11 +53,12 @@
     - reusing code among multiple pages can become hell to maintain
     - no scripting capabilities, would need javascript to make it dynamic
 
+  Overall, Good for structure, too tedious/repetitive for writing. \
   I see myself experiencing too much friction using it, so it's a no go.
 
   === Markdown
   The obvious first choice... for a _sane_ person. \
-  Also the de-facto standard use buy pretty much every static site generator out there. \
+  Also the de-facto standard used by pretty much every static site generator out there. \
   - Pros:
     - sane choice
     - very terse
@@ -68,8 +69,9 @@
     - Limited styling expression power
     - no scripting
     - no way to reuse code across pages
-    - and worst of all: no way to customize the structure of the HTML output, unless I use some weird extensions, which would require passing the source files throug a framework or SSG anyway, *AND* would make the syntax uglier, which is the exact opposite of what I want.
+    - and worst of all: no way to customize the structure of the HTML output, unless I use some weird extensions, which would require passing the source files through a framework or SSG anyway, *AND* would make the syntax uglier, which is the exact opposite of what I want.
 
+  Good for writing, too rigid for custom structure/logic. \
   So, also a no go.
 
   === Pure Python (???)
@@ -89,20 +91,79 @@
       data = f.read()
   ```
 
-  The `with` keyword opens a _context_, which allows you to execute some code before and after the block of code it wraps. \
-  Sounds perfect for writing HTML programmatically! All we need is somethis like this:
+  The `with` keyword allows you to interact with a _context_, which is a construct that performs predefined actions both _before_ and _after_ the piece of code wrapped in the context. \
+  Sounds perfect for writing HTML programmatically! \
+  This is how I had implemented a class which mimics the way you'd write nested HTML elements:
 
   ```python
-  items = ["a", "b", "c"]
-  with html.ul() as ul:
-      for item in items:
-          ul.li(item)
+  class HTMLTag:
+    def __init__(self, tag_name, **kwargs):
+        self.tag_name = tag_name
+        # Format kwargs into 'key="value"' strings
+        self.attributes = "".join([f' {k.replace("_", "-")}="{v}"' for k, v in kwargs.items()])
+
+    def __enter__(self):
+        # Print the opening tag when entering the 'with' block
+        print(f"<{self.tag_name}{self.attributes}>", end="")
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        # Print the closing tag when leaving the 'with' block
+        print(f"</{self.tag_name}>")
+
   ```
+
+  You'd use it like this:
+
+  ```python
+  with HTMLTag("div", _class="container", id="main"):
+      with HTMLTag("h1", style="color: blue;"):
+          print("Hello, World!", end="")
+      with HTMLTag("p"):
+          print("This was generated using a Python context manager.", end="")
+  ```
+
+  You can likely see how, with some work to prettify the API, this could become quite a usable tool.
+  We could make derived classes for each single HTML tag, as to avoid some code repetition:
+
+  ```python
+    class Div(HTMLTag):
+      def __init__(self, **kwargs):
+          # Automatically handle the 'class' keyword conflict
+          if 'cls' in kwargs:
+              kwargs['class'] = kwargs.pop('cls')
+          super().__init__("div", **kwargs)
+
+  class H1(HTMLTag):
+      def __init__(self, **kwargs):
+          super().__init__("h1", **kwargs)
+
+  class P(HTMLTag):
+      def __init__(self, **kwargs):
+          super().__init__("p", **kwargs)
+  ```
+
+  This is all fine and dandy, but there's a not so subtle usability problem: We have to write our actual content using print statements and strings. \
+  This is a major issue. \
+  Assume we'd want to make a Table of Contents component. It's pretty common to have an index of some sort in pretty much any artcile, right? \
+  And ToCs usually go at, or close to, the very beginning of the article, correct? \
+  But how could we construct a ToC without having printed all the content first? Well, we can't.
+
+  To solve this issue, we'd have complicate the structure of our (for now) simple HTML renderer, and add think of a way to access the HTML node tree once it's fully constructed, analyize it, and then go back at the beginning to insert another element, a ToC in this case.
+
+  This is doable, don't get me wrong, but it _feels_ out of scope for this project. \
+  It _feels_ like there must be a simpler way to write HTML programmatically without having to build a full fledged HTML Node tree representation.
+
+  Remember? I'm lazy. Plus, if I wanted to use something like that I'd adopt one of the existing libraries, like #link("https://github.com/Knio/dominate")[Dominate].
+
+  So, final verdict for Python: Great for logic, terrible for writing text (having to use print statements and strings). \
+  The ideal workflow would let me *just write the damn text*, without wrapping every sentence in quotes, or polluting the document with function calls and endless nesting, while still giving me the power of a real programming language behind the scenes.
 
   == Typst
   Then, the revelation.
 
-  I knew about this language the whole time, since 2023 in fact, I had tried it for a bit, but wrote it off as not yet mature enough for whatever I was doing at the time.
+  I knew about this language the whole time, since 2023 in fact. \
+  I had tried it for a bit, but wrote it off as not yet mature enough for whatever I was doing at the time.
 
   I also happened to use it for a fairly recent project, a technical documentation automation pipeline I was experimenting with for work, but it never occurred to me to use it for a blog, until now.
 
@@ -118,96 +179,91 @@
 
   Here's my blog template function, as an example of its syntax:
 
-  #html.details(
-    html.summary("Expand Code")
-      + ```typst
-      #let blog_template(
-        main_title: "Main Title",
-        subtitle: "Subtitle",
-        author: "Author",
-        date_published: datetime(day: 1, month: 1, year: 1970),
-        read_time: "Read Time",
-        tags: ("Tag 1", "Tag 2", "Tag 3"),
-        stylesheet: "",
-        // typst source file metadata
-        post_number: 0,
-        post_filename: "some-title",
-        content,
-      ) = {
-        // =============== Headings ==============
-        set heading(numbering: "01.")
-        show heading: it => {
-          if it.level <= 1 {
-            html.h1(it.body)
-          } else {
-            html.elem(
-              "h" + str(it.level),
-              html.span(it.numbering, class: "section-num") + " " + it.body,
-            )
-          }
-        }
 
-        // =============== Build Document ==============
-        html.html(
-          lang: "en",
-          blog_head(main_title, stylesheet)
-            + html.body(
-              blog_nav()
-                + html.article(
-                  blog_header(
-                    main_title,
-                    subtitle,
-                    author,
-                    date_published,
-                    read_time,
-                    tags,
-                  )
-                    + html.main(content),
-                )
-                + blog_footer(author, "2026"),
-            ),
+  ```typst
+  #let blog_template(
+    main_title: "Main Title",
+    subtitle: "Subtitle",
+    author: "Author",
+    date_published: datetime(day: 1, month: 1, year: 1970),
+    read_time: "Read Time",
+    tags: ("Tag 1", "Tag 2", "Tag 3"),
+    stylesheet: "",
+    // typst source file metadata
+    post_number: 0,
+    post_filename: "some-title",
+    content,
+  ) = {
+    // =============== Headings ==============
+    set heading(numbering: "01.")
+    show heading: it => {
+      if it.level <= 1 {
+        html.h1(it.body)
+      } else {
+        html.elem(
+          "h" + str(it.level),
+          html.span(it.numbering, class: "section-num") + " " + it.body,
         )
       }
-      ```,
-  )
-  \
+    }
+
+    // =============== Build Document ==============
+    html.html(
+      lang: "en",
+      blog_head(main_title, stylesheet)
+        + html.body(
+          blog_nav()
+            + html.article(
+              blog_header(
+                main_title,
+                subtitle,
+                author,
+                date_published,
+                read_time,
+                tags,
+              )
+                + html.main(content),
+            )
+            + blog_footer(author, "2026"),
+        ),
+    )
+  }
+  ```
+
   And here's how it looks in use:
 
-  #html.details(
-    html.summary("Expand Code")
-      + ```typst
-      #import "../../blog.typ": blog_template, styles, tags
+  ```typst
+  #import "../../blog.typ": blog_template, styles, tags
 
-      #let info = (
-        // post metadata
-        main_title: "Hello, Internet!",
-        subtitle: "To Write a Blog Post, You Must First Introduce an ACE Vulnerability in Your Markup Language",
-        author: "Marco Bulgarelli",
-        date_published: datetime(day: 11, month: 3, year: 2026),
-        read_time: "5 min read",
-        tags: (tags.meta, tags.typst),
-        stylesheet: styles.blog,
-        post_filename: "hello-internet",
-        post_number: 1,
-      )
-
-      #blog_template(
-        ..info,
-      )[
-        == Some Title
-
-        And here I can just write normal typst.\
-        I can use *bold*, _italics_ ...
-
-        Lists
-        - item 1
-        - item 2
-
-        You got the idea
-      ]
-      ```,
+  #let info = (
+    // post metadata
+    main_title: "Hello, Internet!",
+    subtitle: "To Write a Blog Post, You Must First Introduce an ACE Vulnerability in Your Markup Language",
+    author: "Marco Bulgarelli",
+    date_published: datetime(day: 11, month: 3, year: 2026),
+    read_time: "5 min read",
+    tags: (tags.meta, tags.typst),
+    stylesheet: styles.blog,
+    post_filename: "hello-internet",
+    post_number: 1,
   )
-  \
+
+  #blog_template(
+    ..info,
+  )[
+    == Some Title
+
+    And here I can just write normal typst.\
+    I can use *bold*, _italics_ ...
+
+    Lists
+    - item 1
+    - item 2
+
+    You got the idea
+  ]
+  ```
+
   And that gets rendered as follows:
 
   == Some Title

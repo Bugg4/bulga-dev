@@ -95,6 +95,7 @@ find $STYLES_DIR/ -type f | entr bash -c 'copy_file "$0"' /_ &
 find $SHARED_DIR/ -type f | entr bash -c 'copy_file "$0"' /_ &
 # Watch all .typ files in parallel
 find "$POSTS_DIR" -type f -name "*.typ" | xargs --max-args=1 --max-procs=0 bash -c 'watch_typst "$0"' &
-live-server $DIST_DIR/
+live-server $DIST_DIR/ &
+qr http://$(lanip):8080 &
 
 wait
