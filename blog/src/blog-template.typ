@@ -29,6 +29,7 @@
   html.meta(charset: "utf-8")
     + html.meta(name: "viewport", content: "width=device-width, initial-scale=1.0")
     + html.title(title)
+    // NOTE: favicon currently not working because of broken head, see: https://github.com/typst/typst/issues/7974
     + html.link(rel: "icon", type: "image/x-icon", href: shared.favicon)
     + html.link(rel: "stylesheet", href: stylesheet),
 )
@@ -48,8 +49,7 @@
 
 #let blog_header(title, subtitle, author, date_published, read_time, tags) = html.header(
   html.h1(
-    class: "blog-title",
-    title + html.br() + html.span(class: "blog-subtitle", subtitle),
+    html.span(class: "gradient", title) + html.br() + html.span(subtitle),
   )
     + html.ul(
       class: "blog-metadata",

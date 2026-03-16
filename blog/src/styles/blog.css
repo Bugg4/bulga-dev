@@ -159,7 +159,7 @@ h1 {
 }
 
 /* Gradient Text Effect */
-.blog-subtitle {
+.gradient {
   background: linear-gradient(to right,
       var(--accent-cyan),
       var(--accent-fuchsia));

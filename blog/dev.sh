@@ -6,4 +6,5 @@ typst-git watch dist.typ \
   --features bundle,html \
   --ignore-system-fonts \
   --no-serve \
-  --no-reload
+  --no-reload &
+live-server ./dist
