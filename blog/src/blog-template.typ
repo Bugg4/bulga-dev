@@ -49,17 +49,19 @@
 
 #let blog_header(title, subtitle, author, date_published, read_time, tags) = html.header(
   html.h1(
-    html.span(class: "gradient", title) + html.br() + html.span(subtitle),
+    html.span(class: "blog-title gradient", title) + html.br() + html.span(class: "blog-subtitle", subtitle),
   )
-    + html.ul(
+    + html.div(
       class: "blog-metadata",
-      html.li(class: "author", author)
-        + html.li(class: "date-published", date_published.display())
-        + html.li(class: "read-time", read_time)
-        + html.ul(
-          class: "tags",
-          tags.map(t => html.li(class: "tag", t)).join(),
-        ),
+      html.ul(
+        html.li(class: "author", author)
+          + html.li(class: "date-published", date_published.display())
+          + html.li(class: "read-time", read_time)
+          + html.ul(
+            class: "tags",
+            tags.map(t => html.li(class: "tag", t)).join(),
+          ),
+      ),
     ),
 )
 
