@@ -2,20 +2,23 @@
 // Globals
 // ==========================================
 
-#let PUBLIC_ROOT = ".dist"
-#let PUBLIC_POSTS_ROOT = "posts"
-
 #let styles = (
-  blog: "../../styles/blog.css",
+  // https://ydx-typst.netlify.app/reference/foundations/path/#path-type
+  blog: "/styles/blog.css",
 )
 
 #let shared = (
-  favicon: "../../shared/favicon.png",
+  favicon: "shared/favicon.png",
 )
 
 #let tags = (
   meta: "meta",
   typst: "typst",
+)
+
+#let page_types = (
+  post: "post",
+  index: "index",
 )
 
 // ==========================================
@@ -83,7 +86,8 @@
 // Main Layout Root
 // ==========================================
 
-#let blog_template(
+#let blog_post(
+  page_type: "",
   main_title: "Main Title",
   subtitle: "Subtitle",
   author: "Author",
@@ -96,37 +100,46 @@
   post_filename: "some-title",
   content,
 ) = {
-  // =============== Headings ==============
-  set heading(numbering: "01.")
-  show heading: it => {
-    if it.level <= 1 {
-      html.h1(it.body)
-    } else {
-      html.elem(
-        "h" + str(it.level),
-        html.span(it.numbering, class: "section-num") + " " + it.body,
-      )
-    }
+  // setup document
+  let path = ""
+  if (page_type == page_types.post) {
+    path = "post/"
+  } else if (page_type == page_types.index) {
+    path = "./"
   }
+  document(path + post_filename + ".html", title: main_title)[
+    // =============== Headings ==============
+    #set heading(numbering: "01.")
+    #show heading: it => {
+      if it.level <= 1 {
+        html.h1(it.body)
+      } else {
+        html.elem(
+          "h" + str(it.level),
+          html.span(it.numbering, class: "section-num") + " " + it.body,
+        )
+      }
+    }
 
-  // =============== Build Document ==============
-  html.html(
-    lang: "en",
-    blog_head(main_title, stylesheet)
-      + html.body(
-        blog_nav()
-          + html.article(
-            blog_header(
-              main_title,
-              subtitle,
-              author,
-              date_published,
-              read_time,
-              tags,
+    // =============== Build Document ==============
+    #html.html(
+      lang: "en",
+      blog_head(main_title, stylesheet)
+        + html.body(
+          blog_nav()
+            + html.article(
+              blog_header(
+                main_title,
+                subtitle,
+                author,
+                date_published,
+                read_time,
+                tags,
+              )
+                + html.main(content),
             )
-              + html.main(content),
-          )
-          + blog_footer(author, "2026"),
-      ),
-  )
+            + blog_footer(author, "2026"),
+        ),
+    )
+  ]
 }

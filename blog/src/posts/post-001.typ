@@ -1,7 +1,9 @@
-#import "../../blog.typ": blog_template, styles, tags
+
+#import "../blog-template.typ": blog_post, styles, tags, page_types
 
 #let info = (
   // post metadata
+  page_type: page_types.post,
   main_title: "Hello, Internet!",
   subtitle: "To Write a Blog Post, You Must First Introduce an ACE Vulnerability in Your Markup Language",
   author: "Marco Bulgarelli",
@@ -13,7 +15,7 @@
   post_number: 1,
 )
 
-#blog_template(
+#blog_post(
   ..info,
 )[
 
@@ -112,7 +114,7 @@
         print(f"</{self.tag_name}>")
 
   ```
-
+  See the `__enter__` and `__exit__` methods? The code nested inside `with` statements is executed between those two. \
   You'd use it like this:
 
   ```python
@@ -149,15 +151,16 @@
   And ToCs usually go at, or close to, the very beginning of the article, correct? \
   But how could we construct a ToC without having printed all the content first? Well, we can't.
 
-  To solve this issue, we'd have complicate the structure of our (for now) simple HTML renderer, and add think of a way to access the HTML node tree once it's fully constructed, analyize it, and then go back at the beginning to insert another element, a ToC in this case.
+  To solve this issue, we'd have to complicate the structure of our simple (for now) HTML renderer, and think of a way to access the HTML node tree once it's fully constructed, analyize it, and then go back at the beginning to insert another element, a ToC in this case.
 
   This is doable, don't get me wrong, but it _feels_ out of scope for this project. \
   It _feels_ like there must be a simpler way to write HTML programmatically without having to build a full fledged HTML Node tree representation.
 
   Remember? I'm lazy. Plus, if I wanted to use something like that I'd adopt one of the existing libraries, like #link("https://github.com/Knio/dominate")[Dominate].
 
-  So, final verdict for Python: Great for logic, terrible for writing text (having to use print statements and strings). \
-  The ideal workflow would let me *just write the damn text*, without wrapping every sentence in quotes, or polluting the document with function calls and endless nesting, while still giving me the power of a real programming language behind the scenes.
+  So, final verdict for Python: Great for logic, terrible for writing content.
+
+  The ideal workflow I'm searching for would let me *just write the damn text*, without wrapping every sentence in quotes, or polluting the document with function calls and endless nesting, while still giving me the power of a real programming language behind the scenes.
 
   == Typst
   Then, the revelation.
@@ -290,4 +293,5 @@
   - talk about wanting to be able to execute arbitrary code which typst does not fully allow.
     there 's the metadata workaroun, but it's ugly and requires a two-step compilation.
     So if I wanna keep typst, I have to introduce \#exec
-]
+] #eval("<" + str(info.post_number) + ">")
+
