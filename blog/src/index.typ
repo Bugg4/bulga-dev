@@ -1,4 +1,4 @@
-#import "blog-template.typ": blog_post, page_types, styles
+#import "blog-template.typ": blog_post, styles, routes
 #import "utils.typ": pad_left
 
 // Get posts info
@@ -12,7 +12,7 @@
 )
 
 #blog_post(
-  page_type: page_types.index,
+  route: routes.index,
   main_title: "Index",
   subtitle: "List of my posts",
   author: "Marco Bulgarelli",

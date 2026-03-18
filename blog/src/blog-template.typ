@@ -16,9 +16,9 @@
   typst: "typst",
 )
 
-#let page_types = (
-  post: "post",
-  index: "index",
+#let routes = (
+  post: "post/",
+  index: "/",
 )
 
 // ==========================================
@@ -89,7 +89,7 @@
 // ==========================================
 
 #let blog_post(
-  page_type: "",
+  route: "",
   main_title: "Main Title",
   subtitle: "Subtitle",
   author: "Author",
@@ -103,25 +103,12 @@
   content,
 ) = {
   // setup document
-  let path = ""
-  if (page_type == page_types.post) {
-    path = "post/"
-  } else if (page_type == page_types.index) {
-    path = "./"
-  }
-  document(path + post_filename + ".html", title: main_title)[
+  document(route + post_filename + ".html", title: main_title)[
     // =============== Headings ==============
-    #set heading(numbering: "01.")
-    #show heading: it => {
-      if it.level <= 1 {
-        html.h1(it.body)
-      } else {
-        html.elem(
-          "h" + str(it.level),
-          html.span(it.numbering, class: "section-num") + " " + it.body,
-        )
-      }
-    }
+    #set heading(numbering: "1.1.1 " + sym.dash)
+
+    // =============== Quotes ================
+    #show quote: it => emph(it)
 
     // =============== Build Document ==============
     #html.html(

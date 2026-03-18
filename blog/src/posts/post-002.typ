@@ -1,9 +1,9 @@
 
-#import "../blog-template.typ": blog_post, page_types, styles, tags
+#import "../blog-template.typ": blog_post, routes, styles, tags
 
 #let info = (
   // post metadata
-  page_type: page_types.post,
+  route: routes.post,
   main_title: "Main Title",
   subtitle: "Subtitle",
   author: "Marco Bulgarelli",

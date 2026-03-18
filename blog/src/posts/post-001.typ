@@ -1,11 +1,11 @@
 
-#import "../blog-template.typ": blog_post, styles, tags, page_types
+#import "../blog-template.typ": blog_post, routes, styles, tags
 
 #let info = (
   // post metadata
-  page_type: page_types.post,
+  route: routes.post,
   main_title: "Hello, Internet!",
-  subtitle: "To Write a Blog Post, You Must First Introduce an ACE Vulnerability in Your Markup Language",
+  subtitle: "My Blog, My Way",
   author: "Marco Bulgarelli",
   date_published: datetime(day: 11, month: 3, year: 2026),
   read_time: "5 min read",
@@ -18,84 +18,79 @@
 #blog_post(
   ..info,
 )[
-
   So, uhm... is this thing on? \
   Welcome to my first ever blog post! How exciting!
-  This took *MUCH* longer than I expected, but I'm happy I managed to get it started.
+  This took _much_ longer than I expected, but I'm happy I managed to get it started.
 
-  I won't waste time introducing myself, as that's the job of the #link("about:blank")[About Me] page, which I've yet to write,
-  but I'm sure you'll manage fine in the meantime. \
-  Instead, I'd like to talk a bit about how I approached this blog writing thing, which is quite funny
-  to actually write word for word, now that I'm actually doing it.
+  I won't waste time introducing myself, as that's the job of the #link("about:blank")[About Me] page, which I've yet to write... but I'm sure you'll manage fine in the meantime. \
+  Instead, I'd like to talk about how I approached this blog writing thing, which is quite funny now that I'm actually writing it down.
 
   But let's start from the beginning.
 
-  == Make it simple, Make it From Scratch
+  = Make It Simple, Make It From Scratch
 
-  I like to start projects from scratch. As most developers that code for fun, and not to get shit done do. \
+  I like to start projects from scratch. As most developers coding for fun, and not to get shit done often do. \
   No WordPress, No React, no Hugo. \
   I want a simple, fast, accessible and beautiful static site,
   one the same line of the original #link("https://motherfuckingwebsite.com/")[motherfuckingwebsite.com]
   and all the other #link("https://github.com/lyoshenka/awesome-motherfucking-website")[mfw-inspired sites], which I encourage you to check out if you're not familiar. \
-  _But_ I also want to enjoy the whole process of wrting the website first, and the content later, which may not be as obvious as it sounds. \
-  I see, I'm a lazy person, and arguably, an even lazier developer. \
-  If I don't set the whole thing up to be a an absolute joy to use, I'll get bored or annoyed, and won't write a second post. I'm sure that'd leave you, dear reader, in absolute shambles, so I promise to do my best to make this fun and interesting for both me _and_ you!
+  _But_ I also want to enjoy the whole process of writing the website first, and the content later, which may not be as obvious as it sounds. \
+  See, I'm a lazy person, and arguably, an even lazier developer. \
+  If I don't set the whole thing up to be a an absolute joy to use, I'll get bored or annoyed with it, and won't write a second post. I'm sure that'd leave you, dear reader, in absolute shambles, so I promise to do my best to make this fun and interesting for both me _and_ you!
 
-  So, the first choice I have to make is: which markup language should I choose? \
-  My options:
+  So, the first choice I have to make is: which stack should I adopt? \
+  The options I went through:
 
-  === Just raw HTML
+  == Just Raw HTML + CSS
+  Ah, they joy of having literally zero dependencies, anside from a text editor. \
+  Without a doubt, the most minimal option.
   - Pros:
-    - cool at first
-    - very powerful as it allows for a great degree of freedom with basically zero complexity.
+    - minimalism FTW
+    - very powerful as they allow for a great degree of freedom in structuring the page, with no added complexity.
   - Cons:
-    - very repetitive
-    - very verbose
-    - source files look cluttery and hard to read
-    - reusing code among multiple pages can become hell to maintain
-    - no scripting capabilities, would need javascript to make it dynamic
+    - Very verbose and repetitive
+    - Source files look cluttery and hard to read once they pass a couple hundreads lines.
+    - HTML does not support importing/including snippets from other different files out of the box, so reusing get perry hard.
+    - No scripting capabilities, would need javascript
 
   Overall, Good for structure, too tedious/repetitive for writing. \
-  I see myself experiencing too much friction using it, so it's a no go.
+  I see myself experiencing too much friction with this method, so it's a no go.
 
-  === Markdown
+  == Markdown + SSG
   The obvious first choice... for a _sane_ person. \
-  Also the de-facto standard used by pretty much every static site generator out there. \
+  Also the de-facto standard, and, I assume, most used method to build static sites. \
+  I've already stated I'd like to avoid SSGs, as they can be a bit opinionated in the way they handle the source tree structure. \
+  They also kinda hide away the whole markdown compilation process, which I'd prefer to have complete control on.
+
   - Pros:
     - sane choice
-    - very terse
-    - easy to read
-    - ubiquitous
+    - Markdown is terse and easy to read
 
   - Cons:
-    - Limited styling expression power
-    - no scripting
-    - no way to reuse code across pages
-    - and worst of all: no way to customize the structure of the HTML output, unless I use some weird extensions, which would require passing the source files through a framework or SSG anyway, *AND* would make the syntax uglier, which is the exact opposite of what I want.
+    - Scripting and content must be separate: the logic resides inside the template, while the content resides in the Markdwon files. I want content and logic in the same file.
+    - I just learn to use the SSG instead building everythign myself. Also, I'd end up stealing someone's cool template instead of making my own.
 
-  Good for writing, too rigid for custom structure/logic. \
-  So, also a no go.
+  Tl;dr: I'm not a sane person. Next.
 
-  === Pure Python (???)
+  == Pure Python (???)
   What? \
-  Yeah, I wrote my blog post in Python, bruv. \
+  Yeah, I write my posts in Python, bruv. \
   Just Kidding, but I did try. \
 
-  Let me open a funny parenthesis for a moment, and tell you about that. \
-  I thought: _"Hey, I know Python, it's very ergonomic, very flexible, so maybe I can find a way to intertwine written content with
-  Python code in a way that doesn't look ugly, and grants me the full power of an actual programming language"_ (yeah, sorry HTML folks).
+  I thought #quote[Hey, Python is ergonomic, very flexible, so maybe I can find a way to intertwine written content with Python code in a way that doesn't look ugly, and grants me the full power of an actual programming language] (yeah, sorry HTML folks).
 
-  I had recently learnt about context managers, which, if you wrote any Python at all, you surely used.
-  It's the costruct the allows you to do something like:
+  I had recently learnt about context managers, which, if you wrote any Python at all, you surely used:
 
   ```python
   with open("file.txt") as f:
       data = f.read()
   ```
 
-  The `with` keyword allows you to interact with a _context_, which is a construct that performs predefined actions both _before_ and _after_ the piece of code wrapped in the context. \
-  Sounds perfect for writing HTML programmatically! \
-  This is how I had implemented a class which mimics the way you'd write nested HTML elements:
+  The `with` keyword here allows you to `open()` a file and bind it to the `f` variable without having to close it once you're done; it gets closed automatically once you exit the scope if the `with` block. \
+  That's because you're operating inside *context*, which is a construct that can perform predefined actions both _before_ and _after_ the piece of code it wraps. \
+  Sounds perfect for writing HTML programmatically!
+
+  This is how I went about implementeing a context manager class which mimics the way you'd write nested HTML elements:
 
   ```python
   class HTMLTag:
@@ -114,7 +109,8 @@
         print(f"</{self.tag_name}>")
 
   ```
-  See the `__enter__` and `__exit__` methods? The code nested inside `with` statements is executed between those two. \
+  See the `__enter__` and `__exit__` methods? Those are the secret sauce of context managers. \
+  The code nested inside `with` statements is executed between those two. \
   You'd use it like this:
 
   ```python
@@ -124,29 +120,37 @@
       with HTMLTag("p"):
           print("This was generated using a Python context manager.", end="")
   ```
+  And that would produce the nested HTML structure you'd expect:
 
-  You can likely see how, with some work to prettify the API, this could become quite a usable tool.
-  We could make derived classes for each single HTML tag, as to avoid some code repetition:
+  ```html
+  <div class="container" id="main">
+    <h1 style="color: blue;">Hello, World!</h1>
+    <p>This was generated using a Python context manager.</p>
+  </div>
+  ```
+
+  You can likely see how, with some work to prettify the API, this could become quite a usable pattern. The idea is simply that we manage the HTML nesting using python contexts.\
+  We could also make a derived classes for each single HTML tag, as to avoid some code and make the code prettier:
 
   ```python
-    class Div(HTMLTag):
-      def __init__(self, **kwargs):
-          # Automatically handle the 'class' keyword conflict
-          if 'cls' in kwargs:
-              kwargs['class'] = kwargs.pop('cls')
+  class Div(HTMLTag):
+    def __init__(self, **kwargs):
+        # Automatically handle the 'class' keyword conflict
+        if 'cls' in kwargs:
+          kwargs['class'] = kwargs.pop('cls')
           super().__init__("div", **kwargs)
 
   class H1(HTMLTag):
-      def __init__(self, **kwargs):
-          super().__init__("h1", **kwargs)
+    def __init__(self, **kwargs):
+      super().__init__("h1", **kwargs)
 
   class P(HTMLTag):
-      def __init__(self, **kwargs):
-          super().__init__("p", **kwargs)
+    def __init__(self, **kwargs):
+      super().__init__("p", **kwargs)
   ```
 
   This is all fine and dandy, but there's a not so subtle usability problem: We have to write our actual content using print statements and strings. \
-  This is a major issue. \
+  This is a major annoyance. \
   Assume we'd want to make a Table of Contents component. It's pretty common to have an index of some sort in pretty much any artcile, right? \
   And ToCs usually go at, or close to, the very beginning of the article, correct? \
   But how could we construct a ToC without having printed all the content first? Well, we can't.
@@ -162,7 +166,7 @@
 
   The ideal workflow I'm searching for would let me *just write the damn text*, without wrapping every sentence in quotes, or polluting the document with function calls and endless nesting, while still giving me the power of a real programming language behind the scenes.
 
-  == Typst
+  = Typst
   Then, the revelation.
 
   I knew about this language the whole time, since 2023 in fact. \
@@ -170,21 +174,27 @@
 
   I also happened to use it for a fairly recent project, a technical documentation automation pipeline I was experimenting with for work, but it never occurred to me to use it for a blog, until now.
 
-  _TODO: explain typst in short here._
+  For the uninitiade, #link("https://typst.app/docs/")[Typst] describes itself as follows:
 
-  Turns out Typst does have an HTML export feature, but it's still in beta and not stable, nor complete. \
+  #quote[
+    [...] a new markup-based typesetting system for the sciences. It is designed to be an alternative both to advanced tools like LaTeX and simpler tools like Word and Google Docs. Our goal with Typst is to build a typesetting tool that is highly capable and a pleasure to use.
+  ]
+
+  That is *_EXACTLY_* what I'm looking for.
+
+  Turns out Typst also has an HTML export feature, but it's still in beta and not stable, nor complete. \
 
   _Buuuuuut..._
 
   It is _so_ nice to write in. \
   It's basically Markdown on steroids, and Turing complete. \
-  It's meant to be a modern replacement for LaTeX, here's the official #link("https://github.com/typst/typst")[GitHub repo], check it out if you've never heard of it.
+  Here's the official #link("https://github.com/typst/typst")[GitHub repo], check it out if you've never heard of it.
 
   Here's my blog template function, as an example of its syntax:
 
-
   ```typst
-  #let blog_template(
+  #let blog_post(
+    route: "",
     main_title: "Main Title",
     subtitle: "Subtitle",
     author: "Author",
@@ -197,101 +207,67 @@
     post_filename: "some-title",
     content,
   ) = {
-    // =============== Headings ==============
-    set heading(numbering: "01.")
-    show heading: it => {
-      if it.level <= 1 {
-        html.h1(it.body)
-      } else {
-        html.elem(
-          "h" + str(it.level),
-          html.span(it.numbering, class: "section-num") + " " + it.body,
-        )
-      }
-    }
+    // setup document
+    document(route + post_filename + ".html", title: main_title)[
+      // =============== Headings ==============
+      #set heading(numbering: "1.1.1 " + sym.dash)
 
-    // =============== Build Document ==============
-    html.html(
-      lang: "en",
-      blog_head(main_title, stylesheet)
-        + html.body(
-          blog_nav()
-            + html.article(
-              blog_header(
-                main_title,
-                subtitle,
-                author,
-                date_published,
-                read_time,
-                tags,
+      // =============== Quotes ================
+      #show quote: it => emph(it)
+
+      // =============== Build Document ==============
+      #html.html(
+        lang: "en",
+        blog_head(main_title, stylesheet)
+          + html.body(
+            blog_nav()
+              + html.article(
+                blog_header(
+                  main_title,
+                  subtitle,
+                  author,
+                  date_published,
+                  read_time,
+                  tags,
+                )
+                  + html.main(content),
               )
-                + html.main(content),
-            )
-            + blog_footer(author, "2026"),
-        ),
-    )
+              + blog_footer(author, "2026"),
+          ),
+      )
+    ]
   }
   ```
+  What I'm doing is defining a `blog_template()` function which takes arguments in the form of a dictionary. \
+  Those args will act as a centralized place to setup all the metadata about my post. \
+  What I like about this approach, is that the metadata is defined all at once, in the same place, like you'd do inside the YAML front matter of a markdown file.
 
-  And here's how it looks in use:
+  Inside the curly braces I then have a couple of `set` and `show` rules, which are a concept particular to Typst:
+  - `set` rules allow me pre-set parameters for #link("https://typst.app/docs/reference/foundations/function/#element-functions")[element functions] that get called inside this template. Imagine it like a macro that "fixes" the specified parameters of a functions to the specified values, so we don't have to set theme each time.
+  TODO: Make practical example
+  - `show` rules allow me to _redefine_ how those elements look, and completly change their structure.
+  for example, I could redefine all the appearances of bold text to always be surrounded by red amoguses (or amogi?):
 
   ```typst
-  #import "../../blog.typ": blog_template, styles, tags
-
-  #let info = (
-    // post metadata
-    main_title: "Hello, Internet!",
-    subtitle: "To Write a Blog Post, You Must First Introduce an ACE Vulnerability in Your Markup Language",
-    author: "Marco Bulgarelli",
-    date_published: datetime(day: 11, month: 3, year: 2026),
-    read_time: "5 min read",
-    tags: (tags.meta, tags.typst),
-    stylesheet: styles.blog,
-    post_filename: "hello-internet",
-    post_number: 1,
-  )
-
-  #blog_template(
-    ..info,
-  )[
-    == Some Title
-
-    And here I can just write normal typst.\
-    I can use *bold*, _italics_ ...
-
-    Lists
-    - item 1
-    - item 2
-
-    You got the idea
-  ]
+  #show strong: it => [#text(fill: red, "ඞ") #it #text(fill: red, "ඞ")]
   ```
 
-  And that gets rendered as follows:
+  #html.span("ඞ", style: "color:red") *sus* #html.span("ඞ", style: "color:red") \
+  A very powerful ability, to be used with caution.
 
-  == Some Title
 
-  And here I can just write normal typst.\
-  I can use *bold*, _italics_ ...
-
-  Lists
-  - item 1
-  - item 2
-
-  You got the idea
-
+  TODO: Transition to saying we need to build multiple docs --> makefile ? it's messy --> bundle feature is available in git version
 
 
   == Some notes
 
-  Try writing CSS in typst directly, using shared variables for colors and styles, the build css directly into the components with show/set rules
-
-  - Python con: writing _content_ is clunky because we have to use strings, so no syntax highlighting out of the box, and intepolating code with content becomes kinda verbose with the `with` spam.
-  - talk about choosing typst and creating the blog template
   - talk about html feature being in beta, but stable enough for my use case, and how it allows me to write HTML in a more natural way, without the need for string concatenation or anything like that.
 
-  - talk about wanting to be able to execute arbitrary code which typst does not fully allow.
-    there 's the metadata workaroun, but it's ugly and requires a two-step compilation.
-    So if I wanna keep typst, I have to introduce \#exec
+  - Talk about bundle feature being merged 5 days before starting to write teh blog, and how it saved me from the makefile mess
+
+
+
+
+
 ] #eval("<" + str(info.post_number) + ">")
 
