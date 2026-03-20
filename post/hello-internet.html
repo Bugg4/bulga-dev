@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <p>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </p>
+    <title>Hello, Internet!</title>
+    <p>
+      <link rel="icon" type="image/x-icon" href="shared/favicon.png">
+      <link rel="stylesheet" href="/styles/blog.css">
+    </p>
+  </head>
+  <body>
+    <nav><a href="/" class="nav-brand">Home</a><a href="#" class="nav-link">cd ..</a></nav>
+    <article>
+      <header>
+        <h1><span class="blog-title gradient">Hello, Internet!</span><br><span class="blog-subtitle">My Blog, My Way</span></h1>
+        <div class="blog-metadata">
+          <ul>
+            <li class="author">Marco Bulgarelli</li>
+            <li class="date-published">2026-03-11</li>
+            <li class="read-time">5 min read</li>
+            <ul class="tags">
+              <li class="tag">meta</li>
+              <li class="tag">typst</li>
+            </ul>
+          </ul>
+        </div>
+      </header>
+      <main>
+        <p>So, uhm… is this thing on?<br>Welcome to my first ever blog post! How exciting! This took <em>much</em> longer than I expected, but I’m happy I managed to get it started.</p>
+        <p>I won’t waste time introducing myself, as that’s the job of the <a href="about:blank">About Me</a> page, which I’ve yet to write… but I’m sure you’ll manage fine in the meantime.<br>Instead, I’d like to talk about how I approached this blog writing thing, which is quite funny now that I’m actually writing it down.</p>
+        <p>But let’s start from the beginning.</p>
+        <h2>1 – Make It Simple, Make It From Scratch</h2>
+        <p>I like to start projects from scratch. As most developers coding for fun, and not to get shit done, often do.<br>No WordPress, No React, no Hugo.<br>I want a simple, fast, accessible and beautiful static site, on the same line of the original <a href="https://motherfuckingwebsite.com/">motherfuckingwebsite.com</a> and all the other <a href="https://github.com/lyoshenka/awesome-motherfucking-website">mfw-inspired sites</a>, which I encourage you to check out if you’re not familiar.<br><em>But</em> I also want to enjoy the whole process of writing the website first, and the content later, which may not be as obvious as it sounds.<br>See, I’m a lazy person, and arguably, an even lazier developer.<br>If I don’t set the whole thing up to be an absolute joy to use, I’ll get bored or annoyed with it, and won’t write a second post. I’m sure that’d leave you, dear reader, in absolute shambles, so I promise to do my best to make this fun and interesting for both me <em>and</em> you!</p>
+        <p>So, the first choice I have to make is: which stack should I adopt?<br>The options I went through:</p>
+        <h3>1.1 – Just Raw HTML + CSS</h3>
+        <p>Ah, the joy of having literally zero dependencies, aside from a text editor.<br>Without a doubt, the most minimal option.</p>
+        <ul>
+          <li>
+            <p>Pros:</p>
+            <ul>
+              <li>minimalism FTW</li>
+              <li>very powerful as they allow for a great degree of freedom in structuring the page, with no added complexity.</li>
+            </ul>
+          </li>
+          <li>
+            <p>Cons:</p>
+            <ul>
+              <li>Very verbose and repetitive</li>
+              <li>Source files look cluttered and hard to read once they pass a couple hundred lines.</li>
+              <li>HTML does not support importing/including snippets from other different files out of the box, so reusing gets pretty hard.</li>
+              <li>No scripting capabilities, would need javascript</li>
+            </ul>
+          </li>
+        </ul>
+        <p>Overall, Good for structure, too tedious/repetitive for writing.<br>I see myself experiencing too much friction with this method, so it’s a no go.</p>
+        <h3>1.2 – Markdown + SSG</h3>
+        <p>The obvious first choice… for a <em>sane</em> person.<br>Also the de-facto standard, and, I assume, most used method to build static sites.<br>I’ve already stated I’d like to avoid SSGs, as they can be a bit opinionated in the way they handle the source tree structure.<br>They also kinda hide away the whole markdown compilation process, which I’d prefer to have complete control on.</p>
+        <ul>
+          <li>
+            <p>Pros:</p>
+            <ul>
+              <li>sane choice</li>
+              <li>Markdown is terse and easy to read</li>
+            </ul>
+          </li>
+          <li>
+            <p>Cons:</p>
+            <ul>
+              <li>Scripting and content must be separate: the logic resides inside the template, while the content resides in the Markdown files. I want content and logic in the same file.</li>
+              <li>I just learn to use the SSG instead of building everything myself. Also, I’d end up stealing someone’s cool template instead of making my own.</li>
+            </ul>
+          </li>
+        </ul>
+        <p>Tl;dr: I’m not a sane person. Next.</p>
+        <h3>1.3 – Pure Python (???)</h3>
+        <p>What?<br>Yeah, I write my posts in Python, bruv.<br>Just Kidding, but I did try.<br></p>
+        <p>I thought <em>“Hey, Python is ergonomic, very flexible, so maybe I can find a way to intertwine written content with Python code in a way that doesn’t look ugly, and grants me the full power of an actual programming language”</em> (yeah, sorry HTML folks).</p>
+        <p>I had recently learned about context managers, which, if you wrote any Python at all, you surely used:</p>
+        <pre><code data-lang="python"><span style="color: #d73948">with</span> <span style="color: #4b69c6">open</span>(<span style="color: #198810">"</span><span style="color: #198810">file.txt</span><span style="color: #198810">"</span>) <span style="color: #d73948">as</span> f:
+    data <span style="color: #d73948">=</span> f.<span style="color: #4b69c6">read</span>()</code></pre>
+        <p>The <code>with</code> keyword here allows you to <code>open()</code> a file and bind it to the <code>f</code> variable without having to close it once you’re done; it gets closed automatically once you exit the scope if the <code>with</code> block.<br>That’s because you’re operating inside <strong>context</strong>, which is a construct that can perform predefined actions both <em>before</em> and <em>after</em> the piece of code it wraps.<br>Sounds perfect for writing HTML programmatically!</p>
+        <p>This is how I went about implementing a context manager class which mimics the way you’d write nested HTML elements:</p>
+        <pre><code data-lang="python"><span style="color: #d73948">class</span> <span style="color: #4b69c6">HTMLTag</span>:
+  <span style="color: #d73948">def</span> <span style="color: #4b69c6">__init__</span>(self, tag_name, <span style="color: #d73948">**</span>kwargs):
+      <span style="color: #d73948">self</span>.tag_name <span style="color: #d73948">=</span> tag_name
+      <span style="color: #74747c">#</span><span style="color: #74747c"> Format kwargs into 'key="value"' strings</span>
+      <span style="color: #d73948">self</span>.attributes <span style="color: #d73948">=</span> <span style="color: #198810">"</span><span style="color: #198810">"</span>.<span style="color: #4b69c6">join</span>([<span style="color: #d73948">f</span><span style="color: #198810">'</span><span style="color: #198810"> </span><span style="color: #8b41b1">{</span><span style="color: #8b41b1">k</span><span style="color: #8b41b1">.</span><span style="color: #4b69c6">replace</span><span style="color: #8b41b1">(</span><span style="color: #198810">"</span><span style="color: #198810">_</span><span style="color: #198810">"</span><span style="color: #8b41b1">,</span><span style="color: #8b41b1"> </span><span style="color: #198810">"</span><span style="color: #198810">-</span><span style="color: #198810">"</span><span style="color: #8b41b1">)</span><span style="color: #8b41b1">}</span><span style="color: #198810">="</span><span style="color: #8b41b1">{</span><span style="color: #8b41b1">v</span><span style="color: #8b41b1">}</span><span style="color: #198810">"</span><span style="color: #198810">'</span> <span style="color: #d73948">for</span> k, v <span style="color: #d73948">in</span> kwargs.<span style="color: #4b69c6">items</span>()])
+
+  <span style="color: #d73948">def</span> <span style="color: #4b69c6">__enter__</span>(self):
+      <span style="color: #74747c">#</span><span style="color: #74747c"> Print the opening tag when entering the 'with' block</span>
+      <span style="color: #4b69c6">print</span>(<span style="color: #d73948">f</span><span style="color: #198810">"</span><span style="color: #198810">&lt;</span><span style="color: #8b41b1">{</span><span style="color: #d73948">self</span><span style="color: #8b41b1">.</span><span style="color: #8b41b1">tag_name</span><span style="color: #8b41b1">}</span><span style="color: #8b41b1">{</span><span style="color: #d73948">self</span><span style="color: #8b41b1">.</span><span style="color: #8b41b1">attributes</span><span style="color: #8b41b1">}</span><span style="color: #198810">></span><span style="color: #198810">"</span>, end<span style="color: #d73948">=</span><span style="color: #198810">"</span><span style="color: #198810">"</span>)
+      <span style="color: #d73948">return</span> <span style="color: #d73948">self</span>
+
+  <span style="color: #d73948">def</span> <span style="color: #4b69c6">__exit__</span>(self, exc_type, exc_val, exc_tb):
+      <span style="color: #74747c">#</span><span style="color: #74747c"> Print the closing tag when leaving the 'with' block</span>
+      <span style="color: #4b69c6">print</span>(<span style="color: #d73948">f</span><span style="color: #198810">"</span><span style="color: #198810">&lt;/</span><span style="color: #8b41b1">{</span><span style="color: #d73948">self</span><span style="color: #8b41b1">.</span><span style="color: #8b41b1">tag_name</span><span style="color: #8b41b1">}</span><span style="color: #198810">></span><span style="color: #198810">"</span>)
+</code></pre>
+        <p>See the <code>__enter__</code> and <code>__exit__</code> methods? Those are the secret sauce of context managers.<br>The code nested inside <code>with</code> statements is executed between those two.<br>You’d use it like this:</p>
+        <pre><code data-lang="python"><span style="color: #d73948">with</span> <span style="color: #4b69c6">HTMLTag</span>(<span style="color: #198810">"</span><span style="color: #198810">div</span><span style="color: #198810">"</span>, _class<span style="color: #d73948">=</span><span style="color: #198810">"</span><span style="color: #198810">container</span><span style="color: #198810">"</span>, id<span style="color: #d73948">=</span><span style="color: #198810">"</span><span style="color: #198810">main</span><span style="color: #198810">"</span>):
+    <span style="color: #d73948">with</span> <span style="color: #4b69c6">HTMLTag</span>(<span style="color: #198810">"</span><span style="color: #198810">h1</span><span style="color: #198810">"</span>, style<span style="color: #d73948">=</span><span style="color: #198810">"</span><span style="color: #198810">color: blue;</span><span style="color: #198810">"</span>):
+        <span style="color: #4b69c6">print</span>(<span style="color: #198810">"</span><span style="color: #198810">Hello, World!</span><span style="color: #198810">"</span>, end<span style="color: #d73948">=</span><span style="color: #198810">"</span><span style="color: #198810">"</span>)
+    <span style="color: #d73948">with</span> <span style="color: #4b69c6">HTMLTag</span>(<span style="color: #198810">"</span><span style="color: #198810">p</span><span style="color: #198810">"</span>):
+        <span style="color: #4b69c6">print</span>(<span style="color: #198810">"</span><span style="color: #198810">This was generated using a Python context manager.</span><span style="color: #198810">"</span>, end<span style="color: #d73948">=</span><span style="color: #198810">"</span><span style="color: #198810">"</span>)</code></pre>
+        <p>And that would produce the nested HTML structure you’d expect:</p>
+        <pre><code data-lang="html">&lt;<span style="color: #4b69c6">div</span> <span style="color: #8b41b1">class</span>=<span style="color: #198810">"</span><span style="color: #198810">container</span><span style="color: #198810">"</span> <span style="color: #8b41b1">id</span>=<span style="color: #198810">"</span><span style="color: #198810">main</span><span style="color: #198810">"</span>>
+  &lt;<span style="color: #4b69c6">h1</span> <span style="color: #8b41b1">style</span>=<span style="color: #198810">"</span><span style="color: #4b69c6">color</span>: <span style="color: #4b69c6">blue</span>;<span style="color: #198810">"</span>>Hello, World!&lt;/<span style="color: #4b69c6">h1</span>>
+  &lt;<span style="color: #4b69c6">p</span>>This was generated using a Python context manager.&lt;/<span style="color: #4b69c6">p</span>>
+&lt;/<span style="color: #4b69c6">div</span>></code></pre>
+        <p>You can likely see how, with some work to prettify the API, this could become quite a usable pattern. The idea is simply that we manage the HTML nesting using python contexts.<br>We could also make derived classes for each single HTML tag, as to avoid some code and make the code prettier:</p>
+        <pre><code data-lang="python"><span style="color: #d73948">class</span> <span style="color: #4b69c6">Div</span>(<span style="color: #8b41b1">HTMLTag</span>):
+  <span style="color: #d73948">def</span> <span style="color: #4b69c6">__init__</span>(self, <span style="color: #d73948">**</span>kwargs):
+      <span style="color: #74747c">#</span><span style="color: #74747c"> Automatically handle the 'class' keyword conflict</span>
+      <span style="color: #d73948">if</span> <span style="color: #198810">'</span><span style="color: #198810">cls</span><span style="color: #198810">'</span> <span style="color: #d73948">in</span> kwargs:
+        kwargs[<span style="color: #198810">'</span><span style="color: #198810">class</span><span style="color: #198810">'</span>] <span style="color: #d73948">=</span> kwargs.<span style="color: #4b69c6">pop</span>(<span style="color: #198810">'</span><span style="color: #198810">cls</span><span style="color: #198810">'</span>)
+        <span style="color: #4b69c6">super</span>().<span style="color: #4b69c6">__init__</span>(<span style="color: #198810">"</span><span style="color: #198810">div</span><span style="color: #198810">"</span>, <span style="color: #d73948">**</span>kwargs)
+
+<span style="color: #d73948">class</span> <span style="color: #4b69c6">H1</span>(<span style="color: #8b41b1">HTMLTag</span>):
+  <span style="color: #d73948">def</span> <span style="color: #4b69c6">__init__</span>(self, <span style="color: #d73948">**</span>kwargs):
+    <span style="color: #4b69c6">super</span>().<span style="color: #4b69c6">__init__</span>(<span style="color: #198810">"</span><span style="color: #198810">h1</span><span style="color: #198810">"</span>, <span style="color: #d73948">**</span>kwargs)
+
+<span style="color: #d73948">class</span> <span style="color: #4b69c6">P</span>(<span style="color: #8b41b1">HTMLTag</span>):
+  <span style="color: #d73948">def</span> <span style="color: #4b69c6">__init__</span>(self, <span style="color: #d73948">**</span>kwargs):
+    <span style="color: #4b69c6">super</span>().<span style="color: #4b69c6">__init__</span>(<span style="color: #198810">"</span><span style="color: #198810">p</span><span style="color: #198810">"</span>, <span style="color: #d73948">**</span>kwargs)</code></pre>
+        <p>This is all fine and dandy, but there’s a not so subtle usability problem: We have to write our actual content using print statements and strings.<br>This is a major annoyance.<br>Assume we’d want to make a Table of Contents component. It’s pretty common to have an index of some sort in pretty much any article, right?<br>And ToCs usually go at, or close to, the very beginning of the article, correct?<br>But how could we construct a ToC without having printed all the content first? Well, we can’t.</p>
+        <p>To solve this issue, we’d have to complicate the structure of our simple (for now) HTML renderer, and think of a way to access the HTML node tree once it’s fully constructed, analyize it, and then go back at the beginning to insert another element, a ToC in this case.</p>
+        <p>This is doable, don’t get me wrong, but it <em>feels</em> out of scope for this project.<br>It <em>feels</em> like there must be a simpler way to write HTML programmatically without having to build a fully-fledged HTML Node tree representation.</p>
+        <p>Remember? I’m lazy. Plus, if I wanted to use something like that I’d adopt one of the existing libraries, like <a href="https://github.com/Knio/dominate">Dominate</a>.</p>
+        <p>So, final verdict for Python: Great for logic, terrible for writing content.</p>
+        <p>The ideal workflow I’m searching for would let me <strong>just write the damn text</strong>, without wrapping every sentence in quotes, or polluting the document with function calls and endless nesting, while still giving me the power of a real programming language behind the scenes.</p>
+        <h2>2 – Typst</h2>
+        <p>Then, the revelation.</p>
+        <p>I knew about this language the whole time, since 2023 in fact.<br>I had tried it for a bit, but wrote it off as not yet mature enough for whatever I was doing at the time.</p>
+        <p>I also happened to use it for a fairly recent project, a technical documentation automation pipeline I was experimenting with for work, but it never occurred to me to use it for a blog, until now.</p>
+        <p>For the uninitiated, <a href="https://typst.app/docs/">Typst</a> describes itself as follows:</p>
+        <p><em>“ […] a new markup-based typesetting system for the sciences. It is designed to be an alternative both to advanced tools like LaTeX and simpler tools like Word and Google Docs. Our goal with Typst is to build a typesetting tool that is highly capable and a pleasure to use. ”</em></p>
+        <p>That is <strong><em>EXACTLY</em></strong> what I’m looking for.</p>
+        <p>Turns out Typst also has an HTML export feature, but it’s still in beta and not stable, nor complete.<br></p>
+        <p><em>Buuuuuut…</em></p>
+        <p>It is <em>so</em> nice to write in.<br>It’s basically Markdown on steroids, and Turing complete.<br>Here’s the official <a href="https://github.com/typst/typst">GitHub repo</a>, check it out if you’ve never heard of it.</p>
+        <p>Here’s my blog template function, as an example of its syntax:</p>
+        <pre><code data-lang="typst"><span style="color: #d73948">#</span><span style="color: #d73948">let</span> <span style="color: #4b69c6">blog_post</span>(
+  route: <span style="color: #198810">""</span>,
+  main_title: <span style="color: #198810">"Main Title"</span>,
+  subtitle: <span style="color: #198810">"Subtitle"</span>,
+  author: <span style="color: #198810">"Author"</span>,
+  date_published: <span style="color: #4b69c6">datetime</span>(day: <span style="color: #b60157">1</span>, month: <span style="color: #b60157">1</span>, year: <span style="color: #b60157">1970</span>),
+  read_time: <span style="color: #198810">"Read Time"</span>,
+  tags: (<span style="color: #198810">"Tag 1"</span>, <span style="color: #198810">"Tag 2"</span>, <span style="color: #198810">"Tag 3"</span>),
+  stylesheet: <span style="color: #198810">""</span>,
+  <span style="color: #74747c">// typst source file metadata</span>
+  post_number: <span style="color: #b60157">0</span>,
+  post_filename: <span style="color: #198810">"some-title"</span>,
+  content,
+) <span style="color: #d73948">=</span> {
+  <span style="color: #74747c">// setup document</span>
+  <span style="color: #4b69c6">document</span>(route <span style="color: #d73948">+</span> post_filename <span style="color: #d73948">+</span> <span style="color: #198810">".html"</span>, title: main_title)[
+    <span style="color: #74747c">// =============== Headings ==============</span>
+    <span style="color: #d73948">#</span><span style="color: #d73948">set</span> <span style="color: #4b69c6">heading</span>(numbering: <span style="color: #198810">"1.1.1 "</span> <span style="color: #d73948">+</span> sym.dash)
+
+    <span style="color: #74747c">// =============== Quotes ================</span>
+    <span style="color: #d73948">#</span><span style="color: #d73948">show</span> <span style="color: #4b69c6">quote</span>: it <span style="color: #d73948">=></span> <span style="color: #4b69c6">emph</span>(it)
+
+    <span style="color: #74747c">// =============== Build Document ==============</span>
+    <span style="color: #8b41b1">#</span><span style="color: #8b41b1">html</span>.<span style="color: #4b69c6">html</span>(
+      lang: <span style="color: #198810">"en"</span>,
+      <span style="color: #4b69c6">blog_head</span>(main_title, stylesheet)
+        <span style="color: #d73948">+</span> html.<span style="color: #4b69c6">body</span>(
+          <span style="color: #4b69c6">blog_nav</span>()
+            <span style="color: #d73948">+</span> html.<span style="color: #4b69c6">article</span>(
+              <span style="color: #4b69c6">blog_header</span>(
+                main_title,
+                subtitle,
+                author,
+                date_published,
+                read_time,
+                tags,
+              )
+                <span style="color: #d73948">+</span> html.<span style="color: #4b69c6">main</span>(content),
+            )
+            <span style="color: #d73948">+</span> <span style="color: #4b69c6">blog_footer</span>(author, <span style="color: #198810">"2026"</span>),
+        ),
+    )
+  ]
+}</code></pre>
+        <p>What I’m doing is defining a <code>blog_template()</code> function which takes arguments in the form of a dictionary.<br>Those args will act as a centralized place to setup all the metadata about my post.<br>What I like about this approach, is that the metadata is defined all at once, in the same place, like you’d do inside the YAML front matter of a markdown file.</p>
+        <p>Inside the curly braces I then have a couple of <code>set</code> and <code>show</code> rules, which are a concept particular to Typst:</p>
+        <ul>
+          <li><code>set</code> rules allow me to preset parameters for <a href="https://typst.app/docs/reference/foundations/function/#element-functions">element functions</a> that get called inside this template. Imagine it like a macro that “fixes” the specified parameters of a function to the specified values, so we don’t have to set them each time.<br>For instance, <code>#set heading(numbering: "1.a ")</code> would make all headings throughout the document automatically number themselves following that specific pattern. Set it once, and forget it!</li>
+          <li><code>show</code> rules allow me to <em>redefine</em> how those elements look, and completely change their structure.</li>
+        </ul>
+        <p>for example, I could redefine all the appearances of bold text to always be surrounded by red amoguses (or amogi?):</p>
+        <pre><code data-lang="typst"><span style="color: #d73948">#</span><span style="color: #d73948">show</span> <span style="color: #4b69c6">strong</span>: it <span style="color: #d73948">=></span> [<span style="color: #4b69c6">#</span><span style="color: #4b69c6">text</span>(fill: red, <span style="color: #198810">"ඞ"</span>) <span style="color: #8b41b1">#</span><span style="color: #8b41b1">it</span> <span style="color: #4b69c6">#</span><span style="color: #4b69c6">text</span>(fill: red, <span style="color: #198810">"ඞ"</span>)]</code></pre>
+        <p><span style="color:red">ඞ</span> <strong>sus</strong> <span style="color:red">ඞ</span><br>I know, a very powerful ability, to be used with caution.</p>
+        <p>But don’t get distracted.<br>What we’re here for, and the main selling point of Typst, to me, is how naturally you can intertwine plain text and actual code. That’s where I see the real beauty of this tool.<br>To give you a taste, here’s the exact source code for the intro you just read, straight from this very file:</p>
+        <pre><code data-lang="typst"><span style="color: #4b69c6">#</span><span style="color: #4b69c6">blog_post</span>(
+  <span style="color: #d73948">..</span>info,
+)[
+  So, uhm<span style="color: #1d6c76">...</span> is this thing on? <span style="color: #1d6c76">\</span>
+  Welcome to my first ever blog post! How exciting!
+  This took <em>_</em><em>much</em><em>_</em> longer than I expected, but I'm happy
+  I managed to get it started.
+
+  I won't waste time introducing myself, as that's the job
+  of the <span style="color: #4b69c6">#</span><span style="color: #4b69c6">link</span>(<span style="color: #198810">"about:blank"</span>)[About Me] page, which I've yet
+  to write<span style="color: #1d6c76">...</span> but I'm sure you'll manage fine in the meantime. <span style="color: #1d6c76">\</span>
+  Instead, I'd like to talk about how I approached this
+  blog writing thing, which is quite funny now that
+  I'm actually writing it down.
+]</code></pre>
+        <p>See how clean that is?<br>No HTML tags cluttering up the paragraphs, no deep nesting, It’s mostlt yregular text.<br>But when I <em>do</em> need to insert some function calls, they effortlessly fall right in line with the writing flow.<br>I vastly prefer this over Markdown + weird templating syntaxes.<br></p>
+        <p>All hail Typst!</p>
+        <h3>2.1 – I Need MOAR Experimental Features</h3>
+        <p>Ok great, we have a language.<br>Now I can harness its power to write my awesome blog, export it to html and publish!</p>
+        <p>Yeah, not quite.</p>
+        <p>See, HTML export in Typst is currently an early stage experimental feature.<br>At the time of writing, they do have most of the native Typst-to-HTML element conversions figured out, see <a href="https://github.com/typst/typst/issues/721">here</a> but it’s still quite buggy.<br></p>
+        <p>One of the earliest bugs I found while writing my template was that Typst liked to sprinkle some <code>&lt;p></code> tags in the <code>&lt;head></code> element, which is only supposed to contain metadata, so the resulting HTML is invalid.<br>I did <a href="https://github.com/typst/typst/issues/7974">report this</a>, so if you’re a time traveler from the future, hopefully it’s already fixed for you!<br>This had the nice effect of tripping up VSCode’s live server extension, which I was using to preview the HTML page in real time.<br>Luckily, switching to node’s <a href="https://github.com/tapio/live-server">live-server</a> solved this problem for now.</p>
+        <p>That’s just to preview a single page, though.<br>Things spicier once I realized we need to build multiple pages at once.<br>Think about it: a blog is (usually) more one page. We have need to have posts, index pages, about me, http error pages… all needing to be bundled alongside CSS styles and shared assets.</p>
+        <p>Here comes the kicker: Typst currently does <strong>not</strong> support multi-page compilation for non-paged export targets like HTML out of the box, at least not in any released version.</p>
+        <p>My immediate thought to fix this problem was the tried-and-true sledgehammer: I wrote a Makefile.</p>
+        <pre><code data-lang="Makefile">BLOG_SRC <span style="color: #d73948">:=</span> <span style="color: #198810">content/</span>
+BLOG_DIST <span style="color: #d73948">:=</span> <span style="color: #198810">dist/</span>
+POST_OUT_DIR <span style="color: #d73948">:=</span> <span style="color: #198810">posts</span>
+
+POST_FOLDER_PREFIX <span style="color: #d73948">:=</span> <span style="color: #198810">post-</span>
+POST_EXTENSION <span style="color: #d73948">:=</span> <span style="color: #198810">typ</span>
+
+<span style="color: #74747c">#</span><span style="color: #74747c"> Compile Typst Files</span>
+<span style="color: #74747c">#</span><span style="color: #74747c"> Maps content/post-001/some-title.typ -> .dist/posts/001/some-title.html</span>
+POST_FILES <span style="color: #d73948">:=</span> <span style="color: #d73948">$(</span><span style="color: #4b69c6">wildcard</span><span style="color: #198810"> </span><span style="color: #d73948">$(</span><span style="color: #198810">BLOG_SRC</span><span style="color: #d73948">)</span><span style="color: #d73948">$(</span><span style="color: #198810">POST_FOLDER_PREFIX</span><span style="color: #d73948">)</span><span style="color: #d73948">*</span><span style="color: #198810">/</span><span style="color: #d73948">*</span><span style="color: #198810">.</span><span style="color: #d73948">$(</span><span style="color: #198810">POST_EXTENSION</span><span style="color: #d73948">)</span><span style="color: #d73948">)</span>
+HTML_FILES <span style="color: #d73948">:=</span> <span style="color: #d73948">$(</span><span style="color: #4b69c6">patsubst</span><span style="color: #198810"> </span><span style="color: #d73948">$(</span><span style="color: #198810">BLOG_SRC</span><span style="color: #d73948">)</span><span style="color: #d73948">$(</span><span style="color: #198810">POST_FOLDER_PREFIX</span><span style="color: #d73948">)</span><span style="color: #d73948">%</span><span style="color: #198810">.</span><span style="color: #d73948">$(</span><span style="color: #198810">POST_EXTENSION</span><span style="color: #d73948">)</span><span style="color: #198810">,</span><span style="color: #198810"> </span><span style="color: #d73948">$(</span><span style="color: #198810">BLOG_DIST</span><span style="color: #d73948">)</span><span style="color: #d73948">$(</span><span style="color: #198810">POST_OUT_DIR</span><span style="color: #d73948">)</span><span style="color: #198810">/</span><span style="color: #d73948">%</span><span style="color: #198810">.html</span><span style="color: #198810">,</span><span style="color: #198810"> </span><span style="color: #d73948">$(</span><span style="color: #198810">POST_FILES</span><span style="color: #d73948">)</span><span style="color: #d73948">)</span>
+
+<span style="color: #74747c">#</span><span style="color: #74747c"> Assets</span>
+<span style="color: #74747c">#</span><span style="color: #74747c"> Maps content/post-001/assets/pic.jpg -> .dist/posts/001/assets/pic.jpg</span>
+ASSET_FILES <span style="color: #d73948">:=</span> <span style="color: #d73948">$(</span><span style="color: #4b69c6">shell</span><span style="color: #198810"> </span><span style="color: #4b69c6">find</span><span style="color: #198810"> </span><span style="color: #d73948">$(</span><span style="color: #198810">BLOG_SRC</span><span style="color: #d73948">)</span><span style="color: #198810"> -</span><span style="color: #198810">path</span><span style="color: #198810"> </span><span style="color: #198810">"</span><span style="color: #198810">*/assets/*</span><span style="color: #198810">"</span><span style="color: #198810"> -</span><span style="color: #198810">type</span><span style="color: #198810"> f </span><span style="color: #b60157">2</span><span style="color: #d73948">></span><span style="color: #198810">/dev/null</span><span style="color: #d73948">)</span>
+ASSET_TARGETS <span style="color: #d73948">:=</span> <span style="color: #d73948">$(</span><span style="color: #4b69c6">patsubst</span><span style="color: #198810"> </span><span style="color: #d73948">$(</span><span style="color: #198810">BLOG_SRC</span><span style="color: #d73948">)</span><span style="color: #d73948">$(</span><span style="color: #198810">POST_FOLDER_PREFIX</span><span style="color: #d73948">)</span><span style="color: #d73948">%</span><span style="color: #198810">,</span><span style="color: #198810"> </span><span style="color: #d73948">$(</span><span style="color: #198810">BLOG_DIST</span><span style="color: #d73948">)</span><span style="color: #d73948">$(</span><span style="color: #198810">POST_OUT_DIR</span><span style="color: #d73948">)</span><span style="color: #198810">/</span><span style="color: #d73948">%</span><span style="color: #198810">,</span><span style="color: #198810"> </span><span style="color: #d73948">$(</span><span style="color: #198810">ASSET_FILES</span><span style="color: #d73948">)</span><span style="color: #d73948">)</span>
+
+<span style="color: #74747c">#</span><span style="color: #74747c"> Styles</span>
+<span style="color: #74747c">#</span><span style="color: #74747c"> Maps styles/blog.css -> .dist/styles/blog.css</span>
+STYLE_FILES <span style="color: #d73948">:=</span> <span style="color: #d73948">$(</span><span style="color: #4b69c6">shell</span><span style="color: #198810"> </span><span style="color: #4b69c6">find</span><span style="color: #198810"> styles</span><span style="color: #198810"> -</span><span style="color: #198810">type</span><span style="color: #198810"> f </span><span style="color: #b60157">2</span><span style="color: #d73948">></span><span style="color: #198810">/dev/null</span><span style="color: #d73948">)</span>
+STYLE_TARGETS <span style="color: #d73948">:=</span> <span style="color: #d73948">$(</span><span style="color: #4b69c6">patsubst</span><span style="color: #198810"> </span><span style="color: #198810">styles/</span><span style="color: #d73948">%</span><span style="color: #198810">,</span><span style="color: #198810"> </span><span style="color: #d73948">$(</span><span style="color: #198810">BLOG_DIST</span><span style="color: #d73948">)</span><span style="color: #198810">styles/</span><span style="color: #d73948">%</span><span style="color: #198810">,</span><span style="color: #198810"> </span><span style="color: #d73948">$(</span><span style="color: #198810">STYLE_FILES</span><span style="color: #d73948">)</span><span style="color: #d73948">)</span>
+
+<span style="color: #74747c">#</span><span style="color: #74747c"> Shared</span>
+<span style="color: #74747c">#</span><span style="color: #74747c"> Maps shared/amogus.png -> .dist/shared/amogus.png</span>
+SHARED_FILES <span style="color: #d73948">:=</span> <span style="color: #d73948">$(</span><span style="color: #4b69c6">shell</span><span style="color: #198810"> </span><span style="color: #4b69c6">find</span><span style="color: #198810"> shared</span><span style="color: #198810"> -</span><span style="color: #198810">type</span><span style="color: #198810"> f </span><span style="color: #b60157">2</span><span style="color: #d73948">></span><span style="color: #198810">/dev/null</span><span style="color: #d73948">)</span>
+SHARED_TARGETS <span style="color: #d73948">:=</span> <span style="color: #d73948">$(</span><span style="color: #4b69c6">patsubst</span><span style="color: #198810"> </span><span style="color: #198810">shared/</span><span style="color: #d73948">%</span><span style="color: #198810">,</span><span style="color: #198810"> </span><span style="color: #d73948">$(</span><span style="color: #198810">BLOG_DIST</span><span style="color: #d73948">)</span><span style="color: #198810">shared/</span><span style="color: #d73948">%</span><span style="color: #198810">,</span><span style="color: #198810"> </span><span style="color: #d73948">$(</span><span style="color: #198810">SHARED_FILES</span><span style="color: #d73948">)</span><span style="color: #d73948">)</span>
+
+<span style="color: #4b69c6">.PHONY</span><span style="color: #d73948">:</span> <span style="color: #198810">all build clean copy-assets copy-styles serve</span>
+
+<span style="color: #4b69c6">serve</span><span style="color: #d73948">:</span>
+  <span style="color: #4b69c6">live-server</span> .dist <span style="color: #d73948">&amp;</span> <span style="color: #4b69c6">disown</span>
+
+<span style="color: #74747c">#</span><span style="color: #74747c"> Main target</span>
+<span style="color: #4b69c6">all</span><span style="color: #d73948">:</span> <span style="color: #198810">build copy-assets copy-styles copy-shared</span>
+
+<span style="color: #4b69c6">build</span><span style="color: #d73948">:</span> <span style="color: #d73948">$(</span><span style="color: #198810">HTML_FILES</span><span style="color: #d73948">)</span>
+
+<span style="color: #4b69c6">copy-assets</span><span style="color: #d73948">:</span> <span style="color: #d73948">$(</span><span style="color: #198810">ASSET_TARGETS</span><span style="color: #d73948">)</span>
+
+<span style="color: #4b69c6">copy-styles</span><span style="color: #d73948">:</span> <span style="color: #d73948">$(</span><span style="color: #198810">STYLE_TARGETS</span><span style="color: #d73948">)</span>
+
+<span style="color: #4b69c6">copy-shared</span><span style="color: #d73948">:</span> <span style="color: #d73948">$(</span><span style="color: #198810">SHARED_TARGETS</span><span style="color: #d73948">)</span>
+
+<span style="color: #74747c">#</span><span style="color: #74747c"> --- Pattern Rules ---</span>
+
+<span style="color: #74747c">#</span><span style="color: #74747c"> Rule for compiling Typst files</span>
+<span style="color: #d73948">$(</span>BLOG_DIST<span style="color: #d73948">)</span><span style="color: #d73948">$(</span><span style="color: #4b69c6">POST_OUT_DIR</span><span style="color: #d73948">)</span><span style="color: #4b69c6">/</span><span style="color: #d73948">%</span><span style="color: #4b69c6">.html</span><span style="color: #d73948">:</span> <span style="color: #d73948">$(</span><span style="color: #198810">BLOG_SRC</span><span style="color: #d73948">)</span><span style="color: #d73948">$(</span><span style="color: #198810">POST_FOLDER_PREFIX</span><span style="color: #d73948">)</span><span style="color: #d73948">%</span><span style="color: #198810">.</span><span style="color: #d73948">$(</span><span style="color: #198810">POST_EXTENSION</span><span style="color: #d73948">)</span>
+  <span style="color: #d73948">@</span><span style="color: #4b69c6">mkdir</span> -p <span style="color: #d73948">$(</span><span style="color: #4b69c6">dir</span> <span style="color: #d73948">$@</span><span style="color: #d73948">)</span>
+  <span style="color: #4b69c6">typst</span> compile <span style="color: #d73948">$&lt;</span> <span style="color: #d73948">$@</span> --root . --features html --format html
+
+<span style="color: #74747c">#</span><span style="color: #74747c"> Rule for copying post assets</span>
+<span style="color: #d73948">$(</span>BLOG_DIST<span style="color: #d73948">)</span><span style="color: #d73948">$(</span><span style="color: #4b69c6">POST_OUT_DIR</span><span style="color: #d73948">)</span><span style="color: #4b69c6">/</span><span style="color: #d73948">%</span><span style="color: #d73948">:</span> <span style="color: #d73948">$(</span><span style="color: #198810">BLOG_SRC</span><span style="color: #d73948">)</span><span style="color: #d73948">$(</span><span style="color: #198810">POST_FOLDER_PREFIX</span><span style="color: #d73948">)</span><span style="color: #d73948">%</span>
+  <span style="color: #d73948">@</span><span style="color: #4b69c6">mkdir</span> -p <span style="color: #d73948">$(</span><span style="color: #4b69c6">dir</span> <span style="color: #d73948">$@</span><span style="color: #d73948">)</span>
+  <span style="color: #4b69c6">cp</span> <span style="color: #d73948">$&lt;</span> <span style="color: #d73948">$@</span>
+
+<span style="color: #74747c">#</span><span style="color: #74747c"> Rule for copying styles</span>
+<span style="color: #d73948">$(</span><span style="color: #4b69c6">BLOG_DIST</span><span style="color: #d73948">)</span><span style="color: #4b69c6">styles/</span><span style="color: #d73948">%</span><span style="color: #d73948">:</span> <span style="color: #198810">styles/</span><span style="color: #d73948">%</span>
+  <span style="color: #d73948">@</span><span style="color: #4b69c6">mkdir</span> -p <span style="color: #d73948">$(</span><span style="color: #4b69c6">dir</span> <span style="color: #d73948">$@</span><span style="color: #d73948">)</span>
+  <span style="color: #4b69c6">cp</span> <span style="color: #d73948">$&lt;</span> <span style="color: #d73948">$@</span>
+
+<span style="color: #74747c">#</span><span style="color: #74747c"> Rule for copying shared files</span>
+<span style="color: #d73948">$(</span><span style="color: #4b69c6">BLOG_DIST</span><span style="color: #d73948">)</span><span style="color: #4b69c6">shared/</span><span style="color: #d73948">%</span><span style="color: #d73948">:</span> <span style="color: #198810">shared/</span><span style="color: #d73948">%</span>
+  <span style="color: #d73948">@</span><span style="color: #4b69c6">mkdir</span> -p <span style="color: #d73948">$(</span><span style="color: #4b69c6">dir</span> <span style="color: #d73948">$@</span><span style="color: #d73948">)</span>
+  <span style="color: #4b69c6">cp</span> <span style="color: #d73948">$&lt;</span> <span style="color: #d73948">$@</span>
+
+<span style="color: #4b69c6">clean</span><span style="color: #d73948">:</span>
+  <span style="color: #4b69c6">rm</span> -rf <span style="color: #d73948">$(</span>BLOG_DIST<span style="color: #d73948">)</span></code></pre>
+        <p>Yeah, that’s quite an abomination.</p>
+        <p>It works, sure, but it felt messy and distinctly not in spirit with my goal of having a fun, simple system.<br>I wanted a clean setup, and this thing felt like the exact opposite.</p>
+        <p>I then decided to take a trip to the Typst repo, to see what the devs are up to.<br></p>
+        <p>Lo and behold!<br>A <a href="https://github.com/typst/typst/pull/7964"><em>massive</em> PR</a> introducing exactly the kind of export bundling I needed had <strong>just</strong> been merged, roughly a couple days after I started writing this post!</p>
+        <p>Since it isn’t released yet I immediatly cloned and built the git version of compiler myself.<br>Hopefully I’ll be able to also contribure some more bug reports, as a small thank you to the project.<br></p>
+        <p>My project structure now looks as follows:</p>
+        <pre><code data-lang="text">blog/
+├── src/
+│   ├── posts/
+│   │   ├── post-001.typ
+│   │   └── post-002.typ
+│   ├── shared/
+│   ├── styles/
+│   ├── blog-template.typ
+│   ├── index.typ
+│   └── utils.typ
+├── dev.sh
+└── dist.typ</code></pre>
+        <p>There’s a main <code>dist.typ</code> which acts as my central bundler file, an <code>index.typ</code> which acts as my temporary homepage, and <code>blog-template.typ</code> holding all the layout definitions.<br>All the actual content goes into <code>src/posts/</code>.</p>
+        <p>I’m fully expecting this structure to change and evolve in the future as the blog grows, but for now, I’m finally happy with it.</p>
+        <p>To build the whole thing, I wrote a small Bash script that primarily launches the live server after the compilation’s done, and shows me a QR code I can quickly scan with my phone to check how the page looks on mobile.</p>
+        <pre><code data-lang="bash"><span style="color: #74747c">#</span><span style="color: #74747c">!/bin/bash</span>
+
+<span style="color: #74747c">#</span><span style="color: #74747c"> QR code generation using qrencode</span>
+<span style="color: #4b69c6">qr</span>() {
+  <span style="color: #d73948">local</span> input
+  <span style="color: #d73948">if</span> <span style="color: #4b69c6">[[</span> -n <span style="color: #198810">"</span><span style="color: #198810">$</span><span style="color: #198810">1</span><span style="color: #198810">"</span> <span style="color: #4b69c6">]]</span><span style="color: #d73948">;</span> <span style="color: #d73948">then</span>
+    input<span style="color: #d73948">=</span><span style="color: #198810">"</span><span style="color: #198810">$</span><span style="color: #d73948">*</span><span style="color: #198810">"</span>
+  <span style="color: #d73948">else</span>
+    input<span style="color: #d73948">=</span><span style="color: #198810">"</span><span style="color: #198810">$</span><span style="color: #198810">(</span><span style="color: #4b69c6">cat</span><span style="color: #198810">)</span><span style="color: #198810">"</span>
+  <span style="color: #d73948">fi</span>
+  <span style="color: #4b69c6">qrencode</span> -t UTF8 -o - <span style="color: #198810">"</span><span style="color: #198810">$</span><span style="color: #198810">input</span><span style="color: #198810">"</span>
+}
+
+<span style="color: #74747c">#</span><span style="color: #74747c"> Fetch the local IP address</span>
+<span style="color: #4b69c6">lanip</span>() {
+  <span style="color: #4b69c6">ip</span> -brief address show <span style="color: #d73948">|</span> <span style="color: #4b69c6">grep</span> -oP <span style="color: #198810">'</span><span style="color: #198810">192\.168\.\d+\.\d+</span><span style="color: #198810">'</span> <span style="color: #d73948">|</span> <span style="color: #4b69c6">head</span> -n 1
+}
+
+<span style="color: #74747c">#</span><span style="color: #74747c"> Watch, compile, and bundle via Typst</span>
+<span style="color: #4b69c6">typst-git</span> watch dist.typ \
+  --root . \
+  --format bundle \
+  --features bundle,html \
+  --ignore-system-fonts \
+  --no-serve \
+  --no-reload <span style="color: #d73948">&amp;</span>
+
+<span style="color: #74747c">#</span><span style="color: #74747c"> Print QR code and start local server</span>
+<span style="color: #4b69c6">qr</span> http://$(<span style="color: #4b69c6">lanip</span>):8080
+<span style="color: #4b69c6">live-server</span> ./dist</code></pre>
+        <p>I’m using <code>typst-git watch</code> combined with the new <code>--format bundle</code> flag, which completely eliminates the need for separate manual file-copying steps.<br>The background task handles all the compilation, and then <code>live-server</code> picks up the changes from <code>./dist</code> instantly.</p>
+        <p>The <code>qr</code> function is just a neat little trick to generate a scannable code in my terminal output using <code>qrencode</code>.</p>
+        <h2>3 – Deploy and Enjoy</h2>
+        <p>TODO:</p>
+        <ul>
+          <li>deploy on github pages following <a href="https://stackoverflow.com/questions/36782467/set-subdirectory-as-website-root-on-github-pages/75662195#75662195">https://stackoverflow.com/questions/36782467/set-subdirectory-as-website-root-on-github-pages/75662195#75662195</a></li>
+          <li>Table of contents (different position based on mobile/desktop)</li>
+        </ul>
+      </main>
+    </article>
+    <footer>
+      <p class="footer-copy">© 2026 Marco Bulgarelli. All rights reserved.</p>
+      <ul class="footer-links">
+        <li><a href="#" aria-label="GitHub"></a></li>
+        <li><a href="#" aria-label="Twitter"></a></li>
+        <li><a href="#" aria-label="RSS"></a></li>
+      </ul>
+    </footer>
+  </body>
+</html>
