@@ -341,11 +341,86 @@ SHARED_TARGETS <span style="color: #d73948">:=</span> <span style="color: #d7394
         <p>I’m using <code>typst-git watch</code> combined with the new <code>--format bundle</code> flag, which completely eliminates the need for separate manual file-copying steps.<br>The background task handles all the compilation, and then <code>live-server</code> picks up the changes from <code>./dist</code> instantly.</p>
         <p>The <code>qr</code> function is just a neat little trick to generate a scannable code in my terminal output using <code>qrencode</code>.</p>
         <h2>3 – Deploy and Enjoy</h2>
-        <p>TODO:</p>
+        <p>Alright, the site builds. Now I need to throw it onto the internet so someone can finally read it (hopefully ???).<br>The obvious choice for a static site is GitHub Pages.<br>It’s free, it’s fast, and it’s <em>absolutely proprietary</em>.</p>
+        <p>I primise I will switch to self hosting. Learning to self host everything I need is one of the main reasons I Thought about opening this blog. To document my journey wiht it.<br>But sadly, I have shaved enough yaks up until this point, so it’s time to get this thing online, and think about proper self hosting later.</p>
+        <p>The workflow is simple: I run my build script locally, which spits out the final HTML and assets. I then commit that payload to a separate <code>publish</code> branch. GitHub Pages is configured to blindly serve whatever sits in the root of that branch.</p>
+        <h3>3.1 – It’s Alwasy DNS</h3>
+        <p>I recently impulsively bought the <code>bulga.dev</code> domain on <a href="https://porkbun.com/">Porkbun</a>, so the I’ll set this blog to live at the <code>blog</code> subdomain. How creative.<br>Setting up a custom domain on GitHub Pages shouldn’t be too much of a hustle:</p>
         <ul>
-          <li>deploy on github pages following <a href="https://stackoverflow.com/questions/36782467/set-subdirectory-as-website-root-on-github-pages/75662195#75662195">https://stackoverflow.com/questions/36782467/set-subdirectory-as-website-root-on-github-pages/75662195#75662195</a></li>
-          <li>Table of contents (different position based on mobile/desktop)</li>
+          <li>You go to your profile settings > pages</li>
+          <li>Input your custom domain</li>
+          <li>You’re given a TXT record to setup, GitHub will interrogate your domain, and when it responds with the expected token, your site is verified.</li>
         </ul>
+        <p>So I wen ahead and created the following record through Porkbun:</p>
+        <table>
+          <thead>
+            <tr>
+              <th>TYPE</th>
+              <th>HOST</th>
+              <th>ANSWER</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>TXT</td>
+              <td>_github-pages-challenge-bugg4.blog.bulga.dev</td>
+              <td><em>some-secret-value</em></td>
+            </tr>
+          </tbody>
+        </table>
+        <ul>
+          <li>You then go into your repo’s specific settings</li>
+          <li>You set up the deplyment method for the site. I chose <code>deploy from branch</code>, chose <code>publish</code> as the branch and <code>/</code> as the root folder.</li>
+          <li>You the input your desider custom domain, which visitors will get redirected to if they visit <code>your_username.github.io</code></li>
+          <li>You wait for GitHub to pass the DNS check on your domain, which may take from 2 to 786345 minutes.</li>
+          <li>The DNS check fails</li>
+        </ul>
+        <p>Wait what? You didn’t know? It’s phisically impossible for anything remotely connected to DNS stuff to work succesfully on the first try.<br>It’s just how it works.</p>
+        <p>I hit the button again.<br>GitHub ponders for another couple of minutes.<br></p>
+        <p>Green checkmark, the DNS verirication seeminlgy succeded, but upon checking I was getting a fat 404 on my <code>bugg4.github.io</code> fallback URL.<br>Turns out, because my repo is named <code>bulga-dev</code> and not exactly <code>bugg4.github.io</code>, GitHub treats it as a “Project Page”.<br>This means the default URL isn’t the root, but rather <code>bugg4.github.io/bulga-dev/</code>.<br>Whatever, the custom domain will hide that path anyway.</p>
+        <p>So I went into Porkbun, slapped <code>blog.bulga.dev</code> into a new CNAME record, pointed it to GitHub, and went to my repo settings to verify it.</p>
+        <p>GitHub spits back an <code>InvalidDNSError</code>.<br>I stared at it. I mashed the “Check again” button. Nothing.</p>
+        <p>I then tried to query the DNS records myself using <a href="https://github.com/ogham/dog">dog</a>:</p>
+        <pre><code data-lang="sh"><span style="color: #4b69c6">$</span> dog blog.bulga.dev.bulga.dev
+<span style="color: #4b69c6">Status:</span> NXDomain</code></pre>
+        <p>Wait. blog.bulga.dev.bulga.dev?</p>
+        <p>Yep. Porkbun, like many DNS managers, automatically appends your root domain to the Host field.<br>By typing the full subdomain, I had unknowingly created a DNS record for a domain that sounded like it had a severe stutter.</p>
+        <p>I changed the Host field to just blog.</p>
+        <pre><code data-lang="Bash"><span style="color: #4b69c6">marco@arch</span><span style="color: #d73948">></span> dog blog.bulga.dev
+<span style="color: #4b69c6">CNAME</span> blog.bulga.dev.    10m00s   <span style="color: #198810">"</span><span style="color: #198810">bugg4.github.io.</span><span style="color: #198810">"</span></code></pre>
+        <p><em>Beautiful</em></p>
+        <h3>3.2 – The Caching Trap &amp; The SSL Boss Fight</h3>
+        <p>I went back to GitHub, expecting a warm welcome.</p>
+        <p><code>InvalidDNSError</code>.</p>
+        <p>Bruh.</p>
+        <p>Turns out, I was caught in the GitHub DNS Cache Trap. GitHub’s massive global servers remember your mistakes and aggressively cache them. The only way to fix it was to remove the custom domain from GitHub’s settings, walk away, make a coffee, question my life choices for 15 minutes, and then type it back in.</p>
+        <p>Finally, the DNS check turned green!<br>I excitedly typed <code>blog.bulga.dev</code> into my browser and smashed Enter.</p>
+        <p><code>net::ERR_CERT_COMMON_NAME_INVALID</code></p>
+        <p>To keep my sanity intact, I threw a curl request at it:</p>
+        <pre><code data-lang="sh"><span style="color: #4b69c6">$</span> curl blog.bulga.dev
+
+<span style="color: #d73948">&lt;</span>!DOCTYPE <span style="color: #4b69c6">html</span><span style="color: #d73948">></span>
+<span style="color: #d73948">&lt;</span>html lang<span style="color: #d73948">=</span><span style="color: #198810">"</span><span style="color: #198810">en</span><span style="color: #198810">"</span><span style="color: #d73948">></span>
+  <span style="color: #d73948">&lt;</span>head<span style="color: #d73948">></span>
+<span style="color: #4b69c6">...</span></code></pre>
+        <p>So blog <em>IS</em> live.</p>
+        <p>So why was my browser having a panic attack?</p>
+        <p>I asked some clankers, and they came back with two main reasons:</p>
+        <ol>
+          <li>
+            <p>The <code>.dev</code> Mandate: The <code>.dev</code> top-level domain is on the HSTS preload list. This means modern browsers physically refuse to load them over standard HTTP. They demand a secure HTTPS connection. curl worked because it doesn’t care about browser security policies, but Brave absolutely does.</p>
+          </li>
+          <li>
+            <p>The Mismatched ID: GitHub hadn’t finished provisioning my Let’s Encrypt SSL certificate yet. When Brave demanded a secure connection, GitHub panicked and handed over its generic *.github.io certificate. Brave saw that the names didn’t match, assumed I was being hacked, and threw the error.</p>
+          </li>
+        </ol>
+        <p>The solution? Wait harder.</p>
+        <p>I took the adivice, and after another 20 minutes, GitHub finally issued the certificate.<br>I slammed that “Enforce HTTPS” checkbox in the repo settings, and the error finally went away.</p>
+        <p>We are live!</p>
+        <h3>3.3 – Wrapping Up (And that ToC)</h3>
+        <p>Oh, and remember that Table of Contents issue I ranted about in the Python section? The one about needing to know the document structure before rendering the top of the page?</p>
+        <p>Typst handles it natively. You can just query the document for headings and it figures out the layout automatically. I even added a bit of logic to change its position based on whether you’re reading this on a desktop or a phone.</p>
+        <p>If you made it this far, thanks for reading my ramblings.<br>Expect more posts my projects, current obesessions and weird experiments, and probably more DNS-induced mental breakdowns as I plan to venture into self hosting <em>everything</em>.</p>
       </main>
     </article>
     <footer>
