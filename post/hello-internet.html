@@ -5,7 +5,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </p>
-    <title>Hello, Internet!!</title>
+    <title>Hello, Internet!</title>
     <p>
       <link rel="icon" type="image/x-icon" href="shared/favicon.png">
       <link rel="stylesheet" href="/styles/blog.css">
@@ -15,12 +15,12 @@
     <nav><a href="/" class="nav-brand">Home</a><a href="#" class="nav-link">cd ..</a></nav>
     <article>
       <header>
-        <h1><span class="blog-title gradient">Hello, Internet!!</span><br><span class="blog-subtitle">My Blog, My Way</span></h1>
+        <h1><span class="blog-title gradient">Hello, Internet!</span><br><span class="blog-subtitle">My Blog, My Way</span></h1>
         <div class="blog-metadata">
           <ul>
             <li class="author">Marco Bulgarelli</li>
-            <li class="date-published">2026-03-11</li>
-            <li class="read-time">5 min read</li>
+            <li class="date-published">2026-03-22</li>
+            <li class="read-time">10 min read</li>
             <ul class="tags">
               <li class="tag">meta</li>
               <li class="tag">typst</li>
@@ -29,13 +29,40 @@
         </div>
       </header>
       <main>
+        <nav role="doc-toc">
+          <h2>Contents</h2>
+          <ol style="list-style-type: none">
+            <li>
+              <div><a href="#loc-1"><span class="prefix">1 –</span> Make It Simple, Make It From Scratch</a></div>
+              <ol style="list-style-type: none">
+                <li><a href="#loc-2"><span class="prefix">1.1 –</span> Just Raw HTML + CSS</a></li>
+                <li><a href="#loc-3"><span class="prefix">1.2 –</span> Markdown + SSG</a></li>
+                <li><a href="#loc-4"><span class="prefix">1.3 –</span> Pure Python (???)</a></li>
+              </ol>
+            </li>
+            <li>
+              <div><a href="#loc-5"><span class="prefix">2 –</span> Typst</a></div>
+              <ol style="list-style-type: none">
+                <li><a href="#loc-6"><span class="prefix">2.1 –</span> I Need MOAR Experimental Features</a></li>
+              </ol>
+            </li>
+            <li>
+              <div><a href="#loc-7"><span class="prefix">3 –</span> Deploy and Enjoy</a></div>
+              <ol style="list-style-type: none">
+                <li><a href="#loc-8"><span class="prefix">3.1 –</span> It’s Alwasy DNS</a></li>
+                <li><a href="#loc-9"><span class="prefix">3.2 –</span> The Caching Trap &amp; The SSL Boss Fight</a></li>
+                <li><a href="#loc-10"><span class="prefix">3.3 –</span> Wrapping Up (And that ToC)</a></li>
+              </ol>
+            </li>
+          </ol>
+        </nav>
         <p>So, uhm… is this thing on?<br>Welcome to my first ever blog post! How exciting! This took <em>much</em> longer than I expected, but I’m happy I managed to get it started.</p>
         <p>I won’t waste time introducing myself, as that’s the job of the <a href="about:blank">About Me</a> page, which I’ve yet to write… but I’m sure you’ll manage fine in the meantime.<br>Instead, I’d like to talk about how I approached this blog writing thing, which is quite funny now that I’m actually writing it down.</p>
         <p>But let’s start from the beginning.</p>
-        <h2>1 – Make It Simple, Make It From Scratch</h2>
+        <h2 id="loc-1">1 – Make It Simple, Make It From Scratch</h2>
         <p>I like to start projects from scratch. As most developers coding for fun, and not to get shit done, often do.<br>No WordPress, No React, no Hugo.<br>I want a simple, fast, accessible and beautiful static site, on the same line of the original <a href="https://motherfuckingwebsite.com/">motherfuckingwebsite.com</a> and all the other <a href="https://github.com/lyoshenka/awesome-motherfucking-website">mfw-inspired sites</a>, which I encourage you to check out if you’re not familiar.<br><em>But</em> I also want to enjoy the whole process of writing the website first, and the content later, which may not be as obvious as it sounds.<br>See, I’m a lazy person, and arguably, an even lazier developer.<br>If I don’t set the whole thing up to be an absolute joy to use, I’ll get bored or annoyed with it, and won’t write a second post. I’m sure that’d leave you, dear reader, in absolute shambles, so I promise to do my best to make this fun and interesting for both me <em>and</em> you!</p>
         <p>So, the first choice I have to make is: which stack should I adopt?<br>The options I went through:</p>
-        <h3>1.1 – Just Raw HTML + CSS</h3>
+        <h3 id="loc-2">1.1 – Just Raw HTML + CSS</h3>
         <p>Ah, the joy of having literally zero dependencies, aside from a text editor.<br>Without a doubt, the most minimal option.</p>
         <ul>
           <li>
@@ -56,7 +83,7 @@
           </li>
         </ul>
         <p>Overall, Good for structure, too tedious/repetitive for writing.<br>I see myself experiencing too much friction with this method, so it’s a no go.</p>
-        <h3>1.2 – Markdown + SSG</h3>
+        <h3 id="loc-3">1.2 – Markdown + SSG</h3>
         <p>The obvious first choice… for a <em>sane</em> person.<br>Also the de-facto standard, and, I assume, most used method to build static sites.<br>I’ve already stated I’d like to avoid SSGs, as they can be a bit opinionated in the way they handle the source tree structure.<br>They also kinda hide away the whole markdown compilation process, which I’d prefer to have complete control on.</p>
         <ul>
           <li>
@@ -75,7 +102,7 @@
           </li>
         </ul>
         <p>Tl;dr: I’m not a sane person. Next.</p>
-        <h3>1.3 – Pure Python (???)</h3>
+        <h3 id="loc-4">1.3 – Pure Python (???)</h3>
         <p>What?<br>Yeah, I write my posts in Python, bruv.<br>Just Kidding, but I did try.<br></p>
         <p>I thought <em>“Hey, Python is ergonomic, very flexible, so maybe I can find a way to intertwine written content with Python code in a way that doesn’t look ugly, and grants me the full power of an actual programming language”</em> (yeah, sorry HTML folks).</p>
         <p>I had recently learned about context managers, which, if you wrote any Python at all, you surely used:</p>
@@ -130,7 +157,7 @@
         <p>Remember? I’m lazy. Plus, if I wanted to use something like that I’d adopt one of the existing libraries, like <a href="https://github.com/Knio/dominate">Dominate</a>.</p>
         <p>So, final verdict for Python: Great for logic, terrible for writing content.</p>
         <p>The ideal workflow I’m searching for would let me <strong>just write the damn text</strong>, without wrapping every sentence in quotes, or polluting the document with function calls and endless nesting, while still giving me the power of a real programming language behind the scenes.</p>
-        <h2>2 – Typst</h2>
+        <h2 id="loc-5">2 – Typst</h2>
         <p>Then, the revelation.</p>
         <p>I knew about this language the whole time, since 2023 in fact.<br>I had tried it for a bit, but wrote it off as not yet mature enough for whatever I was doing at the time.</p>
         <p>I also happened to use it for a fairly recent project, a technical documentation automation pipeline I was experimenting with for work, but it never occurred to me to use it for a blog, until now.</p>
@@ -210,9 +237,9 @@
   blog writing thing, which is quite funny now that
   I'm actually writing it down.
 ]</code></pre>
-        <p>See how clean that is?<br>No HTML tags cluttering up the paragraphs, no deep nesting, It’s mostlt yregular text.<br>But when I <em>do</em> need to insert some function calls, they effortlessly fall right in line with the writing flow.<br>I vastly prefer this over Markdown + weird templating syntaxes.<br></p>
+        <p>See how clean that is?<br>No HTML tags cluttering up the paragraphs, no deep nesting, It’s mostly regular text.<br>But when I <em>do</em> need to insert some function calls, they effortlessly fall right in line with the writing flow.<br>I vastly prefer this over Markdown + weird templating syntaxes.<br></p>
         <p>All hail Typst!</p>
-        <h3>2.1 – I Need MOAR Experimental Features</h3>
+        <h3 id="loc-6">2.1 – I Need MOAR Experimental Features</h3>
         <p>Ok great, we have a language.<br>Now I can harness its power to write my awesome blog, export it to html and publish!</p>
         <p>Yeah, not quite.</p>
         <p>See, HTML export in Typst is currently an early stage experimental feature.<br>At the time of writing, they do have most of the native Typst-to-HTML element conversions figured out, see <a href="https://github.com/typst/typst/issues/721">here</a> but it’s still quite buggy.<br></p>
@@ -340,18 +367,18 @@ SHARED_TARGETS <span style="color: #d73948">:=</span> <span style="color: #d7394
 <span style="color: #4b69c6">live-server</span> ./dist</code></pre>
         <p>I’m using <code>typst-git watch</code> combined with the new <code>--format bundle</code> flag, which completely eliminates the need for separate manual file-copying steps.<br>The background task handles all the compilation, and then <code>live-server</code> picks up the changes from <code>./dist</code> instantly.</p>
         <p>The <code>qr</code> function is just a neat little trick to generate a scannable code in my terminal output using <code>qrencode</code>.</p>
-        <h2>3 – Deploy and Enjoy</h2>
+        <h2 id="loc-7">3 – Deploy and Enjoy</h2>
         <p>Alright, the site builds. Now I need to throw it onto the internet so someone can finally read it (hopefully ???).<br>The obvious choice for a static site is GitHub Pages.<br>It’s free, it’s fast, and it’s <em>absolutely proprietary</em>.</p>
-        <p>I primise I will switch to self hosting. Learning to self host everything I need is one of the main reasons I Thought about opening this blog. To document my journey wiht it.<br>But sadly, I have shaved enough yaks up until this point, so it’s time to get this thing online, and think about proper self hosting later.</p>
+        <p>I promise I will switch to self hosting. Learning to self host everything I need is one of the main reasons I Thought about opening this blog. To document my journey wiht it.<br>But sadly, I have shaved enough yaks up until this point, so it’s time to get this thing online, and think about proper self hosting later.</p>
         <p>The workflow is simple: I run my build script locally, which spits out the final HTML and assets. I then commit that payload to a separate <code>publish</code> branch. GitHub Pages is configured to blindly serve whatever sits in the root of that branch.</p>
-        <h3>3.1 – It’s Alwasy DNS</h3>
+        <h3 id="loc-8">3.1 – It’s Alwasy DNS</h3>
         <p>I recently impulsively bought the <code>bulga.dev</code> domain on <a href="https://porkbun.com/">Porkbun</a>, so the I’ll set this blog to live at the <code>blog</code> subdomain. How creative.<br>Setting up a custom domain on GitHub Pages shouldn’t be too much of a hustle:</p>
         <ul>
           <li>You go to your profile settings > pages</li>
           <li>Input your custom domain</li>
           <li>You’re given a TXT record to setup, GitHub will interrogate your domain, and when it responds with the expected token, your site is verified.</li>
         </ul>
-        <p>So I wen ahead and created the following record through Porkbun:</p>
+        <p>So I went ahead and created the following record through Porkbun:</p>
         <table>
           <thead>
             <tr>
@@ -371,13 +398,13 @@ SHARED_TARGETS <span style="color: #d73948">:=</span> <span style="color: #d7394
         <ul>
           <li>You then go into your repo’s specific settings</li>
           <li>You set up the deplyment method for the site. I chose <code>deploy from branch</code>, chose <code>publish</code> as the branch and <code>/</code> as the root folder.</li>
-          <li>You the input your desider custom domain, which visitors will get redirected to if they visit <code>your_username.github.io</code></li>
+          <li>You the input your desired custom domain, which visitors will get redirected to if they visit <code>your_username.github.io</code></li>
           <li>You wait for GitHub to pass the DNS check on your domain, which may take from 2 to 786345 minutes.</li>
           <li>The DNS check fails</li>
         </ul>
         <p>Wait what? You didn’t know? It’s phisically impossible for anything remotely connected to DNS stuff to work succesfully on the first try.<br>It’s just how it works.</p>
         <p>I hit the button again.<br>GitHub ponders for another couple of minutes.<br></p>
-        <p>Green checkmark, the DNS verirication seeminlgy succeded, but upon checking I was getting a fat 404 on my <code>bugg4.github.io</code> fallback URL.<br>Turns out, because my repo is named <code>bulga-dev</code> and not exactly <code>bugg4.github.io</code>, GitHub treats it as a “Project Page”.<br>This means the default URL isn’t the root, but rather <code>bugg4.github.io/bulga-dev/</code>.<br>Whatever, the custom domain will hide that path anyway.</p>
+        <p>Green checkmark, the DNS verification seemingly succeeded, but upon checking I was getting a fat 404 on my <code>bugg4.github.io</code> fallback URL.<br>Turns out, because my repo is named <code>bulga-dev</code> and not exactly <code>bugg4.github.io</code>, GitHub treats it as a “Project Page”.<br>This means the default URL isn’t the root, but rather <code>bugg4.github.io/bulga-dev/</code>.<br>Whatever, the custom domain will hide that path anyway.</p>
         <p>So I went into Porkbun, slapped <code>blog.bulga.dev</code> into a new CNAME record, pointed it to GitHub, and went to my repo settings to verify it.</p>
         <p>GitHub spits back an <code>InvalidDNSError</code>.<br>I stared at it. I mashed the “Check again” button. Nothing.</p>
         <p>I then tried to query the DNS records myself using <a href="https://github.com/ogham/dog">dog</a>:</p>
@@ -389,7 +416,7 @@ SHARED_TARGETS <span style="color: #d73948">:=</span> <span style="color: #d7394
         <pre><code data-lang="Bash"><span style="color: #4b69c6">marco@arch</span><span style="color: #d73948">></span> dog blog.bulga.dev
 <span style="color: #4b69c6">CNAME</span> blog.bulga.dev.    10m00s   <span style="color: #198810">"</span><span style="color: #198810">bugg4.github.io.</span><span style="color: #198810">"</span></code></pre>
         <p><em>Beautiful</em></p>
-        <h3>3.2 – The Caching Trap &amp; The SSL Boss Fight</h3>
+        <h3 id="loc-9">3.2 – The Caching Trap &amp; The SSL Boss Fight</h3>
         <p>I went back to GitHub, expecting a warm welcome.</p>
         <p><code>InvalidDNSError</code>.</p>
         <p>Bruh.</p>
@@ -417,10 +444,10 @@ SHARED_TARGETS <span style="color: #d73948">:=</span> <span style="color: #d7394
         <p>The solution? Wait harder.</p>
         <p>I took the adivice, and after another 20 minutes, GitHub finally issued the certificate.<br>I slammed that “Enforce HTTPS” checkbox in the repo settings, and the error finally went away.</p>
         <p>We are live!</p>
-        <h3>3.3 – Wrapping Up (And that ToC)</h3>
-        <p>Oh, and remember that Table of Contents issue I ranted about in the Python section? The one about needing to know the document structure before rendering the top of the page?</p>
-        <p>Typst handles it natively. You can just query the document for headings and it figures out the layout automatically. I even added a bit of logic to change its position based on whether you’re reading this on a desktop or a phone.</p>
-        <p>If you made it this far, thanks for reading my ramblings.<br>Expect more posts my projects, current obesessions and weird experiments, and probably more DNS-induced mental breakdowns as I plan to venture into self hosting <em>everything</em>.</p>
+        <h3 id="loc-10">3.3 – Wrapping Up (And that ToC)</h3>
+        <p>Oh, and remember that Table of Contents I talk about in the Python section? The one about needing to know the document structure before rendering the top of the page?</p>
+        <p>Typst handles it natively. You can just query the document for headings and it lists them automatically.</p>
+        <p>If you made it this far, thanks for reading my ramblings.<br><br>Expect more posts about my current projects, obsessions and weird experiments, and probably more DNS-induced mental breakdowns as I plan to venture into self hosting <em>everything</em>.</p>
       </main>
     </article>
     <footer>
