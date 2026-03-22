@@ -50,7 +50,7 @@
               <div><a href="#loc-7"><span class="prefix">3 –</span> Deploy and Enjoy</a></div>
               <ol style="list-style-type: none">
                 <li><a href="#loc-8"><span class="prefix">3.1 –</span> It’s Alwasy DNS</a></li>
-                <li><a href="#loc-9"><span class="prefix">3.2 –</span> The Caching Trap &amp; The SSL Boss Fight</a></li>
+                <li><a href="#loc-9"><span class="prefix">3.2 –</span> The Caching Trap</a></li>
                 <li><a href="#loc-10"><span class="prefix">3.3 –</span> Wrapping Up (And that ToC)</a></li>
               </ol>
             </li>
@@ -411,15 +411,15 @@ SHARED_TARGETS <span style="color: #d73948">:=</span> <span style="color: #d7394
         <pre><code data-lang="sh"><span style="color: #4b69c6">$</span> dog blog.bulga.dev.bulga.dev
 <span style="color: #4b69c6">Status:</span> NXDomain</code></pre>
         <p>Wait. blog.bulga.dev.bulga.dev?</p>
-        <p>Yep. Porkbun, like many DNS managers, automatically appends your root domain to the Host field.<br>By typing the full subdomain, I had unknowingly created a DNS record for a domain that sounded like it had a severe stutter.</p>
+        <p>Yep. Porkbun, like many DNS managers, automatically appends your root domain to the Host field.<br>By typing the full subdomain, I had unknowingly created a DNS record for a domain that sounded like I had a severe stutter.</p>
         <p>I changed the Host field to just blog.</p>
         <pre><code data-lang="Bash"><span style="color: #4b69c6">marco@arch</span><span style="color: #d73948">></span> dog blog.bulga.dev
 <span style="color: #4b69c6">CNAME</span> blog.bulga.dev.    10m00s   <span style="color: #198810">"</span><span style="color: #198810">bugg4.github.io.</span><span style="color: #198810">"</span></code></pre>
         <p><em>Beautiful</em></p>
-        <h3 id="loc-9">3.2 – The Caching Trap &amp; The SSL Boss Fight</h3>
+        <h3 id="loc-9">3.2 – The Caching Trap</h3>
         <p>I went back to GitHub, expecting a warm welcome.</p>
         <p><code>InvalidDNSError</code>.</p>
-        <p>Bruh.</p>
+        <p>🙃</p>
         <p>Turns out, I was caught in the GitHub DNS Cache Trap. GitHub’s massive global servers remember your mistakes and aggressively cache them. The only way to fix it was to remove the custom domain from GitHub’s settings, walk away, make a coffee, question my life choices for 15 minutes, and then type it back in.</p>
         <p>Finally, the DNS check turned green!<br>I excitedly typed <code>blog.bulga.dev</code> into my browser and smashed Enter.</p>
         <p><code>net::ERR_CERT_COMMON_NAME_INVALID</code></p>
