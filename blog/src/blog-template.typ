@@ -1,3 +1,5 @@
+#import "utils.typ": heading_with_id
+
 // ==========================================
 // Globals
 // ==========================================
@@ -103,9 +105,25 @@
   content,
 ) = {
   // setup document
-  document(route + post_filename + ".html", title: main_title)[
+  document(route + post_filename + ".html", title: main_title, keywords: str(post_number))[
     // =============== Headings ==============
-    #set heading(numbering: "1.1.1 " + sym.dash)
+    #set heading(numbering: "1.1.1 " + sym.dash, depth: 1)
+
+
+    //https://github.com/typst/typst/issues/2926
+    /*     #show heading: it => {
+      let key = str(post_number) + "-" + lower(post_filename).replace(" ", "-")
+      return [
+        #it
+        #v(-1em)
+        #figure(
+          kind: "heading",
+          numbering: (..numbers) => numbering(heading-numbering, ..(counter(heading).get())),
+          supplement: "Section",
+        )[]
+        #label(key)
+      ]
+    } */
 
     // =============== Quotes ================
     #show quote: it => emph(it)
@@ -125,7 +143,10 @@
                 read_time,
                 tags,
               )
-                + html.main(content),
+                + html.main()[
+                  // #outline(title: "ToC", target: <post-1-heading>)
+                  #content
+                ],
             )
             + blog_footer(author, "2026"),
         ),

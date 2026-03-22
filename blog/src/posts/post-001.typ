@@ -1,5 +1,12 @@
 
-#import "../blog-template.typ": blog_post, routes, styles, tags
+#import "../blog-template.typ": blog_figure, blog_post, routes, styles, tags
+#import "../utils.typ": heading_with_id
+
+#let post_heading_label(post_number) = {
+  label("post-" + str(post_number) + "-heading")
+}
+
+
 
 #let info = (
   // post metadata
@@ -7,8 +14,8 @@
   main_title: "Hello, Internet!",
   subtitle: "My Blog, My Way",
   author: "Marco Bulgarelli",
-  date_published: datetime(day: 11, month: 3, year: 2026),
-  read_time: "5 min read",
+  date_published: datetime(day: 22, month: 3, year: 2026),
+  read_time: "10 min read",
   tags: (tags.meta, tags.typst),
   stylesheet: styles.blog,
   post_filename: "hello-internet",
@@ -18,6 +25,9 @@
 #blog_post(
   ..info,
 )[
+
+  #outline()
+
   So, uhm... is this thing on? \
   Welcome to my first ever blog post! How exciting!
   This took _much_ longer than I expected, but I'm happy I managed to get it started.
@@ -27,7 +37,9 @@
 
   But let's start from the beginning.
 
+
   = Make It Simple, Make It From Scratch
+
 
   I like to start projects from scratch. As most developers coding for fun, and not to get shit done, often do. \
   No WordPress, No React, no Hugo. \
@@ -278,7 +290,7 @@
   ```
 
   See how clean that is? \
-  No HTML tags cluttering up the paragraphs, no deep nesting, It's mostlt yregular text.\
+  No HTML tags cluttering up the paragraphs, no deep nesting, It's mostly regular text.\
   But when I _do_ need to insert some function calls, they effortlessly fall right in line with the writing flow. \
   I vastly prefer this over Markdown + weird templating syntaxes. \
 
@@ -453,12 +465,122 @@
   The `qr` function is just a neat little trick to generate a scannable code in my terminal output using `qrencode`.
 
   = Deploy and Enjoy
-  TODO:
-  - deploy on github pages following https://stackoverflow.com/questions/36782467/set-subdirectory-as-website-root-on-github-pages/75662195#75662195
-  - Table of contents (different position based on mobile/desktop)
+  Alright, the site builds. Now I need to throw it onto the internet so someone can finally read it (hopefully ???). \
+  The obvious choice for a static site is GitHub Pages.\
+  It's free, it's fast, and it's _absolutely proprietary_.
 
+  I promise I will switch to self hosting. Learning to self host everything I need is one of the main reasons I Thought about opening this blog. To document my journey wiht it. \
+  But sadly, I have shaved enough yaks up until this point, so it's time to get this thing online, and think about proper self hosting later.
 
+  The workflow is simple: I run my build script locally, which spits out the final HTML and assets. I then commit that payload to a separate `publish` branch. GitHub Pages is configured to blindly serve whatever sits in the root of that branch.
 
+  == It's Alwasy DNS
+  I recently impulsively bought the `bulga.dev` domain on #link("https://porkbun.com/")[Porkbun], so the I'll set this blog to live at the `blog` subdomain. How creative. \
+  Setting up a custom domain on GitHub Pages shouldn't be too much of a hustle:
+  - You go to your profile settings > pages
+  - Input your custom domain
+  - You're given a TXT record to setup, GitHub will interrogate your domain, and when it responds with the expected token, your site is verified.
+
+  So I went ahead and created the following record through Porkbun:
+
+  #table(
+    columns: 3,
+    table.header([TYPE], [HOST], [ANSWER]),
+    [TXT], [\_github-pages-challenge-bugg4.blog.bulga.dev], [_some-secret-value_],
+  )
+
+  - You then go into your repo's specific settings
+  - You set up the deplyment method for the site. I chose `deploy from branch`, chose `publish` as the branch and `/` as the root folder.
+  - You the input your desired custom domain, which visitors will get redirected to if they visit `your_username.github.io`
+  - You wait for GitHub to pass the DNS check on your domain, which may take from 2 to 786345 minutes.
+  - The DNS check fails
+
+  Wait what?
+  You didn't know? It's phisically impossible for anything remotely connected to DNS stuff to work succesfully on the first try. \
+  It's just how it works.
+
+  I hit the button again. \
+  GitHub ponders for another couple of minutes. \
+
+  Green checkmark, the DNS verification seemingly succeeded, but upon checking I was getting a fat 404 on my `bugg4.github.io` fallback URL. \
+  Turns out, because my repo is named `bulga-dev` and not exactly `bugg4.github.io`, GitHub treats it as a "Project Page". \
+  This means the default URL isn't the root, but rather `bugg4.github.io/bulga-dev/`. \
+  Whatever, the custom domain will hide that path anyway.
+
+  So I went into Porkbun, slapped `blog.bulga.dev` into a new CNAME record, pointed it to GitHub, and went to my repo settings to verify it.
+
+  GitHub spits back an `InvalidDNSError`. \
+  I stared at it. I mashed the "Check again" button. Nothing.
+
+  I then tried to query the DNS records myself using #link("https://github.com/ogham/dog")[dog]:
+
+  ```sh
+  $ dog blog.bulga.dev.bulga.dev
+  Status: NXDomain
+  ```
+
+  Wait. blog.bulga.dev.bulga.dev?
+
+  Yep. Porkbun, like many DNS managers, automatically appends your root domain to the Host field. \
+  By typing the full subdomain, I had unknowingly created a DNS record for a domain that sounded like it had a severe stutter.
+
+  I changed the Host field to just blog.
+
+  ```Bash
+  marco@arch> dog blog.bulga.dev
+  CNAME blog.bulga.dev.    10m00s   "bugg4.github.io."
+  ```
+
+  _Beautiful_
+
+  == The Caching Trap & The SSL Boss Fight
+  I went back to GitHub, expecting a warm welcome.
+
+  `InvalidDNSError`.
+
+  Bruh.
+
+  Turns out, I was caught in the GitHub DNS Cache Trap. GitHub's massive global servers remember your mistakes and aggressively cache them. The only way to fix it was to remove the custom domain from GitHub's settings, walk away, make a coffee, question my life choices for 15 minutes, and then type it back in.
+
+  Finally, the DNS check turned green! \
+  I excitedly typed `blog.bulga.dev` into my browser and smashed Enter.
+
+  `net::ERR_CERT_COMMON_NAME_INVALID`
+
+  To keep my sanity intact, I threw a curl request at it:
+
+  ```sh
+  $ curl blog.bulga.dev
+
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+  ...
+  ```
+  So blog _IS_ live.
+
+  So why was my browser having a panic attack?
+
+  I asked some clankers, and they came back with two main reasons:
+
+  + The `.dev` Mandate: The `.dev` top-level domain is on the HSTS preload list. This means modern browsers physically refuse to load them over standard HTTP. They demand a secure HTTPS connection. curl worked because it doesn't care about browser security policies, but Brave absolutely does.
+
+  + The Mismatched ID: GitHub hadn't finished provisioning my Let's Encrypt SSL certificate yet. When Brave demanded a secure connection, GitHub panicked and handed over its generic \*.github.io certificate. Brave saw that the names didn't match, assumed I was being hacked, and threw the error.
+
+  The solution? Wait harder.
+
+  I took the adivice, and after another 20 minutes, GitHub finally issued the certificate. \
+  I slammed that "Enforce HTTPS" checkbox in the repo settings, and the error finally went away.
+
+  We are live!
+
+  == Wrapping Up (And that ToC)
+  Oh, and remember that Table of Contents I talk about in the Python section? The one about needing to know the document structure before rendering the top of the page?
+
+  Typst handles it natively. You can just query the document for headings and it lists them automatically.
+
+  If you made it this far, thanks for reading my ramblings. \
+\  Expect more posts about my current projects, obsessions and weird experiments, and probably more DNS-induced mental breakdowns as I plan to venture into self hosting _everything_.
 
 ] #eval("<" + str(info.post_number) + ">")
 

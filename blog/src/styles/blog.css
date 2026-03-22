@@ -145,6 +145,17 @@ nav {
   border-bottom: var(--border-thin);
 }
 
+nav[role="doc-toc"] {
+  display: block;
+  margin: 0px;
+  padding: 0px;
+  margin-bottom: 1.2rem;
+
+  & h2 {
+    margin-top: 1rem;
+  }
+}
+
 .nav-brand {
   display: flex;
   align-items: center;
