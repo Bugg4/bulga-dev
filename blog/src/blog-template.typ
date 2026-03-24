@@ -133,6 +133,7 @@
     // =============== Build Document ==============
     #html.html(
       lang: "en",
+      id: "post-" + str(post_number),
       blog_head(main_title, stylesheet)
         + html.body(
           blog_nav()

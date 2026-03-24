@@ -572,5 +572,3 @@ Typst handles it natively. You can just query the document for headings and it l
 
 If you made it this far, thanks for reading my ramblings. \
 \  Expect more posts about my current projects, obsessions and weird experiments, and probably more DNS-induced mental breakdowns as I plan to venture into self hosting _everything_.
-
-#label(str(info.post_number))

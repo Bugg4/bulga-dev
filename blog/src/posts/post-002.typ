@@ -21,5 +21,4 @@
 
 = Testing testing
 This is just a test post
-#label(str(info.post_number))
 

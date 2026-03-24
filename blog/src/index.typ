@@ -28,7 +28,8 @@
     #for p in posts {
       html.li(
         link(
-          label(str(p.post_number)),
+          p.route + p.post_filename + ".html" + "#post-" + str(p.post_number),
+          //label("post-" + str(p.post_number)),
           pad_left("0", 3, p.post_number) + ": " + p.main_title + [ --- ] + p.subtitle,
         ),
       )
