@@ -1,4 +1,4 @@
-#import "utils.typ": heading_with_id
+#import "utils.typ": post_id, slugify
 
 // ==========================================
 // Globals
@@ -18,9 +18,9 @@
   typst: "typst",
 )
 
-#let routes = (
-  post: "post/",
-  index: "/",
+#let page_kind = (
+  post: (route: "post/"),
+  index: (route: "/"),
 )
 
 // ==========================================
@@ -91,41 +91,35 @@
 // ==========================================
 
 #let blog_post(
-  route: "",
+  kind: page_kind.post,
   main_title: "Main Title",
   subtitle: "Subtitle",
   author: "Author",
   date_published: datetime(day: 1, month: 1, year: 1970),
-  read_time: "Read Time",
+  read_time_mins: "5",
   tags: ("Tag 1", "Tag 2", "Tag 3"),
   stylesheet: "",
   show_outline: true,
   // typst source file metadata
   post_number: 0,
-  post_filename: "some-title",
   content,
 ) = {
   // setup document
-  document(route + post_filename + ".html", title: main_title, keywords: str(post_number))[
-    // =============== Headings ==============
-    #let post_id = [#("post-" + str(post_number) + "-" + post_filename.replace(" ", "-"))]
-    #set heading(numbering: "1.1.1 " + sym.dash, depth: 1, supplement: post_id)
-    #counter(heading).update(0) // reset counter
+  let filename = ""
+  let main_title_slug = slugify(main_title, lower: true, replacement: "-")
+  if (kind == page_kind.index) {
+    filename = page_kind.index.route + "index.html"
+  } else if (kind == page_kind.post) {
+    filename = (
+      page_kind.post.route + post_id(post_number) + "-" + main_title_slug + ".html"
+    )
+  }
 
-    //https://github.com/typst/typst/issues/2926
-    /*     #show heading: it => {
-      let key = str(post_number) + "-" + lower(post_filename).replace(" ", "-")
-      return [
-        #it
-        #v(-1em)
-        #figure(
-          kind: "heading",
-          numbering: (..numbers) => numbering(heading-numbering, ..(counter(heading).get())),
-          supplement: "Section",
-        )[]
-        #label(key)
-      ]
-    } */
+  document(filename, title: main_title)[
+    // =============== Headings ==============
+    #let heading_supp = [#(post_id(post_number) + "-" + main_title_slug)]
+    #set heading(numbering: "1.1.1 " + sym.dash, depth: 1, supplement: heading_supp)
+    #counter(heading).update(0) // reset counter
 
     // =============== Quotes ================
     #show quote: it => emph(it)
@@ -133,7 +127,7 @@
     // =============== Build Document ==============
     #html.html(
       lang: "en",
-      id: "post-" + str(post_number),
+      id: post_id(post_number),
       blog_head(main_title, stylesheet)
         + html.body(
           blog_nav()
@@ -143,12 +137,13 @@
                 subtitle,
                 author,
                 date_published,
-                read_time,
+                read_time_mins,
                 tags,
               )
                 + html.main()[
                   #if (show_outline) {
-                    outline(title: "Contents", target: heading.where(supplement: post_id))
+                    // Why can't I do: target: #html.h2.where(class: "some-class")
+                    outline(title: "Contents", target: heading.where(supplement: heading_supp))
                   }
                   #content
                 ],

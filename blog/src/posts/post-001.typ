@@ -1,17 +1,16 @@
 
-#import "../blog-template.typ": blog_figure, blog_post, routes, styles, tags
+#import "../blog-template.typ": blog_figure, blog_post, page_kind, styles, tags
 
 #let info = (
   // post metadata
-  route: routes.post,
+  kind: page_kind.post,
   main_title: "Hello, Internet!",
   subtitle: "My Blog, My Way",
   author: "Marco Bulgarelli",
   date_published: datetime(day: 22, month: 3, year: 2026),
-  read_time: "10 min read",
+  read_time_mins: "10 min read",
   tags: (tags.meta, tags.typst),
   stylesheet: styles.blog,
-  post_filename: "hello-internet",
   post_number: 1,
 )
 
@@ -565,7 +564,7 @@ I slammed that "Enforce HTTPS" checkbox in the repo settings, and the error fina
 
 We are live!
 
-== Wrapping Up (And that ToC)
+== Wrapping Up
 Oh, and remember that Table of Contents I talk about in the Python section? The one about needing to know the document structure before rendering the top of the page?
 
 Typst handles it natively. You can just query the document for headings and it lists them automatically.
