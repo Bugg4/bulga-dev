@@ -1,14 +1,14 @@
-#import "blog-template.typ": blog_post, styles, routes
+#import "blog-template.typ": blog_post, routes, styles
 #import "utils.typ": pad_left
 
 // Get posts info
 #import "posts/post-001.typ": info as post_001
-// #import "posts/post-002.typ": info as post_002
+#import "posts/post-002.typ": info as post_002
 
 // Build list of posts
 #let posts = (
   post_001,
- // post_002,
+  post_002,
 )
 
 #blog_post(
@@ -21,13 +21,14 @@
   tags: (),
   stylesheet: styles.blog,
   post_filename: "index",
+  show_outline: false,
   post_number: 0,
 )[
   #html.ul()[
     #for p in posts {
       html.li(
         link(
-          eval("<" + str(p.post_number) + ">", mode: "code"),
+          label(str(p.post_number)),
           pad_left("0", 3, p.post_number) + ": " + p.main_title + [ --- ] + p.subtitle,
         ),
       )

@@ -15,10 +15,11 @@
   post_number: 2,
 )
 
-#blog_post(
+#show: blog_post.with(
   ..info,
-)[
-  == Testing testing
-  This is just a test post
-] #eval("<" + str(info.post_number) + ">")
+)
+
+= Testing testing
+This is just a test post
+#label(str(info.post_number))
 

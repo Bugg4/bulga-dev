@@ -1,7 +1,7 @@
 // Include all content files
 #include "src/index.typ"
 #include "src/posts/post-001.typ"
-// #include "src/posts/post-002.typ"
+#include "src/posts/post-002.typ"
 
 // Relative to dist.typ
 #let STYLES_SRC_DIR = "./src/styles/"
