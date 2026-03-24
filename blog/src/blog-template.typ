@@ -99,6 +99,7 @@
   read_time: "Read Time",
   tags: ("Tag 1", "Tag 2", "Tag 3"),
   stylesheet: "",
+  show_outline: true,
   // typst source file metadata
   post_number: 0,
   post_filename: "some-title",
@@ -108,7 +109,7 @@
   document(route + post_filename + ".html", title: main_title, keywords: str(post_number))[
     // =============== Headings ==============
     #set heading(numbering: "1.1.1 " + sym.dash, depth: 1)
-
+    #counter(heading).update(0) // reset counter
 
     //https://github.com/typst/typst/issues/2926
     /*     #show heading: it => {
@@ -144,7 +145,9 @@
                 tags,
               )
                 + html.main()[
-                  // #outline(title: "ToC", target: <post-1-heading>)
+                  #if (show_outline) {
+                    outline(title: "Contents", target: heading)
+                  }
                   #content
                 ],
             )
