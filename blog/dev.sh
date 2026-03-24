@@ -16,20 +16,10 @@ lanip() {
 }
 export -f lanip
 
-# Handle Args
-if [ "$1" == "clean" ]; then
-  echo "Cleaning dist ..."
-  rm -rf "$DIST_DIR"
-  echo "Cleaned."
-  exit 0
-fi
-
 typst-git watch dist.typ \
   --root . \
   --format bundle \
   --features bundle,html \
   --ignore-system-fonts \
   --no-serve \
-  --no-reload &
-qr http://$(lanip):8080
-live-server ./dist
+  --no-reload
