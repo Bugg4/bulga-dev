@@ -108,7 +108,8 @@
   // setup document
   document(route + post_filename + ".html", title: main_title, keywords: str(post_number))[
     // =============== Headings ==============
-    #set heading(numbering: "1.1.1 " + sym.dash, depth: 1)
+    #let post_id = [#("post-" + str(post_number) + "-" + post_filename.replace(" ", "-"))]
+    #set heading(numbering: "1.1.1 " + sym.dash, depth: 1, supplement: post_id)
     #counter(heading).update(0) // reset counter
 
     //https://github.com/typst/typst/issues/2926
@@ -146,7 +147,7 @@
               )
                 + html.main()[
                   #if (show_outline) {
-                    outline(title: "Contents", target: heading)
+                    outline(title: "Contents", target: heading.where(supplement: post_id))
                   }
                   #content
                 ],
