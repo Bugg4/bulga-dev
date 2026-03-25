@@ -1,8 +1,8 @@
 
-#import "../blog-template.typ": blog_post, page_kind, styles, tags
+#import "../blog-template.typ": blog_post, kinds, styles, tags
 
 #let info = (
-  kind: page_kind.post,
+  page_kind: kinds.post,
   main_title: "Main Title",
   subtitle: "Subtitle",
   author: "Marco Bulgarelli",

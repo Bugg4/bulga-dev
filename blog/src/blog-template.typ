@@ -18,7 +18,7 @@
   typst: "typst",
 )
 
-#let page_kind = (
+#let kinds = (
   post: (route: "post/"),
   index: (route: "/"),
 )
@@ -91,7 +91,7 @@
 // ==========================================
 
 #let blog_post(
-  kind: page_kind.post,
+  page_kind: kinds.post,
   main_title: "Main Title",
   subtitle: "Subtitle",
   author: "Author",
@@ -107,11 +107,11 @@
   // setup document
   let filename = ""
   let main_title_slug = slugify(main_title, lower: true, replacement: "-")
-  if (kind == page_kind.index) {
-    filename = page_kind.index.route + "index.html"
-  } else if (kind == page_kind.post) {
+  if (page_kind == kinds.index) {
+    filename = kinds.index.route + "index.html"
+  } else if (page_kind == kinds.post) {
     filename = (
-      page_kind.post.route + post_id(post_number) + "-" + main_title_slug + ".html"
+      kinds.post.route + post_id(post_number) + "-" + main_title_slug + ".html"
     )
   }
 

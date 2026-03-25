@@ -1,9 +1,8 @@
 
-#import "../blog-template.typ": blog_figure, blog_post, page_kind, styles, tags
+#import "../blog-template.typ": blog_figure, blog_post, kinds, styles, tags
 
 #let info = (
-  // post metadata
-  kind: page_kind.post,
+  page_kind: kinds.post,
   main_title: "Hello, Internet!",
   subtitle: "My Blog, My Way",
   author: "Marco Bulgarelli",
