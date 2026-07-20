@@ -60,7 +60,7 @@ I see myself experiencing too much friction with this method, so it's a no go.
 == Markdown + SSG
 The obvious first choice... for a _sane_ person. \
 Also the de-facto standard, and, I assume, most used method to build static sites. \
-I've already stated I'd like to avoid SSGs, as they can be a bit opinionated in the way they handle the source tree structure. \
+I'd like to avoid SSGs, as they can be a bit opinionated in the way they handle the source tree structure. \
 They also kinda hide away the whole markdown compilation process, which I'd prefer to have complete control on.
 
 - Pros:
@@ -74,11 +74,11 @@ They also kinda hide away the whole markdown compilation process, which I'd pref
 Tl;dr: I'm not a sane person. Next.
 
 == Pure Python (???)
-What? \
-Yeah, I write my posts in Python, bruv. \
+What? You don't write your articles in Python? \
 Just Kidding, but I did try. \
 
-I thought #quote[Hey, Python is ergonomic, very flexible, so maybe I can find a way to intertwine written content with Python code in a way that doesn't look ugly, and grants me the full power of an actual programming language] (yeah, sorry HTML folks).
+I thought #quote[Hey, Python is ergonomic, very flexible, so maybe I can find a way to intertwine written content with Python code in a way that doesn't look ugly, and grants me the full power of an actual programming language] (yeah, sorry HTML folks). \
+Basically I tried to turn Python in some kind of domain specific language.
 
 I had recently learned about context managers, which, if you wrote any Python at all, you surely used:
 
@@ -87,11 +87,11 @@ with open("file.txt") as f:
     data = f.read()
 ```
 
-The `with` keyword here allows you to `open()` a file and bind it to the `f` variable without having to close it once you're done; it gets closed automatically once you exit the scope if the `with` block. \
-That's because you're operating inside *context*, which is a construct that can perform predefined actions both _before_ and _after_ the piece of code it wraps. \
+The `with` keyword here allows you to `open()` a file and bind it to the `f` variable without having to close it once you're done; it gets closed automatically once you exit the scope of the `with` block. \
+That's because you're operating inside a _context_, which is a construct that can perform predefined actions both _before_ and _after_ the piece of code it wraps. \
 Sounds perfect for writing HTML programmatically!
 
-This is how I went about implementing a context manager class which mimics the way you'd write nested HTML elements:
+This is how I went about implementing an HTML class which leverages context managers to build and nest HTML tags using with blocks:
 
 ```python
 class HTMLTag:
@@ -121,7 +121,8 @@ with HTMLTag("div", _class="container", id="main"):
     with HTMLTag("p"):
         print("This was generated using a Python context manager.", end="")
 ```
-And that would produce the nested HTML structure you'd expect:
+
+Still kind of verbose for the API I'm looking for, but would produce the nested HTML structure you'd expect:
 
 ```html
 <div class="container" id="main">
@@ -130,7 +131,8 @@ And that would produce the nested HTML structure you'd expect:
 </div>
 ```
 
-You can likely see how, with some work to prettify the API, this could become quite a usable pattern. The idea is simply that we manage the HTML nesting using python contexts.\
+You can likely see how, with some work to prettify the API, this could become quite a usable pattern. \
+The idea is, simply put, to manage the HTML nesting using python contexts.\
 We could also make derived classes for each single HTML tag, as to avoid some code and make the code prettier:
 
 ```python
@@ -151,24 +153,26 @@ class P(HTMLTag):
 ```
 
 This is all fine and dandy, but there's a not so subtle usability problem: We have to write our actual content using print statements and strings. \
-This is a major annoyance. \
-Assume we'd want to make a Table of Contents component. It's pretty common to have an index of some sort in pretty much any article, right? \
-And ToCs usually go at, or close to, the very beginning of the article, correct? \
-But how could we construct a ToC without having printed all the content first? Well, we can't.
+This is a major annoyance.
+
+Assume we'd want to make a Table of Contents component, and index of all headings. \
+ToCs usually go at, or close to, the very beginning of the article, correct? \
+But how could we construct it without having printed all the content first? Well, we can't.
 
 To solve this issue, we'd have to complicate the structure of our simple (for now) HTML renderer, and think of a way to access the HTML node tree once it's fully constructed, analyize it, and then go back at the beginning to insert another element, a ToC in this case.
 
-This is doable, don't get me wrong, but it _feels_ out of scope for this project. \
-It _feels_ like there must be a simpler way to write HTML programmatically without having to build a fully-fledged HTML Node tree representation.
+This is doable, but it _feels_ out of scope for this project. \
+It _feels_ like there must be a simpler way to write HTML programmatically without having to build a fully-fledged HTML Node tree representation myself.
 
 Remember? I'm lazy. Plus, if I wanted to use something like that I'd adopt one of the existing libraries, like #link("https://github.com/Knio/dominate")[Dominate].
+I want to keep dependecies to an absolute minimum.
 
-So, final verdict for Python: Great for logic, terrible for writing content.
+So, final verdict for Python: Great language, but coercing it into a DSL doesn't feel like the right path.
 
 The ideal workflow I'm searching for would let me *just write the damn text*, without wrapping every sentence in quotes, or polluting the document with function calls and endless nesting, while still giving me the power of a real programming language behind the scenes.
 
 = Typst
-Then, the revelation.
+Revelation.
 
 I knew about this language the whole time, since 2023 in fact. \
 I had tried it for a bit, but wrote it off as not yet mature enough for whatever I was doing at the time.
@@ -191,7 +195,7 @@ It is _so_ nice to write in. \
 It's basically Markdown on steroids, and Turing complete. \
 Here's the official #link("https://github.com/typst/typst")[GitHub repo], check it out if you've never heard of it.
 
-Here's my blog template function, as an example of its syntax:
+Here's my blog template function, as an example of its syntax (mind that I'm not really writing _content_ here, but I'm setting up how'd like it to be rendered in HTML):
 
 ```typst
 #let blog_post(
@@ -241,10 +245,10 @@ Here's my blog template function, as an example of its syntax:
 ```
 What I'm doing is defining a `blog_template()` function which takes arguments in the form of a dictionary. \
 Those args will act as a centralized place to setup all the metadata about my post. \
-What I like about this approach, is that the metadata is defined all at once, in the same place, like you'd do inside the YAML front matter of a markdown file.
+What I like about this approach, is that the metadata is defined all at once, in the same place, like you'd do inside the YAML front matter of a Markdown file.
 
 Inside the curly braces I then have a couple of `set` and `show` rules, which are a concept particular to Typst:
-- `set` rules allow me to preset parameters for #link("https://typst.app/docs/reference/foundations/function/#element-functions")[element functions] that get called inside this template. Imagine it like a macro that "fixes" the specified parameters of a function to the specified values, so we don't have to set them each time. \
+- `set` rules allow me to preset parameters for #link("https://typst.app/docs/reference/foundations/function/#element-functions")[element functions] that get called inside this template. \ Imagine it like a macro that "fixes" the specified parameters of a function to the specified values, so we don't have to set them each time. \
   For instance, `#set heading(numbering: "1.a ")` would make all headings throughout the document automatically number themselves following that specific pattern. Set it once, and forget it!
 - `show` rules allow me to _redefine_ how those elements look, and completely change their structure.
 for example, I could redefine all the appearances of bold text to always be surrounded by red amoguses (or amogi?):
@@ -279,12 +283,11 @@ To give you a taste, here's the exact source code for the intro you just read, s
 ```
 
 See how clean that is? \
-No HTML tags cluttering up the paragraphs, no deep nesting, It's mostly regular text.\
-But when I _do_ need to insert some function calls, they effortlessly fall right in line with the writing flow. \
+Almost looks like Markdown.
+It's mostly regular text. But when I _do_ need to insert some function calls, they effortlessly fall right in line with the writing flow. \
 I vastly prefer this over Markdown + weird templating syntaxes. \
 
 All hail Typst!
-
 
 == I Need MOAR Experimental Features
 Ok great, we have a language. \
@@ -301,8 +304,10 @@ This had the nice effect of tripping up VSCode's live server extension, which I 
 Luckily, switching to node's #link("https://github.com/tapio/live-server")[live-server] solved this problem for now.
 
 That's just to preview a single page, though. \
-Things spicier once I realized we need to build multiple pages at once. \
-Think about it: a blog is (usually) more one page. We have need to have posts, index pages, about me, http error pages... all needing to be bundled alongside CSS styles and shared assets.
+
+If this is becomes my chosen solution, I will need to be able to generate _multiple_ pages at once. \
+Not to mention we need to handle assets, CSS stylesheets, maybe JS scripts...
+
 
 Here comes the kicker: Typst currently does *not* support multi-page compilation for non-paged export targets like HTML out of the box, at least not in any released version.
 
