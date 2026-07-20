@@ -8,7 +8,7 @@
   author: "Marco Bulgarelli",
   date_published: datetime(day: 20, month: 07, year: 2026),
   read_time_mins: "5 min read",
-  tags: (tags.meta, tags.typst),
+  tags: (tags.vibecoding),
   stylesheet: styles.blog,
   // post_filename: "002-test",
   post_number: 2,
@@ -30,22 +30,22 @@ Anyway I just wanted to write a couple lines to document how I program day to da
 I recently found a workflow I'm pretty happy with, and I figured it'd be interesting to freeze it in writing while it's still fresh.
 
 == To Vibe or Not to Vibe
-Look, I'm not here to debate whether AI-assisted coding is good or bad.
-I _will_ mention tho that've been surpreside by the most recent public stance Linus' took (insert link of linus saying anti-AI people can just fork the kernel)
-What I _will_ say is that once you've experienced an LLM following your exacti instruction to the letter while you sip your coffee, going back feels... suboptimal.
+Look, I'm not here to debate whether AI-assisted coding is good or bad. That horse has been beaten to a fine paste already.
 
-I've read and heard countless opnions on vibecoding.
-It's the best thing since sliced bread!
-It's the worst, it'll fry your brain!
-And everything in bewtween.
+I _will_ say that Linus Torvalds' recent take gave me a chuckle: #link("https://lore.kernel.org/linux-media/CAHk-=wi4zC+Ze8e+p3tMv8TtG_80KzsZ1syL9anBtmEh5Z40vg@mail.gmail.com/")[when asked about AI-generated kernel patches], his response was essentially "if you're anti-AI, just fork the kernel."
 
-The problem is, most AI coding tools are either:
+What I _will_ also say is that once you've experienced an LLM following your exact instructions to the letter while you sip your coffee, going back feels genuinely suboptimal.
+
+I've heard every opinion on vibecoding under the sun. It's the death of software engineering. It's the greatest productivity leap since Stack Overflow. It'll make juniors never learn fundamentals. It'll let seniors 10x their output. It's a crutch. It's a superpower.
+
+Here's my take: it's a tool. Use it well, it amplifies you. Use it poorly, it amplifies your bad habits. Same as any tool we've ever adopted. The folks panicking about it are giving the same energy as teachers in 2005 convinced Wikipedia would destroy education.
+
+I see myself as a fucntionalist at heart. Take something for what it does, not for what it is.
+
+The _actual_ problem, as far as I'm concerned, isn't AI coding itself, it's the harness. Everything I tried was either:
 - Tied to a specific editor (looking at you, Cursor),
 - Wrapped in a clunky web UI (looking at you, ChatGPT),
 - Or built by companies that will probably pivot to crypto any day now, or just sell out to ClosedAI.
-
-What I wanted was simple: the raw power of an LLM agent, inside my existing editor, without any fluff.
-No fancy UI panels, no proprietary editor forks, no lock-in.
 
 Enter OpenCode.
 
@@ -139,10 +139,6 @@ Common sense, but worth saying.
 
 == Where This Is Going
 I'm still figuring out the optimal setup. The combination of vanilla VSCode + opencode + MCPs has been working surprisingly well for the past few weeks, but I'm constantly tweaking.
-
-A few things on my radar:
-
-
 
 Until next time.\
 _May your context window be large and your hallucinations minimal._

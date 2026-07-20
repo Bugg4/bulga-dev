@@ -16,6 +16,7 @@
 #let tags = (
   meta: "meta",
   typst: "typst",
+  vibecoding: "vibecoding"
 )
 
 #let kinds = (
