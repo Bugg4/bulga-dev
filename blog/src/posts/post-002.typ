@@ -29,11 +29,9 @@ Anyway I just wanted to write a couple lines to document how I program day to da
 
 I recently found a workflow I'm pretty happy with, and I figured it'd be interesting to freeze it in writing while it's still fresh.
 
-I've been coding professionally for a few months now, and I've always been a terminal-first kind of developer.
-I like tools that get out of my way. I want my editor to be fast, my tooling to be invisible.
-
-== The Great Editor Schism
+== To Vibe or Not to Vibe
 Look, I'm not here to debate whether AI-assisted coding is good or bad.
+I _will_ mention tho that've been surpreside by the most recent public stance Linus' took (insert link of linus saying anti-AI people can just fork the kernel)
 What I _will_ say is that once you've experienced an LLM following your exacti instruction to the letter while you sip your coffee, going back feels... suboptimal.
 
 I've read and heard countless opnions on vibecoding.
