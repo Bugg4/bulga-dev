@@ -8,7 +8,7 @@
   author: "Marco Bulgarelli",
   date_published: datetime(day: 20, month: 07, year: 2026),
   read_time_mins: "5 min read",
-  tags: (tags.vibecoding),
+  tags: (tags.vibecoding,),
   stylesheet: styles.blog,
   // post_filename: "002-test",
   post_number: 2,

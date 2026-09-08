@@ -4,11 +4,13 @@
 // Get posts info
 #import "posts/post-001.typ": info as post_001
 #import "posts/post-002.typ": info as post_002
+#import "posts/post-003.typ": info as post_003
 
 // Build list of posts
 #let posts = (
   post_001,
   post_002,
+  post_003,
 )
 
 #blog_post(

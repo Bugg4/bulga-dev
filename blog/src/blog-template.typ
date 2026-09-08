@@ -16,7 +16,9 @@
 #let tags = (
   meta: "meta",
   typst: "typst",
-  vibecoding: "vibecoding"
+  vibecoding: "vibecoding",
+  ai: "ai",
+  philosophy: "philosophy",
 )
 
 #let kinds = (
