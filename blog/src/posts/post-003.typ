@@ -1,14 +1,13 @@
 
-// TODO: Revisit the argument after adding the missing WhatsApp audio transcripts.
 #import "../blog-template.typ": blog_post, kinds, styles, tags
 
 #let info = (
   page_kind: kinds.post,
   main_title: "A Group of Cells Governed by Physics",
-  subtitle: "A Bad Equation for Intelligence, and Why I Can't Stop Thinking About It",
+  subtitle: "A Bad Equation for Intelligence",
   author: "Marco Bulgarelli",
   date_published: datetime(day: 9, month: 9, year: 2026),
-  read_time_mins: "9 min read",
+  read_time_mins: "10 min read",
   tags: (tags.ai, tags.philosophy),
   stylesheet: styles.blog,
   post_number: 3,
@@ -32,7 +31,7 @@ His answer was no. The plant is following an algorithm encoded in its DNA.
 
 Fair enough. But then the annoying question: *how is that fundamentally different from us?*
 
-We also act according to structures encoded in biology, modified by experience, and executed by matter that follows physical laws. Our algorithm is vastly more complicated and adaptable, but calling the plant "just an algorithm" does not tell us where intelligence begins. It only moves the mystery one step up the complexity ladder.
+We also act according to structures encoded in biology, modified by experience, and executed by matter that follows physical laws. Our overall system is vastly larger and more adaptable, but its local rules may still be simple. Calling the plant "just an algorithm" does not tell us where intelligence begins. It only moves the mystery one step up the complexity ladder.
 
 Somewhere between a root finding water, Stockfish finding checkmate, an LLM writing a paragraph, and a human asking why any of this counts, we decide to use the word _intelligence_.
 
@@ -41,6 +40,8 @@ Where, exactly, should we draw the line?
 = Intelligence Without Magic
 
 I tend to take a functionalist view of this stuff: judge a system by what it can do, not by what it is made of.
+
+Computation is not a property exclusive to silicon. You can encode an algorithm in a mechanical device, in flowing water, in air pressure, in transistors, or in cells. Once a system can receive input, transform information, and produce output, it can execute an algorithm. The substrate changes what is practical, not what computation fundamentally is.
 
 This is not the same as claiming that every useful algorithm is conscious, alive, or secretly having feelings. Intelligence and consciousness are separate questions, and mixing them makes both conversations worse.
 
@@ -62,6 +63,8 @@ I tried to compress the idea into a deliberately crude model:
 
 This is not a measurable law. I do not have units for "algorithmic complexity," and I would be extremely suspicious of anyone selling an intelligence benchmark based on this formula. It is a thinking tool: four knobs that seem to shape the behaviour we call intelligent.
 
+The multiplication is the important part. None of these ingredients is intelligent in isolation. A universe of data sitting untouched does nothing. The most elaborate function in existence does nothing if it receives no input and is never executed. Intelligence, if it appears, appears in the interaction: a process operating on information at sufficient scale.
+
 == Data Scale
 
 A system needs something to reason _with_: observations, memories, training examples, inherited structure, or the current state of its environment.
@@ -81,6 +84,10 @@ Speed is relative to the environment. Human neurons are laughably slow next to s
 == Algorithmic Complexity
 
 By this I mean the richness of the process connecting input to action: how many kinds of relationships it can represent, how deeply it can compose them, and how flexibly it can reuse what it has learned.
+
+I do not mean that every individual instruction must be impressive. At the lowest useful level, a neuron might be described as receiving electrochemical signal X and sending signal Y. An LLM mostly performs matrix multiplications. Neither operation looks remotely like thought when inspected alone.
+
+What changes is the scale at which those operations are connected: the number of neurons or parameters, the number of relationships between them, the speed of their interaction, and the size of the solution space the resulting system can navigate. That space may be effectively unbounded even when each step through it is mechanically simple. Thought is not hiding inside one special instruction; it emerges from the organisation and scale of the whole computation.
 
 A thermostat has data, performs inference quickly, and makes decisions. Its algorithm is simply too narrow for us to call it intelligent in ordinary conversation.
 
@@ -111,6 +118,8 @@ It senses, communicates internally, adapts, and solves a narrow set of survival 
 Stockfish is extremely fast, sophisticated within its domain, and effectively deterministic when its configuration and execution are fixed. Compared with a general model, the information it consumes at decision time is tiny: a board position and a bounded search history.
 
 It is superhuman at chess and helpless outside it. That is why "narrow AI" is a useful label. Stockfish demonstrates that a deterministic system can display extraordinary competence. It also demonstrates that competence in one search space is not the same as general intelligence.
+
+Still, _narrow_ intelligence is not _no_ intelligence. Optimise a system enough to navigate an enormous space of chess positions and it acquires at least one characteristic we recognise as intelligent: it solves a difficult problem. Ask it about tomorrow's weather and it has nothing to say, not because its chess ability was fake, but because generality was never its function.
 
 == An LLM
 
@@ -170,6 +179,10 @@ That idea does not make humans less intelligent. It just removes one of the comf
 
 I still do not have a clean threshold, and I increasingly suspect there is not one.
 
+It is the old question of the heap: how many grains of sand do you need before they stop being separate grains and become a pile? One grain obviously is not a heap. Ten thousand obviously are. Demanding the exact grain that performs the transformation does not improve our understanding of sand.
+
+The boundary between a mechanism and an intelligent system may work the same way. A tiny input space and a tiny function look like a reflex. Push the data, connectivity, speed, and reachable solutions far enough and the combined system begins to look intelligent. The precise point where we switch words matters less than understanding what changed along the way.
+
 Intelligence looks less like a substance a system possesses and more like a relationship between its machinery, its information, and the problems around it. A sunflower is well adapted to its world. Stockfish is godlike in a tiny universe. An LLM ranges across a much larger symbolic space, with strange blind spots. A human combines language, memory, embodiment, social learning, and continuous feedback into something broader again.
 
 The differences are real. They may be differences of architecture, scale, embodiment, adaptability, or degree. We should investigate them instead of hiding them behind the word "just."
@@ -177,8 +190,6 @@ The differences are real. They may be differences of architecture, scale, embodi
 _Just_ an algorithm. _Just_ statistics. _Just_ a group of cells governed by physics.
 
 "Just" is doing all the work.
-
-// TODO(audio): Add any missing examples or counterarguments from the voice notes here.
 
 For now, my best answer is this: a system is intelligent when it can use information to produce useful behaviour across enough variation that a simple reflex no longer explains it well.
 
