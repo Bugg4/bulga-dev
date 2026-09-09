@@ -23,33 +23,32 @@ This post started, as all rigorous scientific work does, in a late-night WhatsAp
 
 I had dropped #link("https://x.com/OpenAI/status/2097374640582668336")[an OpenAI post] into the group chat with the restrained caption: _A Millennium problem solved_. I followed it with the equally restrained claim: anyone who could not see at least the first glimmers of AGI in this had ham over their eyes.
 
-Francesco dismissed the label. \
-AGI, ASI, smarter than humans, "really thinking": what mattered was that the system was useful and producing results that would have taken us much longer to reach. \
+Francesco was less interested in taxonomy. AGI, ASI, smarter than humans, "really thinking": what mattered was that the system was useful and producing results that would have taken us much longer to reach.
 
-Federico's answer was blunt: _`It doesn't really think.`_
+Federico's immediate objection was blunt: _`It doesn't really think.`_
 
-_If it walks like a duck and quacks like a duck..._, I replied. \
-Whatever is happening inside, the result looks like one produced by human intelligence.
+My instinctive response was the duck test. _If it walks like a duck and quacks like a duck..._ Whatever is happening inside, the result looks like one produced by human intelligence.
 
-Federico reached for a version of the Chinese room: imagine a very fast little man with a Chinese dictionary and a perfect book of instructions. He has no idea what he is writing, but follows the rules quickly enough that his answers are indistinguishable from those of a Chinese speaker. An LLM, in this view, is just that little man with a much bigger dictionary.
+That led straight to a version of the Chinese room: imagine a very fast little man with a Chinese dictionary and a perfect book of instructions. He has no idea what he is writing, but follows the rules quickly enough that his answers are indistinguishable from those of a Chinese speaker. An LLM, in this view, is just that little man with a much bigger dictionary.
 
-My answer was that scale is precisely where the magic happens. A thousand fast little men may still be following simple instructions, but together they become a system capable of something none of them can do alone.
+To me, that analogy did not make scale irrelevant; it made scale precisely where the magic happens. A thousand fast little men may still be following simple instructions, but together they become a system capable of something none of them can do alone.
 
 The conversation then took the scenic route through mathematical search, a C program adding large numbers, a possibly intelligent faucet, self-replicating robots, gnats, cats, and children. Eventually I asked whether a single-celled organism was intelligent. What about ten million cells? A tadpole? A cat? A human?
 
-Federico argued that cardinality alone changes nothing. A neuron is not intelligent; neither are a hundred thousand neurons taken individually. Intelligence comes from the interaction of the whole system.
+Cardinality alone, came the objection, changes nothing. A neuron is not intelligent; neither are a hundred thousand neurons taken individually. Intelligence comes from the interaction of the whole system.
 
-An algorithm governing them, you could say
+Fine. \
+Call that interaction an `algorithm`, and the rules governing it `physics`.
 
-I replied. In other words: physics.
+Not just the neurons, though: the whole body. Still a group of cells governed by physics.
 
-He expanded the system to the whole body. I described it as a group of cells governed by physics. _By the laws of the world_, he corrected me.
+_By the laws of the world._
 
-_Ergo, physics_, I corrected him back, with the confidence of someone about to turn a normal conversation into a philosophical hostage situation.
+_Ergo, physics_, with the confidence of someone about to turn a normal conversation into a philosophical hostage situation.
 
-Plants came up. A root grows towards nutrients. A sunflower turns towards light. Does that make the plant intelligent?
+From there, plants were inevitable. A root grows towards nutrients. A sunflower turns towards light. Does that make the plant intelligent?
 
-His answer was no. The plant is following an algorithm encoded in its DNA.
+No, came the answer. A plant follows an algorithm encoded in its DNA.
 
 Fair enough. But then the annoying question: *how is that fundamentally different from us?*
 
@@ -151,7 +150,7 @@ It is superhuman at chess and helpless outside it. That is why "narrow AI" is a 
 
 Still, _narrow_ intelligence is not _no_ intelligence. Optimise a system enough to navigate an enormous space of chess positions and it acquires at least one characteristic we recognise as intelligent: it solves a difficult problem. Ask it about tomorrow's weather and it has nothing to say, not because its chess ability was fake, but because generality was never its function.
 
-Federico stress-tested this claim with increasingly rude examples. Is travelling-salesman search intelligent? Tabu search over an arbitrarily large space? A C program that adds three enormous numbers?
+Federico stress-tested this claim with increasingly minimal examples. Is travelling-salesman search intelligent? Tabu search over an arbitrarily large space? A C program that adds three enormous numbers?
 
 I bit the bullet: *yes, but very little*. Extrapolating towards zero, any algorithm actually operating on data has some vanishingly small place on the spectrum. That does not make a three-line adder AGI, any more than a gnat is a human because both are alive. The size of the numbers is not what matters; the scale and variety of problems the system can navigate is.
 
