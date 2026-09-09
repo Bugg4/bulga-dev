@@ -3,11 +3,11 @@
 
 #let info = (
   page_kind: kinds.post,
-  main_title: "A Group of Cells Governed by Physics",
-  subtitle: "A Bad Equation for Intelligence",
+  main_title: "How Many Matrix Multiplications Make a Mind?",
+  subtitle: "Notes From a Midnight Argument About Intelligence",
   author: "Marco Bulgarelli",
   date_published: datetime(day: 9, month: 9, year: 2026),
-  read_time_mins: "10 min read",
+  read_time_mins: "13 min read",
   tags: (tags.ai, tags.philosophy),
   stylesheet: styles.blog,
   post_number: 3,
@@ -17,13 +17,35 @@
   ..info,
 )
 
-= It Started With a Sunflower
+= It Started With a Millennium Problem
 
-This post started, as all rigorous scientific work does, in a WhatsApp argument after midnight.
+This post started, as all rigorous scientific work does, in a late-night WhatsApp argument that ran past midnight.
 
-We were talking about intelligence, and at some point my friend described a body as a group of cells governed by the laws of the world.
+I had dropped #link("https://x.com/OpenAI/status/2097374640582668336")[an OpenAI post] into the group chat with the restrained caption: _A Millennium problem solved_. I followed it with the equally restrained claim: anyone who could not see at least the first glimmers of AGI in this had ham over their eyes.
 
-_The laws of physics_, I corrected him, with the confidence of someone about to turn a normal conversation into a philosophical hostage situation.
+Francesco dismissed the label. \
+AGI, ASI, smarter than humans, "really thinking": what mattered was that the system was useful and producing results that would have taken us much longer to reach. \
+
+Federico's answer was blunt: _`It doesn't really think.`_
+
+_If it walks like a duck and quacks like a duck..._, I replied. \
+Whatever is happening inside, the result looks like one produced by human intelligence.
+
+Federico reached for a version of the Chinese room: imagine a very fast little man with a Chinese dictionary and a perfect book of instructions. He has no idea what he is writing, but follows the rules quickly enough that his answers are indistinguishable from those of a Chinese speaker. An LLM, in this view, is just that little man with a much bigger dictionary.
+
+My answer was that scale is precisely where the magic happens. A thousand fast little men may still be following simple instructions, but together they become a system capable of something none of them can do alone.
+
+The conversation then took the scenic route through mathematical search, a C program adding large numbers, a possibly intelligent faucet, self-replicating robots, gnats, cats, and children. Eventually I asked whether a single-celled organism was intelligent. What about ten million cells? A tadpole? A cat? A human?
+
+Federico argued that cardinality alone changes nothing. A neuron is not intelligent; neither are a hundred thousand neurons taken individually. Intelligence comes from the interaction of the whole system.
+
+An algorithm governing them, you could say
+
+I replied. In other words: physics.
+
+He expanded the system to the whole body. I described it as a group of cells governed by physics. _By the laws of the world_, he corrected me.
+
+_Ergo, physics_, I corrected him back, with the confidence of someone about to turn a normal conversation into a philosophical hostage situation.
 
 Plants came up. A root grows towards nutrients. A sunflower turns towards light. Does that make the plant intelligent?
 
@@ -43,11 +65,13 @@ I tend to take a functionalist view of this stuff: judge a system by what it can
 
 Computation is not a property exclusive to silicon. You can encode an algorithm in a mechanical device, in flowing water, in air pressure, in transistors, or in cells. Once a system can receive input, transform information, and produce output, it can execute an algorithm. The substrate changes what is practical, not what computation fundamentally is.
 
+Francesco proposed a more interesting distinction than substrate. A traditional search function is created by someone and remains static, so perhaps its apparent intelligence belongs to its author. A system that finds new solutions autonomously and dynamically is different: the creator built the process, but the process is now creating too. I am not sure this gives us a clean boundary, but agency and adaptation seem more relevant than whether the machinery is wet or made of silicon.
+
 This is not the same as claiming that every useful algorithm is conscious, alive, or secretly having feelings. Intelligence and consciousness are separate questions, and mixing them makes both conversations worse.
 
 The narrower question is this: *what makes a system capable of turning information into useful decisions in situations it has not encountered exactly before?*
 
-"Humans can generalize" sounds like a promising answer until machines start doing it too.
+"Humans can generalize" sounds like a promising answer, until machines start doing it too.
 
 An LLM can write a sentence absent from its training data, adapt an explanation to a new audience, or combine concepts into a solution it was never explicitly given. You can argue about how well it does these things, but saying it cannot generalize at all requires a definition carefully constructed to exclude it.
 
@@ -65,6 +89,8 @@ This is not a measurable law. I do not have units for "algorithmic complexity," 
 
 The multiplication is the important part. None of these ingredients is intelligent in isolation. A universe of data sitting untouched does nothing. The most elaborate function in existence does nothing if it receives no input and is never executed. Intelligence, if it appears, appears in the interaction: a process operating on information at sufficient scale.
 
+A static dump of model weights is not a thought. Neither would a perfect, motionless copy of a brain be one. The information and structure may be present, but nothing happens until the system runs.
+
 == Data Scale
 
 A system needs something to reason _with_: observations, memories, training examples, inherited structure, or the current state of its environment.
@@ -81,6 +107,8 @@ A perfect chess move calculated after the heat death of the universe is not very
 
 Speed is relative to the environment. Human neurons are laughably slow next to silicon, yet our brains process enough signals in parallel to steer a body through a changing world in real time.
 
+Efficiency belongs somewhere around this knob too. The human brain is extraordinarily energy-efficient, while an LLM can be extraordinarily fast given a warehouse of hardware and electricity. Even comparing neurons with parameters is seductive but dubious: they are not equivalent units. There is, as I put it in the chat, a _big asterisk_ over the whole comparison.
+
 == Algorithmic Complexity
 
 By this I mean the richness of the process connecting input to action: how many kinds of relationships it can represent, how deeply it can compose them, and how flexibly it can reuse what it has learned.
@@ -88,6 +116,8 @@ By this I mean the richness of the process connecting input to action: how many 
 I do not mean that every individual instruction must be impressive. At the lowest useful level, a neuron might be described as receiving electrochemical signal X and sending signal Y. An LLM mostly performs matrix multiplications. Neither operation looks remotely like thought when inspected alone.
 
 What changes is the scale at which those operations are connected: the number of neurons or parameters, the number of relationships between them, the speed of their interaction, and the size of the solution space the resulting system can navigate. That space may be effectively unbounded even when each step through it is mechanically simple. Thought is not hiding inside one special instruction; it emerges from the organisation and scale of the whole computation.
+
+I suspect this creates a peculiar bias against LLMs: we know enough about their internals to dismiss them as "just matrix multiplications," while the brain remains obscure enough to call its output thought. But zoom into a neuron and we can play the same trick: _just electrochemical signals_. Knowing the local operation does not explain away the system-level phenomenon.
 
 A thermostat has data, performs inference quickly, and makes decisions. Its algorithm is simply too narrow for us to call it intelligent in ordinary conversation.
 
@@ -121,6 +151,12 @@ It is superhuman at chess and helpless outside it. That is why "narrow AI" is a 
 
 Still, _narrow_ intelligence is not _no_ intelligence. Optimise a system enough to navigate an enormous space of chess positions and it acquires at least one characteristic we recognise as intelligent: it solves a difficult problem. Ask it about tomorrow's weather and it has nothing to say, not because its chess ability was fake, but because generality was never its function.
 
+Federico stress-tested this claim with increasingly rude examples. Is travelling-salesman search intelligent? Tabu search over an arbitrarily large space? A C program that adds three enormous numbers?
+
+I bit the bullet: *yes, but very little*. Extrapolating towards zero, any algorithm actually operating on data has some vanishingly small place on the spectrum. That does not make a three-line adder AGI, any more than a gnat is a human because both are alive. The size of the numbers is not what matters; the scale and variety of problems the system can navigate is.
+
+This may be stretching the word _intelligence_ past everyday usefulness. But I prefer an awkward continuum to a magical line that appears exactly where our intuitions become comfortable.
+
 == An LLM
 
 An LLM has absorbed an enormous scale of data, runs inference quickly, and uses an architecture whose basic operation is surprisingly uniform compared with the complexity of its output. Its decoding entropy is adjustable.
@@ -143,6 +179,12 @@ Ask a person the same question twice and the answers may differ. Their internal 
 
 That variability may be useful. It may even be necessary for the kind of open-ended intelligence we exhibit. But unpredictability alone cannot prove that human thought belongs to a different metaphysical category. A roulette wheel is unpredictable too, and nobody asks it for career advice.
 
+At one point Federico offered a stricter definition: intelligence is the innate ability to generalize, learn, remember, and imagine. He also brought in survival and adaptation: a child can live and learn in the world, while an LLM left alone does not even start.
+
+Francesco objected that this sounded more like survivability than intelligence. A child does not create itself either; DNA and parents do the initial construction where engineers and training do it for a model. We briefly converged on a more alarming candidate: an embodied system able to change its own weights, allocate resources, reproduce, and keep itself from breaking.
+
+That would certainly add agency. Whether agency, embodiment, self-preservation, and intelligence should be one concept is less obvious. Our argument kept trying to compress all of them into three letters: AGI.
+
 = The Formula Needs a Patch
 
 My first intuition was that if any of the four terms approached zero, intelligence should approach zero with it. Stockfish and deterministic LLM inference make that difficult to defend for entropy.
@@ -159,6 +201,8 @@ This also suggests there is no single intelligence scalar. We compress a landsca
 - What transformations can it perform?
 - How quickly can it act relative to its environment?
 - How far outside a familiar situation can it generalize?
+- Can it learn and change after deployment?
+- How much does it depend on an external agent to act?
 - Does variability help it explore, or merely corrupt its output?
 
 = No Escape Through Free Will
@@ -179,7 +223,7 @@ That idea does not make humans less intelligent. It just removes one of the comf
 
 I still do not have a clean threshold, and I increasingly suspect there is not one.
 
-It is the old question of the heap: how many grains of sand do you need before they stop being separate grains and become a pile? One grain obviously is not a heap. Ten thousand obviously are. Demanding the exact grain that performs the transformation does not improve our understanding of sand.
+I eventually fell back on the old question of the heap: how many grains of sand do you need before they stop being separate grains and become a pile? One grain obviously is not a heap. Ten thousand obviously are. Demanding the exact grain that performs the transformation does not improve our understanding of sand.
 
 The boundary between a mechanism and an intelligent system may work the same way. A tiny input space and a tiny function look like a reflex. Push the data, connectivity, speed, and reachable solutions far enough and the combined system begins to look intelligent. The precise point where we switch words matters less than understanding what changed along the way.
 
