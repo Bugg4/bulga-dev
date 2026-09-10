@@ -7,7 +7,7 @@
   subtitle: "Notes From a Midnight Argument About Intelligence",
   author: "Marco Bulgarelli",
   date_published: datetime(day: 9, month: 9, year: 2026),
-  read_time_mins: "13 min read",
+  read_time_mins: "15 min read",
   tags: (tags.ai, tags.philosophy),
   stylesheet: styles.blog,
   post_number: 3,
@@ -24,11 +24,17 @@
 // output is a single `span.quote-*` (no double-wrapping:
 // the inner rule uses `inner.body`, not `inner`).
 #let F(body) = {
-  show quote: inner => html.elem("span", attrs: (class: "quote quote-francesco"), text(fill: yellow, emph[“#inner.body”]))
+  show quote: inner => html.elem("span", attrs: (class: "quote quote-francesco"), text(
+    fill: yellow,
+    emph[“#inner.body”],
+  ))
   quote(body)
 }
 #let C(body) = {
-  show quote: inner => html.elem("span", attrs: (class: "quote quote-federico"), text(fill: rgb("#00ff00"), emph[“#inner.body”]))
+  show quote: inner => html.elem("span", attrs: (class: "quote quote-federico"), text(
+    fill: rgb("#00ff00"),
+    emph[“#inner.body”],
+  ))
   quote(body)
 }
 
@@ -141,7 +147,7 @@ I was using the word loosely to mean the variability a system cannot perfectly e
 
 Variability lets a system explore alternatives rather than always falling into the same path. Too little can make behaviour rigid. Too much gives you noise rather than thought. The useful quantity is not maximum entropy, but enough variation to escape a single groove while preserving structure.
 
-And this is where my neat equation starts to break.
+That already exposes the first problem with my equation: the `+ entropy` term says that more entropy should always produce more intelligence. But entropy is not a bonus you can keep adding. Past some point, variability destroys useful structure, so the relationship cannot be simply additive. The examples below expose a second problem: some systems remain remarkably capable with little or no entropy at all.
 
 = Four Very Different Thinkers
 
@@ -161,7 +167,7 @@ It is superhuman at chess and helpless outside it. That is why "narrow AI" is a 
 
 Still, _narrow_ intelligence is not _no_ intelligence. Optimise a system enough to navigate an enormous space of chess positions and it acquires at least one characteristic we recognise as intelligent: it solves a difficult problem. Ask it about tomorrow's weather and it has nothing to say, not because its chess ability was fake, but because generality was never its function.
 
-Federico stress-tested this claim with increasingly minimal examples. Is travelling-salesman search intelligent? Tabu search over an arbitrarily large space? A C program that adds three enormous numbers?
+Federico stress-tested this claim with increasingly minimal examples. Is travelling-salesman search intelligent? Tabu search over an arbitrarily large space? A simple program that adds three enormous numbers?
 
 I bit the bullet: #quote[yes, but very little]. Extrapolating towards zero, any algorithm actually operating on data has some vanishingly small place on the spectrum. That does not make a three-line adder AGI, any more than a gnat is a human because both are alive. The size of the numbers is not what matters; the scale and variety of problems the system can navigate is.
 
@@ -189,7 +195,9 @@ Ask a person the same question twice and the answers may differ. Their internal 
 
 That variability may be useful. It may even be necessary for the kind of open-ended intelligence we exhibit. But unpredictability alone cannot prove that human thought belongs to a different metaphysical category. A roulette wheel is unpredictable too, and nobody asks it for career advice.
 
-At one point Federico offered a stricter definition: intelligence is the innate ability to generalize, learn, remember, and imagine. He also brought in survival and adaptation: a child can live and learn in the world, while an LLM left alone does not even start.
+At one point Federico offered a stricter definition: \
+#C[intelligence is the innate ability to generalize, learn, remember, and imagine.] \
+He also brought in survival and adaptation: a child can live and learn in the world, while an LLM left alone does not even start.
 
 Francesco objected that this sounded more like survivability than intelligence. A child does not create itself either; DNA and parents do the initial construction where engineers and training do it for a model. We briefly converged on a more alarming candidate: an embodied system able to change its own weights, allocate resources, reproduce, and keep itself from breaking.
 
@@ -199,11 +207,17 @@ That would certainly add agency. Whether agency, embodiment, self-preservation, 
 
 My first intuition was that if any of the four terms approached zero, intelligence should approach zero with it. Stockfish and deterministic LLM inference make that difficult to defend for entropy.
 
-A better version is:
+A better version separates a system's underlying capacity from the way entropy affects its use:
 
-`capacity ~= data scale * inference speed * algorithmic expressiveness`
+`capacity ~= data_scale * inference_speed * algorithmic_expressiveness`
 
-Entropy then changes how that capacity is explored. It can increase novelty, adaptability, and the chance of leaving a local optimum, but it is not a substitute for information or structure. It behaves less like fuel and more like turbulence: sometimes essential, sometimes useful, sometimes destructive.
+`effective_intelligence ~= capacity * entropy_modifier(entropy)`
+
+Here `entropy_modifier` is not another quantity that grows without limit, but a bounded, inverted-U modifier. One possible sketch is:
+
+`entropy_modifier(entropy) = max(0, 1 + entropy_benefit * (1 - ((entropy - optimal_entropy) / useful_entropy_half_range)^2))`
+
+`optimal_entropy` is the peak of the curve, while `useful_entropy_half_range` sets the helpful range on either side. If the lower edge of that range is zero, then `optimal_entropy = useful_entropy_half_range` and `entropy_modifier(0) = 1`: a deterministic system retains its underlying capacity. Within the range, entropy can increase novelty, adaptability, and the chance of leaving a local optimum. Beyond it, variability increasingly corrupts the result. Entropy behaves less like fuel and more like turbulence: sometimes useful, sometimes destructive, but not necessary for the engine to run.
 
 This also suggests there is no single intelligence scalar. We compress a landscape of abilities into one flattering word. Chess search, language modelling, plant adaptation, and human reasoning occupy different shapes in that landscape. "Is it intelligent?" may be less useful than asking:
 
@@ -217,7 +231,7 @@ This also suggests there is no single intelligence scalar. We compress a landsca
 
 = No Escape Through Free Will
 
-Eventually the conversation arrived at free will, because apparently we were determined to get no sleep.
+Eventually the conversation arrived at free will, because we were determined to get no sleep.
 
 If we had complete knowledge and control of physics, would a human thought be predictable? In a perfect simulation of the universe, could the simulator know my next sentence before I write it?
 
@@ -227,8 +241,6 @@ Those claims may both be true. A system can be deterministic in principle and im
 
 Maybe to a sufficiently capable observer we would look like LLMs: huge state-transition systems, shaped by training data we call experience, producing outputs whose causes are too numerous for us to inspect.
 
-That idea does not make humans less intelligent. It just removes one of the comforting ways we make our intelligence special.
-
 = So, When Is a System Intelligent?
 
 I still do not have a clean threshold, and I increasingly suspect there is not one.
@@ -237,7 +249,9 @@ I eventually fell back on the old question of the heap: how many grains of sand 
 
 The boundary between a mechanism and an intelligent system may work the same way. A tiny input space and a tiny function look like a reflex. Push the data, connectivity, speed, and reachable solutions far enough and the combined system begins to look intelligent. The precise point where we switch words matters less than understanding what changed along the way.
 
-Intelligence looks less like a substance a system possesses and more like a relationship between its machinery, its information, and the problems around it. A sunflower is well adapted to its world. Stockfish is godlike in a tiny universe. An LLM ranges across a much larger symbolic space, with strange blind spots. A human combines language, memory, embodiment, social learning, and continuous feedback into something broader again.
+Intelligence looks less like a substance a system possesses and more like a relationship between its machinery, its information, and the problems around it. \
+
+A sunflower is well adapted to its world. Stockfish is godlike in a tiny universe. An LLM ranges across a much larger symbolic space, with strange blind spots. A human combines language, memory, embodiment, social learning, and continuous feedback into something broader again.
 
 The differences are real. They may be differences of architecture, scale, embodiment, adaptability, or degree. We should investigate them instead of hiding them behind the word "just."
 
@@ -245,8 +259,8 @@ _Just_ an algorithm. _Just_ statistics. _Just_ a group of cells governed by phys
 
 "Just" is doing all the work.
 
-For now, my best answer is this: a system is intelligent when it can use information to produce useful behaviour across enough variation that a simple reflex no longer explains it well.
+For now, my best answer is this: `a system is intelligent when it can use information to produce useful behaviour across enough variation that a simple reflex no longer explains it well`.
 
-The boundary will move as our machines improve and as we understand biology better. That is fine. The point of a definition is not to protect our ego. It is to help us see what different systems are actually doing.
+The boundary will move as our machines improve and as we understand biology better. That is fine. The point of a definition is to challenge our ego, and help us see what different systems are actually doing.
 
 And whatever conclusion we reach, goodnight, little cell. You are still governed by physics.

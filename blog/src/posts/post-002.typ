@@ -10,7 +10,6 @@
   read_time_mins: "5 min read",
   tags: (tags.vibecoding,),
   stylesheet: styles.blog,
-  // post_filename: "002-test",
   post_number: 2,
 )
 
@@ -38,7 +37,7 @@ What I _will_ also say is that once you've experienced an LLM following your exa
 
 I've heard every opinion on vibecoding under the sun. It's the death of software engineering. It's the greatest productivity leap since Stack Overflow. It'll make juniors never learn fundamentals. It'll let seniors 10x their output. It's a crutch. It's a superpower.
 
-Here's my take: it's a tool. Use it well, it amplifies you. Use it poorly, it amplifies your bad habits. Same as any tool we've ever adopted. The folks panicking about it are giving the same energy as teachers in 2005 convinced Wikipedia would destroy education.
+Here's my take: it's a tool. Use it well, it amplifies you. Use it poorly, it amplifies your bad habits. Same as any tool we've ever adopted.
 
 I see myself as a fucntionalist at heart. Take something for what it does, not for what it is.
 
@@ -52,13 +51,10 @@ Enter OpenCode.
 == Opencode: The Missing Piece
 #link("https://github.com/anomalyco/opencode")[Opencode] is an open-source CLI coding agent.
 You install it, you run it in your terminal, and it has access to your filesystem, your shell, your git repo — the whole shebang.
-It's like having a junior developer who works at the speed of light, never sleeps, and occasionally hallucinates complete nonsense.
-So... basically a junior developer.
 
 What sold me on opencode over alternatives like Claude Code or Aider is that it's truly editor-agnostic.
 It lives in your terminal, period.
 It doesn't care if you use VSCode, Neovim, Emacs, or ed (you freak).
-It just needs a terminal and a working brain — yours, for prompting; the LLM's, for doing the actual work.
 
 Here's my typical flow:
 
@@ -69,7 +65,6 @@ Here's my typical flow:
 That's it. Two windows, one brain (the LLM's, mostly).
 
 I run VSCode basically vanilla, just the editor doing editor things, and the agent doing agent things.
-Clean separation.
 
 == The Two Plugins
 Opencode is extensible through plugins and MCP servers. Here's what I'm running:
@@ -130,12 +125,6 @@ Instead of skimming through it myself, I can ask opencode "find me the section a
 
 Between these three, the agent has pretty good awareness of my data and my docs.
 It's not quite Jarvis, but we're getting there.
-
-== The Elephant in the Room
-I should mention: all of this runs against a remote LLM. I'm not running models locally (yet).
-That means my code gets sent to whichever API provider I'm using, which is something you should be aware of if you work with proprietary codebases.
-For personal projects and this blog? I don't really care. For work stuff? Check your company's policy before you paste sensitive business logic into a chat window.
-Common sense, but worth saying.
 
 == Where This Is Going
 I'm still figuring out the optimal setup. The combination of vanilla VSCode + opencode + MCPs has been working surprisingly well for the past few weeks, but I'm constantly tweaking.
