@@ -357,7 +357,7 @@ blockquote {
   color: var(--accent-yellow);
 }
 
-/* Speaker quotes (post-003): F = Francesco (yellow), C = Federico (green) */
+/* Speaker quotes (post-002): F = Francesco (yellow), C = Federico (green) */
 .quote-francesco {
   color: var(--accent-yellow);
 }
