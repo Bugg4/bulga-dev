@@ -15,6 +15,9 @@
   --accent-fuchsia: #d946ef;
   --accent-fuchsia-light: #e879f9;
   --accent-fuchsia-dim: rgba(217, 70, 239, 0.2);
+  --accent-yellow: yellow;
+  /* Pure CMYK green: cyan (C100) + yellow (Y100) -> C100 M0 Y100 K0 -> #00ff00 */
+  --accent-green: #00ff00;
 
   /* Colors - UI Elements */
   --border-color: #1f2937;
@@ -342,11 +345,25 @@ figcaption {
 
 /* Semantic Blockquote */
 blockquote {
-  border-left: 2px solid var(--accent-cyan);
+  border-left: 2px solid var(--accent-yellow);
   padding: 0.75rem var(--space-md) 0.75rem 1.25rem;
   margin: var(--space-2xl) 0;
-  color: var(--text-muted);
+  color: var(--accent-yellow);
   font-style: italic;
+}
+
+/* Quotes (Typst `quote` element) */
+.quote {
+  color: var(--accent-yellow);
+}
+
+/* Speaker quotes (post-003): F = Francesco (yellow), C = Federico (green) */
+.quote-francesco {
+  color: var(--accent-yellow);
+}
+
+.quote-federico {
+  color: var(--accent-green);
 }
 
 /* Inline Code Styling */

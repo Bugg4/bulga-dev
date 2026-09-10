@@ -3,7 +3,7 @@
 
 #let info = (
   page_kind: kinds.post,
-  main_title: "How Many Matrix Multiplications Make a Mind?",
+  main_title: "Is a Faucet intelligent?",
   subtitle: "Notes From a Midnight Argument About Intelligence",
   author: "Marco Bulgarelli",
   date_published: datetime(day: 9, month: 9, year: 2026),
@@ -17,44 +17,59 @@
   ..info,
 )
 
+// Speaker quotes scoped to this post:
+// - C = Federico Chiodi (green = cyan + yellow in CMYK: C100 M0 Y100 K0 -> #00ff00)
+// - F = Francesco Fregna (yellow)
+// Each wraps `quote` with a local show override so the
+// output is a single `span.quote-*` (no double-wrapping:
+// the inner rule uses `inner.body`, not `inner`).
+#let F(body) = {
+  show quote: inner => html.elem("span", attrs: (class: "quote quote-francesco"), text(fill: yellow, emph[“#inner.body”]))
+  quote(body)
+}
+#let C(body) = {
+  show quote: inner => html.elem("span", attrs: (class: "quote quote-federico"), text(fill: rgb("#00ff00"), emph[“#inner.body”]))
+  quote(body)
+}
+
 = It Started With a Millennium Problem
 
 This post started, as all rigorous scientific work does, in a late-night WhatsApp argument that ran past midnight.
 
-I had dropped #link("https://x.com/OpenAI/status/2097374640582668336")[an OpenAI post] into the group chat with the restrained caption: _A Millennium problem solved_. I followed it with the equally restrained claim: anyone who could not see at least the first glimmers of AGI in this had ham over their eyes.
+I had dropped #link("https://x.com/OpenAI/status/2097374640582668336")[an OpenAI post] into the group chat with the restrained caption: #quote[A Millennium problem solved]. I followed it with the equally restrained claim: anyone who could not see at least the first glimmers of AGI in this had ham over their eyes.
 
-Francesco was less interested in taxonomy. AGI, ASI, smarter than humans, "really thinking": what mattered was that the system was useful and producing results that would have taken us much longer to reach.
+Francesco was less interested in taxonomy. AGI, ASI, smarter than humans, #F[really thinking]: what mattered was that the system was useful and producing results that would have taken us much longer to reach.
 
-Federico's immediate objection was blunt: _`It doesn't really think.`_
+Federico's immediate objection was blunt:
 
-My instinctive response was the duck test. _If it walks like a duck and quacks like a duck..._ Whatever is happening inside, the result looks like one produced by human intelligence.
+#C[It doesn't really think.]
+
+My instinctive response was the duck test. If #quote[it walks like a duck and quacks like a duck...] \
+Whatever is happening inside, the result looks like one produced by human intelligence.
 
 That led straight to a version of the Chinese room: imagine a very fast little man with a Chinese dictionary and a perfect book of instructions. He has no idea what he is writing, but follows the rules quickly enough that his answers are indistinguishable from those of a Chinese speaker. An LLM, in this view, is just that little man with a much bigger dictionary.
 
-To me, that analogy did not make scale irrelevant; it made scale precisely where the magic happens. A thousand fast little men may still be following simple instructions, but together they become a system capable of something none of them can do alone.
+I did not feel like that analogy invalidate my argoument; in fact, it made *scale* precisely where the magic happens. \
+A thousand fast little men may still be following simple instructions, but together they become a system capable of something none of them can do alone.
 
-The conversation then took the scenic route through mathematical search, a C program adding large numbers, a possibly intelligent faucet, self-replicating robots, gnats, cats, and children. Eventually I asked whether a single-celled organism was intelligent. What about ten million cells? A tadpole? A cat? A human?
+The conversation then took the scenic route through mathematical search, a simple program adding large numbers, a possibly intelligent faucet, gnats, cats, and children. \
 
-Cardinality alone, came the objection, changes nothing. A neuron is not intelligent; neither are a hundred thousand neurons taken individually. Intelligence comes from the interaction of the whole system.
+Eventually I asked whether a single-celled organism was intelligent. What about ten million cells? A tadpole? A cat? A human?
 
-Fine. \
+#C[Cardinality alone changes nothing] came the objection. A neuron is not intelligent; neither are a hundred thousand neurons taken individually. Intelligence comes from the interaction of the whole system.
+
+_Fine._ \
 Call that interaction an `algorithm`, and the rules governing it `physics`.
-
-Not just the neurons, though: the whole body. Still a group of cells governed by physics.
-
-_By the laws of the world._
-
-_Ergo, physics_, with the confidence of someone about to turn a normal conversation into a philosophical hostage situation.
 
 From there, plants were inevitable. A root grows towards nutrients. A sunflower turns towards light. Does that make the plant intelligent?
 
-No, came the answer. A plant follows an algorithm encoded in its DNA.
+#C[No], came the answer. #C[A plant follows an algorithm encoded in its DNA].
 
-Fair enough. But then the annoying question: *how is that fundamentally different from us?*
+Fair enough. But then the annoying question: #quote[how is that fundamentally different from us?]
 
-We also act according to structures encoded in biology, modified by experience, and executed by matter that follows physical laws. Our overall system is vastly larger and more adaptable, but its local rules may still be simple. Calling the plant "just an algorithm" does not tell us where intelligence begins. It only moves the mystery one step up the complexity ladder.
+We also act according to structures encoded in biology, modified by experience, and executed by matter that follows physical laws. Our overall system is vastly larger and more adaptable, but its local rules may still be simple. Calling the plant #C[just an algorithm] does not tell us where intelligence begins. It only moves the mystery one step up the complexity ladder.
 
-Somewhere between a root finding water, Stockfish finding checkmate, an LLM writing a paragraph, and a human asking why any of this counts, we decide to use the word _intelligence_.
+Somewhere between a single cell floating at the bottom of the sea, a root finding water, Stockfish finding checkmate, an LLM writing a paragraph, and a human asking why any of this counts, we decide to use the word `intelligence`.
 
 Where, exactly, should we draw the line?
 
@@ -62,19 +77,15 @@ Where, exactly, should we draw the line?
 
 I tend to take a functionalist view of this stuff: judge a system by what it can do, not by what it is made of.
 
-Computation is not a property exclusive to silicon. You can encode an algorithm in a mechanical device, in flowing water, in air pressure, in transistors, or in cells. Once a system can receive input, transform information, and produce output, it can execute an algorithm. The substrate changes what is practical, not what computation fundamentally is.
+Computation is not a property exclusive to silicon. You can encode an algorithm into a #link("https://en.wikipedia.org/wiki/Mechanical_computer")[mechanical device], in #link("https://en.wikipedia.org/wiki/Water_integrator")[flowing water], in #link("https://www.youtube.com/watch?v=E1BLGpE5zH0")[air pressure], in transistors, or in cells. Once a system can receive input, transform information, and produce output, it can execute an algorithm. The substrate changes what is practical, not what computation fundamentally is.
 
-Francesco proposed a more interesting distinction than substrate. A traditional search function is created by someone and remains static, so perhaps its apparent intelligence belongs to its author. A system that finds new solutions autonomously and dynamically is different: the creator built the process, but the process is now creating too. I am not sure this gives us a clean boundary, but agency and adaptation seem more relevant than whether the machinery is wet or made of silicon.
+The narrower question then becomes: *what makes a system capable of turning information into useful decisions in situations it has not encountered exactly before?*
 
-This is not the same as claiming that every useful algorithm is conscious, alive, or secretly having feelings. Intelligence and consciousness are separate questions, and mixing them makes both conversations worse.
-
-The narrower question is this: *what makes a system capable of turning information into useful decisions in situations it has not encountered exactly before?*
-
-"Humans can generalize" sounds like a promising answer, until machines start doing it too.
+#C[Humans can generalize] sounds like a promising answer, until machines start doing it too.
 
 An LLM can write a sentence absent from its training data, adapt an explanation to a new audience, or combine concepts into a solution it was never explicitly given. You can argue about how well it does these things, but saying it cannot generalize at all requires a definition carefully constructed to exclude it.
 
-The usual retreat is that machine generalization is "algorithmic," while human generalization is unpredictable and unique.
+The usual retreat is that machine generalization is "algorithmic", while human generalization is unpredictable and unique.
 
 But our brains are physical systems too. If unpredictability is the magic ingredient, is it a property of intelligence or merely a property of our inability to measure and control all the variables?
 
@@ -152,7 +163,7 @@ Still, _narrow_ intelligence is not _no_ intelligence. Optimise a system enough 
 
 Federico stress-tested this claim with increasingly minimal examples. Is travelling-salesman search intelligent? Tabu search over an arbitrarily large space? A C program that adds three enormous numbers?
 
-I bit the bullet: *yes, but very little*. Extrapolating towards zero, any algorithm actually operating on data has some vanishingly small place on the spectrum. That does not make a three-line adder AGI, any more than a gnat is a human because both are alive. The size of the numbers is not what matters; the scale and variety of problems the system can navigate is.
+I bit the bullet: #quote[yes, but very little]. Extrapolating towards zero, any algorithm actually operating on data has some vanishingly small place on the spectrum. That does not make a three-line adder AGI, any more than a gnat is a human because both are alive. The size of the numbers is not what matters; the scale and variety of problems the system can navigate is.
 
 This may be stretching the word _intelligence_ past everyday usefulness. But I prefer an awkward continuum to a magical line that appears exactly where our intuitions become comfortable.
 

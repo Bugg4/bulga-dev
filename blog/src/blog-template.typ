@@ -125,7 +125,7 @@
     #counter(heading).update(0) // reset counter
 
     // =============== Quotes ================
-    #show quote: it => emph(it)
+    #show quote: it => html.elem("span", attrs: (class: "quote"), text(fill: yellow, emph(it)))
 
     // =============== Build Document ==============
     #html.html(
