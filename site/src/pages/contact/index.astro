@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { site } from "../../config";
+---
+
+<BaseLayout
+  title={`Contact — ${site.title}`}
+  description="How to contact Marco Bulgarelli. Coming soon."
+  canonicalPath="/contact"
+  nav={[{ href: "/blog", label: "Blog" }, { href: "/cv", label: "CV" }, { href: "/contact", label: "Contact" }]}
+  upHref="/"
+  upLabel="Home"
+>
+  <article id="contact">
+    <header>
+      <h1>
+        <span class="blog-title gradient">Contact</span><br />
+        <span class="blog-subtitle">Coming soon</span>
+      </h1>
+      <div class="blog-metadata">
+        <ul>
+          <li class="author">{site.author}</li>
+        </ul>
+      </div>
+    </header>
+    <main>
+      <p>
+        Contact details will live here. In the meantime, find me on{" "}
+        <a href={site.githubUrl}>GitHub</a>.
+      </p>
+    </main>
+  </article>
+</BaseLayout>

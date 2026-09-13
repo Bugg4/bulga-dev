@@ -1,0 +1,75 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import TableOfContents, {
+  type TocHeading,
+} from "../components/TableOfContents.astro";
+
+export interface PostData {
+  postNumber: number;
+  slug: string;
+  title: string;
+  subtitle: string;
+  author: string;
+  publishedAt: Date;
+  readTimeMinutes: number;
+  tags: string[];
+}
+
+interface Props {
+  post: PostData;
+  headings: TocHeading[];
+}
+
+const { post, headings } = Astro.props;
+const postId = `post-${String(post.postNumber).padStart(3, "0")}`;
+const canonicalPath = `/blog/post/${post.slug}.html`;
+const dateIso = post.publishedAt.toISOString().slice(0, 10);
+---
+
+<BaseLayout
+  title={post.title}
+  description={post.subtitle}
+  canonicalPath={canonicalPath}
+  ogType="article"
+  publishedAt={post.publishedAt}
+  upHref="/blog"
+  upLabel="Blog"
+  nav={[{ href: "/blog", label: "Blog" }, { href: "/cv", label: "CV" }, { href: "/contact", label: "Contact" }]}
+  rssHref="/blog/rss.xml"
+  footerRssHref="/blog/rss.xml"
+>
+  <article id={postId}>
+    <header>
+      <h1>
+        <span class="blog-title gradient">{post.title}</span><br />
+        <span class="blog-subtitle">{post.subtitle}</span>
+      </h1>
+      <div class="blog-metadata">
+        <ul>
+          <li class="author">{post.author}</li>
+          <li class="date-published">
+            <time datetime={dateIso}>{dateIso}</time>
+          </li>
+          <li class="read-time">{post.readTimeMinutes} min read</li>
+          {
+            post.tags.length > 0 && (
+              <li>
+                <ul class="tags">
+                  {post.tags.map((tag) => (
+                    <li class="tag">{tag}</li>
+                  ))}
+                </ul>
+              </li>
+            )
+          }
+        </ul>
+      </div>
+    </header>
+    <main>
+      <TableOfContents headings={headings} />
+      <div class="post-content">
+        <slot />
+      </div>
+    </main>
+  </article>
+</BaseLayout>

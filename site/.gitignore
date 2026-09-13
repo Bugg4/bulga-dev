@@ -1,3 +1,5 @@
 blog/**/*.html
 dist/
+.astro/
+node_modules/
 .venv/

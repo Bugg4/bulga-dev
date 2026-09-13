@@ -1,0 +1,43 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { site } from "../config";
+---
+
+<BaseLayout
+  title={site.title}
+  description="Personal site of Marco Bulgarelli: blog, CV, and contact."
+  canonicalPath="/"
+  nav={[{ href: "/blog", label: "Blog" }, { href: "/cv", label: "CV" }, { href: "/contact", label: "Contact" }]}
+>
+  <article id="home">
+    <header>
+      <h1>
+        <span class="blog-title gradient">{site.author}</span><br />
+        <span class="blog-subtitle">Personal site</span>
+      </h1>
+      <div class="blog-metadata">
+        <ul>
+          <li class="author">{site.author}</li>
+        </ul>
+      </div>
+    </header>
+    <main>
+      <ul class="post-index">
+        <li>
+          <a href="/blog">Blog</a>{" "}
+          <span class="post-index-meta">
+            Posts about coding, AI, and weird experiments.
+          </span>
+        </li>
+        <li>
+          <a href="/cv">CV</a>{" "}
+          <span class="post-index-meta">Work, projects, and experience. Coming soon.</span>
+        </li>
+        <li>
+          <a href="/contact">Contact</a>{" "}
+          <span class="post-index-meta">How to reach me. Coming soon.</span>
+        </li>
+      </ul>
+    </main>
+  </article>
+</BaseLayout>

@@ -187,6 +187,15 @@ nav[role="doc-toc"] {
   }
 }
 
+.nav-links {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  margin: 0;
+  padding: 0;
+}
+
 /* Article Header */
 header {
   width: 100%;
@@ -357,12 +366,12 @@ blockquote {
   color: var(--accent-yellow);
 }
 
-/* Speaker quotes (post-002): F = Francesco (yellow), C = Federico (green) */
-.quote-francesco {
+/* Speaker quote colors */
+.quote-yellow {
   color: var(--accent-yellow);
 }
 
-.quote-federico {
+.quote-green {
   color: var(--accent-green);
 }
 
@@ -420,5 +429,121 @@ footer {
     list-style: none;
     display: flex;
     gap: var(--space-lg);
+  }
+}
+
+/* Accessibility: visible keyboard focus */
+a:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* Keep in-page anchors visible below the viewport top */
+.post-content [id],
+article [id] {
+  scroll-margin-top: var(--space-xl);
+}
+
+/* Numbered article headings (Typst parity: "1 – Title", "1.1 – Sub") */
+.post-content {
+  counter-reset: post-h2;
+  overflow-wrap: break-word;
+}
+
+.post-content h2 {
+  counter-reset: post-h3;
+  font-size: var(--text-xl);
+  margin-top: var(--space-4xl);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+}
+
+.post-content h2::before {
+  counter-increment: post-h2;
+  content: counter(post-h2) " –";
+  color: var(--accent-fuchsia);
+  font-family: var(--font-mono);
+}
+
+.post-content h3 {
+  counter-reset: post-h4;
+  font-size: 1.25rem;
+  margin-top: var(--space-3xl);
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+}
+
+.post-content h3::before {
+  counter-increment: post-h3;
+  content: counter(post-h2) "." counter(post-h3) " –";
+  color: var(--accent-fuchsia);
+  font-family: var(--font-mono);
+}
+
+.post-content h4 {
+  font-size: var(--text-lg);
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+}
+
+.post-content h4::before {
+  counter-increment: post-h4;
+  content: counter(post-h2) "." counter(post-h3) "." counter(post-h4) " –";
+  color: var(--accent-fuchsia);
+  font-family: var(--font-mono);
+}
+
+/* Table of contents numbers match heading numbers */
+.toc-num {
+  color: var(--accent-fuchsia);
+  font-family: var(--font-mono);
+}
+
+/* Tables (used by post 001 DNS records) */
+.post-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-2xl) 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  display: block;
+  overflow-x: auto;
+}
+
+.post-content thead {
+  color: var(--text-heading);
+}
+
+.post-content th,
+.post-content td {
+  border: var(--border-thin);
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  vertical-align: top;
+}
+
+.post-content th {
+  background-color: var(--code-header-bg);
+}
+
+/* Non-link nav text keeps the nav-link look without implying navigation */
+span.nav-link {
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }

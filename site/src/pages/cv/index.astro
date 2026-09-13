@@ -1,0 +1,34 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { site } from "../../config";
+---
+
+<BaseLayout
+  title={`CV — ${site.title}`}
+  description="CV of Marco Bulgarelli. Coming soon."
+  canonicalPath="/cv"
+  nav={[{ href: "/blog", label: "Blog" }, { href: "/cv", label: "CV" }, { href: "/contact", label: "Contact" }]}
+  upHref="/"
+  upLabel="Home"
+>
+  <article id="cv">
+    <header>
+      <h1>
+        <span class="blog-title gradient">CV</span><br />
+        <span class="blog-subtitle">Coming soon</span>
+      </h1>
+      <div class="blog-metadata">
+        <ul>
+          <li class="author">{site.author}</li>
+        </ul>
+      </div>
+    </header>
+    <main>
+      <p>
+        My CV will live here. In the meantime, see the{" "}
+        <a href="/blog">blog</a> or find me on{" "}
+        <a href={site.githubUrl}>GitHub</a>.
+      </p>
+    </main>
+  </article>
+</BaseLayout>

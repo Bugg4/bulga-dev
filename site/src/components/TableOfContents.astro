@@ -1,0 +1,87 @@
+---
+export interface TocHeading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: TocHeading[];
+}
+
+interface TocNode extends TocHeading {
+  label: string;
+  children: TocNode[];
+}
+
+const { headings } = Astro.props;
+
+// Keep article headings only (h2–h4). The page title is h1 and the
+// "Contents" heading below is rendered outside the numbered content.
+const articleHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
+
+const counters: number[] = [];
+const roots: TocNode[] = [];
+const stack: { depth: number; node: TocNode }[] = [];
+
+for (const heading of articleHeadings) {
+  const level = heading.depth - 2;
+  counters[level] = (counters[level] ?? 0) + 1;
+  // Drop deeper counters so a new section restarts its subsection numbers.
+  counters.length = level + 1;
+  const node: TocNode = {
+    ...heading,
+    label: counters.join("."),
+    children: [],
+  };
+  while (stack.length > 0 && stack[stack.length - 1].depth >= heading.depth) {
+    stack.pop();
+  }
+  if (stack.length === 0) {
+    roots.push(node);
+  } else {
+    stack[stack.length - 1].node.children.push(node);
+  }
+  stack.push({ depth: heading.depth, node });
+}
+---
+
+{
+  roots.length > 0 && (
+    <nav aria-label="Table of contents">
+      <h2>Contents</h2>
+      <ol>
+        {roots.map((h2) => (
+          <li>
+            <a href={`#${h2.slug}`}>
+              <span class="toc-num">{h2.label} –</span> {h2.text}
+            </a>
+            {h2.children.length > 0 && (
+              <ol>
+                {h2.children.map((h3) => (
+                  <li>
+                    <a href={`#${h3.slug}`}>
+                      <span class="toc-num">{h3.label} –</span> {h3.text}
+                    </a>
+                    {h3.children.length > 0 && (
+                      <ol>
+                        {h3.children.map((h4) => (
+                          <li>
+                            <a href={`#${h4.slug}`}>
+                              <span class="toc-num">{h4.label} –</span>{" "}
+                              {h4.text}
+                            </a>
+                          </li>
+                        ))}
+                      </ol>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}
