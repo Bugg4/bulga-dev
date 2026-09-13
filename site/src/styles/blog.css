@@ -148,14 +148,20 @@ nav {
   border-bottom: var(--border-thin);
 }
 
-nav[role="doc-toc"] {
+/* Table of contents: stacked block below the article header, never inline
+   with the title. The generic `nav` rule is flex; the ToC opts out. */
+nav.toc {
   display: block;
-  margin: 0px;
-  padding: 0px;
-  margin-bottom: 1.2rem;
+  margin: 0 0 1.2rem 0;
+  padding: 0;
+  border-bottom: none;
 
   & h2 {
     margin-top: 1rem;
+  }
+
+  & ol {
+    list-style: none;
   }
 }
 
@@ -505,6 +511,20 @@ article [id] {
 .toc-num {
   color: var(--accent-fuchsia);
   font-family: var(--font-mono);
+}
+
+/* ToC numbering comes from the precomputed label only; kill UA list
+   markers so "1 – Title" is not rendered as "1. 1 – Title". */
+nav.toc ol {
+  list-style: none;
+  margin-bottom: var(--space-sm);
+  padding-left: 0;
+}
+
+nav.toc li > ol {
+  margin-top: var(--space-xs);
+  margin-bottom: var(--space-xs);
+  padding-left: var(--space-lg);
 }
 
 /* Tables (used by post 001 DNS records) */
